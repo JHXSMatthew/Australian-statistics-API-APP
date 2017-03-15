@@ -27,10 +27,10 @@ You may use IntelliJ IDEA as you want either.
 if you are simply using Eclipse,
 
 - `git clone https://github.com/JHXSMatthew/SENG3011` to download the project
-- import -> maven -> Existing maven project -> choose the directory and pick the pom.xml
+- import -> maven -> Existing maven project -> choose the directory and pick the pom.xml ->finish
 - enjoy
  
-###Install
+### Install
 
 install would be super simple as we are using Maven. 
 Just make sure you have installed maven properly.
@@ -39,7 +39,7 @@ Just make sure you have installed maven properly.
 `java -jar FILE_NAME_HERE`. 
 - go to the browser and go `127.0.0.1` . You should see hello world. 
 
-###Development 101
+### Development 101
 
 I believe everyone had experiences with Java,  just to make sure everyone understands what's going on here.
 `CompanyReturnsApplication` and `ServletInitializer` class are just for our application to set up.

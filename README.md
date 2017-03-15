@@ -31,6 +31,7 @@ if you are simply using Eclipse,
 - enjoy
  
 ###Install
+
 install would be super simple as we are using Maven. 
 Just make sure you have installed maven properly.
 - open a terminal/cmd go to the project home directory and type `mvn install`
@@ -39,6 +40,7 @@ Just make sure you have installed maven properly.
 - go to the browser and go `127.0.0.1` . You should see hello world. 
 
 ###Development 101
+
 I believe everyone had experiences with Java,  just to make sure everyone understands what's going on here.
 `CompanyReturnsApplication` and `ServletInitializer` class are just for our application to set up.
 `exampleController` is considered as a backend controller that process clients requests.The annotation

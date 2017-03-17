@@ -37,7 +37,7 @@ Just make sure you have installed maven properly.
 - open a terminal/cmd go to the project home directory and type `mvn install`
 - the Jar file would be in target folder , and you can run the Spring internal web server by typing
 `java -jar FILE_NAME_HERE`. 
-- go to the browser and go `127.0.0.1` . You should see hello world. 
+- go to the browser and go `127.0.0.1:8080` . You should see hello world. 
 
 ### Development 101
 

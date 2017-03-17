@@ -17,6 +17,8 @@ public class APIController {
                              @RequestParam String[] Category,
                              @RequestParam String startDate,
                              @RequestParam String endDate){
+
+
         return "sample";
     }
 }

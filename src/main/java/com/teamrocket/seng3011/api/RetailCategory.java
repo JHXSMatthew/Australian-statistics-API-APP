@@ -4,16 +4,16 @@ package com.teamrocket.seng3011.api;
  * Created by JHXSMatthew on 17/3/17.
  *
  *
- * TODO: fill those ids.
+ * TODO: need someone recheck if this is correct, so messy XML there is
  */
 public enum RetailCategory {
-    Total(-1),
-    Food(-1),
-    HousholdGood(-1),
-    ClothingFootwareAndPersonalAccessory(-1),
-    DepartmentStores(-1),
-    CafesResturantsAndTakeawayFood(-1),
-    Other(-1);
+    Total(20),
+    Food(41),
+    HousholdGood(42),
+    ClothingFootwareAndPersonalAccessory(43),
+    DepartmentStores(44),
+    CafesResturantsAndTakeawayFood(46),
+    Other(45);
 
     private final int id;
 

@@ -42,7 +42,7 @@ Just make sure you have installed maven properly.
 ### Development 101
 
 I believe everyone had experiences with Java,  just to make sure everyone understands what's going on here.
-`CompanyReturnsApplication` and `ServletInitializer` class are just for our application to set up.
+`AustralianStatistics` and `ServletInitializer` class are just for our application to set up.
 `exampleController` is considered as a backend controller that process clients requests.The annotation
 ` @RequestMapping("/")` maps this controller to ROOT URL so when our client try HTTP our website, this controller 
 would handle it.
@@ -54,3 +54,13 @@ If I am confusing you, here are some more professional explanations and resource
 - [Spring MVC tutorial](http://www.mkyong.com/tutorials/spring-mvc-tutorials/)
 
 
+###API
+We are provided an [API](http://stat.data.abs.gov.au/) for our data source.
+
+Here is a [link](http://stat.data.abs.gov.au/restsdmx/sdmx.ashx/GetDataStructure/RT) indicates all possible data structures
+this api using to represent "state,type of retailing industry etc"
+(like, the id for states or whatever) 
+
+and there is a [sample output data](http://stat.data.abs.gov.au/sdmx-json/data/RT/0.2+1.20+41+42+04+05+06+43+44+45+46.10+20+30.M/all?startTime=2016-02&endTime=2017-01&dimensionAtObservation=allDimensions) in JSON format which looks not pretty
+
+please keep this section updating so we share more info about this API.

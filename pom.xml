@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.teamrocket.seng3011</groupId>
-	<artifactId>companyreturns</artifactId>
+	<artifactId>theSoftware</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>companyreturns</name>
-	<description>SENG3011 API1</description>
+	<name>Australian Statistics</name>
+	<description>SENG3011 API2</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>

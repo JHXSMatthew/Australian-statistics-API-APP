@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * Created by Matthew on 13/03/2017.
+ * Created by JHXSMatthew on 13/03/2017.
  * from Spring tutorial
  */
 @RestController

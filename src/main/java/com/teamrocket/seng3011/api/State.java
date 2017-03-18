@@ -3,7 +3,7 @@ package com.teamrocket.seng3011.api;
 /**
  * Created by JHXSMatthew on 17/3/17.
  */
-public enum State {
+public enum State implements HaveID {
     AUS(0), //Australia
     NSW(1), //New South Wales
     VIC(2), //Victoria

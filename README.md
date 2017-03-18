@@ -57,7 +57,11 @@ If I am confusing you, here are some more professional explanations and resource
 ###API
 We are provided an [API](http://stat.data.abs.gov.au/) for our data source.
 
-Here is a [link](http://stat.data.abs.gov.au/restsdmx/sdmx.ashx/GetDataStructure/RT) indicates all possible data structures
+Here is a [link](http://stat.data.abs.gov.au/restsdmx/sdmx.ashx/GetDataStructure/RT) indicates all possible data structures for RT
+
+[link](http://stat.data.abs.gov.au/restsdmx/sdmx.ashx/GetDataStructure/MERCH_EXP) for Merchandise Exports.
+
+
 this api using to represent "state,type of retailing industry etc"
 (like, the id for states or whatever) 
 

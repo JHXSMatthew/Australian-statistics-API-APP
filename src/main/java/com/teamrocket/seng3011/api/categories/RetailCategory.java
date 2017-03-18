@@ -1,4 +1,6 @@
-package com.teamrocket.seng3011.api;
+package com.teamrocket.seng3011.api.categories;
+
+import com.teamrocket.seng3011.api.HaveID;
 
 /**
  * Created by JHXSMatthew on 17/3/17.
@@ -6,7 +8,7 @@ package com.teamrocket.seng3011.api;
  *
  * TODO: need someone recheck if this is correct, so messy XML there is
  */
-public enum RetailCategory {
+public enum RetailCategory implements HaveID {
     Total(20),
     Food(41),
     HousholdGood(42),
@@ -24,4 +26,5 @@ public enum RetailCategory {
     public int getId(){
         return this.id;
     }
+
 }

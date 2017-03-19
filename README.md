@@ -53,8 +53,8 @@ If I am confusing you, here are some more professional explanations and resource
 - [Official Spring guide](https://spring.io/guides)
 - [Spring MVC tutorial](http://www.mkyong.com/tutorials/spring-mvc-tutorials/)
 
+### API
 
-###API
 
 Note:Their sample output JSON sucks, format error etc, completely unreadable. If you want to see what's actually output JSON, check /example.json.
 

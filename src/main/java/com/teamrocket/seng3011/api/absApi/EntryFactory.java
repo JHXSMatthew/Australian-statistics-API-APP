@@ -90,7 +90,5 @@ public class EntryFactory {
         return factory;
     }
 
-    public enum EntryType {
-        EXPORT, RETAIL
-    }
+
 }

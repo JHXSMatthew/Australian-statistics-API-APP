@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
@@ -30,9 +31,8 @@ public class APIController {
         HaveID[] categories = null;
         categories = parseCategory(category,area);
 
-        Arrays.stream(categories).forEach(x->{
-            System.out.println(x.toString());
-        });
+        RestTemplate restTemplate = new RestTemplate();
+
 
 
 

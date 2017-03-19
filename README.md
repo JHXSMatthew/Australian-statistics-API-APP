@@ -55,6 +55,10 @@ If I am confusing you, here are some more professional explanations and resource
 
 
 ###API
+
+Note:Their sample output JSON sucks, format error etc, completely unreadable. If you want to see what's actually output JSON, check /example.json.
+
+
 We are provided an [API](http://stat.data.abs.gov.au/) for our data source.
 
 Here is a [link](http://stat.data.abs.gov.au/restsdmx/sdmx.ashx/GetDataStructure/RT) indicates all possible data structures for RT
@@ -68,3 +72,8 @@ this api using to represent "state,type of retailing industry etc"
 and there is a [sample output data](http://stat.data.abs.gov.au/sdmx-json/data/RT/0.2+1.20+41+42+04+05+06+43+44+45+46.10+20+30.M/all?startTime=2016-02&endTime=2017-01&dimensionAtObservation=allDimensions) in JSON format which looks not pretty
 
 please keep this section updating so we share more info about this API.
+
+API dataSet means:
+
+0:0:2:1:0:9 ->
+key position 0 ... key position 5

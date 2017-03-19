@@ -5,7 +5,7 @@ import java.text.ParseException;
 /**
  * Created by JHXSMatthew on 17/03/2017.
  */
-public class CannotParseCategoryException extends ParseException{
+public class CannotParseCategoryException extends ParseException {
     /**
      * Constructs a ParseException with the specified detail message and
      * offset.

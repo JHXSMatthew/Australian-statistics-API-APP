@@ -15,11 +15,11 @@ public class MonthlyDataRetail {
     @JsonIgnore
     private List<MonthlyDataEntryRetail> entryList;
 
-    public MonthlyDataRetail(MonthlyDataEntryRetail[] entries){
+    public MonthlyDataRetail(MonthlyDataEntryRetail[] entries) {
         this.entries = entries;
     }
 
-    public MonthlyDataRetail(){
+    public MonthlyDataRetail() {
 
     }
 

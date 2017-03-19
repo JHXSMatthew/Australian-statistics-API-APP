@@ -12,11 +12,11 @@ public class DateUtils {
     private static DateFormat formatymd = new SimpleDateFormat("yyyy-MM-dd");
     private static DateFormat formatym = new SimpleDateFormat("yyyy-MM");
 
-    public static String dateToStringYM(Date date){
+    public static String dateToStringYM(Date date) {
         return formatym.format(date);
     }
 
-    public static String dateToStringYMD(Date date){
+    public static String dateToStringYMD(Date date) {
         return formatymd.format(date);
     }
 
@@ -27,7 +27,6 @@ public class DateUtils {
     public static Date stringToDateYMD(String date) throws ParseException {
         return formatymd.parse(date);
     }
-
 
 
 }

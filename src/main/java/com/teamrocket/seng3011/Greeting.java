@@ -3,7 +3,6 @@ package com.teamrocket.seng3011;
 /**
  * Created by JHXSMatthew on 13/03/2017.
  * from Spring tutorial
- *
  */
 public class Greeting {
 

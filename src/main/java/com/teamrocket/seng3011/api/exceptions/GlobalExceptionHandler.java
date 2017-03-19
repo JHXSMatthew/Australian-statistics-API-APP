@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     @ResponseBody
     @ResponseStatus
-    public String handle(CannotParseCategoryException exp){
+    public String handle(CannotParseCategoryException exp) {
         return exp.getMessage();
     }
 

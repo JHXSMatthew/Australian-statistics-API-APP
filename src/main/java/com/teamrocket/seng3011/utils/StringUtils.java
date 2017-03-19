@@ -7,12 +7,12 @@ import com.teamrocket.seng3011.api.HaveID;
  */
 public class StringUtils {
 
-    public static String haveIdToIdString(HaveID... objs){
+    public static String haveIdToIdString(HaveID... objs) {
         StringBuilder builder = new StringBuilder();
-        for(HaveID obj : objs){
+        for (HaveID obj : objs) {
             builder.append(obj.getId())
                     .append("+");
         }
-        return builder.toString().substring(0,builder.length() -1);
+        return builder.toString().substring(0, builder.length() - 1);
     }
 }

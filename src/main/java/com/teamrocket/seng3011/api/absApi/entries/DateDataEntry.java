@@ -12,7 +12,7 @@ public abstract class DateDataEntry {
     @JsonProperty("Date")
     private String date;
 
-    public DateDataEntry(Date date){
+    public DateDataEntry(Date date) {
         this.date = DateUtils.dateToStringYMD(date);
     }
 

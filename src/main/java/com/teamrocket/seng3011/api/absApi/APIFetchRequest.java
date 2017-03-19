@@ -8,11 +8,12 @@ import com.teamrocket.seng3011.utils.DateUtils;
 import com.teamrocket.seng3011.utils.StringUtils;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by JHXSMatthew on 19/03/2017.
@@ -31,17 +32,17 @@ public class APIFetchRequest {
         type = EntryType.parseType(area);
     }
 
-    public APIFetchRequest setState(State[] state){
+    public APIFetchRequest setState(State[] state) {
         states = state;
         return this;
     }
 
-    public APIFetchRequest setCategories(HaveID[] haveIDS){
+    public APIFetchRequest setCategories(HaveID[] haveIDS) {
         this.categories = haveIDS;
         return this;
     }
 
-    public APIFetchRequest setDate(Date starting, Date ending){
+    public APIFetchRequest setDate(Date starting, Date ending) {
         this.starting = starting;
         this.ending = ending;
         return this;
@@ -53,34 +54,31 @@ public class APIFetchRequest {
         return sendHTTPGet(urlAddress); //TODO: parse data fetched.
     }
 
-    private String getURL(){
+    private String getURL() {
         String url = null;
-        if(type == EntryType.EXPORT){
+        Map<String, String> vars = new HashMap<>();
+        if (type == EntryType.RETAIL) {
             url = RT_URL;
-        }else if(type == EntryType.RETAIL){
-            url = EXPORT_URL;
-        }
-        Map<String,String> vars = new HashMap<>();
-        vars.put("timeLength","M");
-        vars.put("starting", DateUtils.dateToStringYM(starting));
-        vars.put("ending", DateUtils.dateToStringYM(ending));
-        if(type == EntryType.RETAIL) {
             vars.put("states", StringUtils.haveIdToIdString(states));
             vars.put("dataType", "2");
             vars.put("categories", StringUtils.haveIdToIdString(categories));
-            vars.put("adjType","10");
+            vars.put("adjType", "10");
             url += "{states}.{dataType}.{categories}.{adjType}.{timeLength}";
             //http://stat.data.abs.gov.au/sdmx-json/data/RT/1+2+3.2.41+42+43.10.M/all?startTime=2015-01&endTime=2015-12&dimensionAtObservation=allDimensions
-        }else if(type == EntryType.EXPORT){
-            vars.put("states",StringUtils.haveIdToIdString(states).replaceAll("0","-")); //special case
+        } else if (type == EntryType.EXPORT) {
+            url = EXPORT_URL;
+            vars.put("states", StringUtils.haveIdToIdString(states).replaceAll("0", "-")); //special case
             vars.put("categories", StringUtils.haveIdToIdString(categories));
-            vars.put("destination.","-");
+            vars.put("destination.", "-");
             url += "{states}.{categories}.{destination}.{timeLength}";
             //http://stat.data.abs.gov.au/sdmx-json/data/MERCH_EXP/-.-1+0+1+2+3+4+5+6+7+8+9.-1.-.M/all?startTime=2016-06&endTime=2016-12&dimensionAtObservation=allDimensions
         }
+        vars.put("timeLength", "M");
+        vars.put("starting", DateUtils.dateToStringYM(starting));
+        vars.put("ending", DateUtils.dateToStringYM(ending));
         url += "/all?startTime={starting}&endTime={ending}&dimensionAtObservation=allDimensions";
-        for(String s : vars.keySet())
-            url = url.replace("{"+ s+"}", vars.get(s));
+        for (String s : vars.keySet())
+            url = url.replace("{" + s + "}", vars.get(s));
         return url;
     }
 
@@ -100,7 +98,7 @@ public class APIFetchRequest {
             in.close();
             return response.toString();
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw new CannotFetchDataException();
         }

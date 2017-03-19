@@ -15,11 +15,11 @@ public class MonthlyDataExport {
     @JsonIgnore
     private List<MonthlyDataEntryExport> entryList;
 
-    public MonthlyDataExport(MonthlyDataEntryExport[] entries){
+    public MonthlyDataExport(MonthlyDataEntryExport[] entries) {
         this.entries = entries;
     }
 
-    public MonthlyDataExport(){
+    public MonthlyDataExport() {
 
     }
 

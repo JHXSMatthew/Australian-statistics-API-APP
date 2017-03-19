@@ -10,12 +10,12 @@ public class MonthlyDataEntryExport extends MonthlyDataEntry {
     private String commodity;
 
 
-    public MonthlyDataEntryExport(String commodity,RegionalDataEntry[] entries) {
+    public MonthlyDataEntryExport(String commodity, RegionalDataEntry[] entries) {
         super(entries);
         this.commodity = commodity;
     }
 
-    public MonthlyDataEntryExport(String commodity){
+    public MonthlyDataEntryExport(String commodity) {
         this.commodity = commodity;
     }
 

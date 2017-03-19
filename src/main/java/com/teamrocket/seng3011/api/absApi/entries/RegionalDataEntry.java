@@ -18,10 +18,11 @@ public class RegionalDataEntry {
     @JsonIgnore
     private List<DateDataEntry> entryList;
 
-    public RegionalDataEntry(State state){
+    public RegionalDataEntry(State state) {
         this.state = state;
     }
-    public RegionalDataEntry(State state,DateDataEntry[] entry){
+
+    public RegionalDataEntry(State state, DateDataEntry[] entry) {
         this.state = state;
         this.entry = entry;
     }
@@ -36,7 +37,7 @@ public class RegionalDataEntry {
     }
 
     public DateDataEntry[] getEntry() {
-        if(entry == null)
+        if (entry == null)
             pack();
         return entry;
     }
@@ -45,14 +46,14 @@ public class RegionalDataEntry {
         this.entry = entry;
     }
 
-    public void addEntry(DateDataEntry entry){
-        if(entryList == null){
+    public void addEntry(DateDataEntry entry) {
+        if (entryList == null) {
             entryList = new ArrayList<>();
         }
         entryList.add(entry);
     }
 
-    public void pack(){
+    public void pack() {
         entry = entryList.toArray(new DateDataEntry[entryList.size()]);
     }
 }

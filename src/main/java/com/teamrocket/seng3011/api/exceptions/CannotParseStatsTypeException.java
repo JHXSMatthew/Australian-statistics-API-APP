@@ -7,11 +7,11 @@ public class CannotParseStatsTypeException extends Exception {
 
     private String str;
 
-    public CannotParseStatsTypeException(String str){
+    public CannotParseStatsTypeException(String str) {
         this.str = str;
     }
 
-    public String getErrorName(){
+    public String getErrorName() {
         return str;
     }
 

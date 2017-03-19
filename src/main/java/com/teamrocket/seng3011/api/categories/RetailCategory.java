@@ -4,8 +4,8 @@ import com.teamrocket.seng3011.api.HaveID;
 
 /**
  * Created by JHXSMatthew on 17/3/17.
- *
- *
+ * <p>
+ * <p>
  * TODO: need someone recheck if this is correct, so messy XML there is
  */
 public enum RetailCategory implements HaveID {
@@ -19,11 +19,11 @@ public enum RetailCategory implements HaveID {
 
     private final int id;
 
-    RetailCategory(int id){
+    RetailCategory(int id) {
         this.id = id;
     }
 
-    public int getId(){
+    public int getId() {
         return this.id;
     }
 

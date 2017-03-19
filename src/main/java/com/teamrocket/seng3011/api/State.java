@@ -16,11 +16,11 @@ public enum State implements HaveID {
 
     private int id;
 
-    State(int id){
+    State(int id) {
         this.id = id;
     }
 
-    public int getId(){
+    public int getId() {
         return this.id;
     }
 

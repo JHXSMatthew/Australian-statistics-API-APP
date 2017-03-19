@@ -17,23 +17,23 @@ public abstract class MonthlyDataEntry {
     private List<RegionalDataEntry> entryList;
 
 
-    public MonthlyDataEntry(RegionalDataEntry[] entries){
+    public MonthlyDataEntry(RegionalDataEntry[] entries) {
         this.entries = entries;
     }
 
-    public MonthlyDataEntry(){
+    public MonthlyDataEntry() {
 
     }
 
-    public void addRegionalDataEntry(RegionalDataEntry entry){
-        if(entryList == null){
+    public void addRegionalDataEntry(RegionalDataEntry entry) {
+        if (entryList == null) {
             entryList = new ArrayList<>();
         }
         entryList.add(entry);
     }
 
     public RegionalDataEntry[] getEntries() {
-        if(entries == null){
+        if (entries == null) {
             entries = entryList.toArray(new RegionalDataEntry[entryList.size()]);
         }
         return entries;

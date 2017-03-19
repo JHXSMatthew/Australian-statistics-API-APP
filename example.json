@@ -1,33 +1,107 @@
 {
   "MonthlyRetailData": [
-    {"RetailIndustry":<>,
-      "RegionalData":[
-        { "State":<>,
-          "Data":[
-            {"Date":<>,"Turnover":<>},
-            {"Date":<>,"Turnover":<>}
+    {
+      "RetailIndustry":
+      <
+      >,
+      "RegionalData": [
+        {
+          "State":
+          <
+          >,
+          "Data": [
+            {
+              "Date":
+              <
+              >,
+              "Turnover":
+              <
+              >
+            },
+            {
+              "Date":
+              <
+              >,
+              "Turnover":
+              <
+              >
+            }
           ]
         }
-        { "State":<>,
-          "Data":[
-            {"Month":<>,"Turnover":<>},
-            {"Month":<>,"Turnover":<>}
+        {
+          "State":
+          <
+          >,
+          "Data": [
+            {
+              "Month":
+              <
+              >,
+              "Turnover":
+              <
+              >
+            },
+            {
+              "Month":
+              <
+              >,
+              "Turnover":
+              <
+              >
+            }
           ]
         }
       ]
     }
-    {"RetailIndustry":<>,
-      "RegionalData":[
-        { "State":<>,
-          "Data":[
-            {"Date":<>,"Turnover":<>},
-            {"Date":<>,"Turnover":<>}
+    {
+      "RetailIndustry":
+      <
+      >,
+      "RegionalData": [
+        {
+          "State":
+          <
+          >,
+          "Data": [
+            {
+              "Date":
+              <
+              >,
+              "Turnover":
+              <
+              >
+            },
+            {
+              "Date":
+              <
+              >,
+              "Turnover":
+              <
+              >
+            }
           ]
         }
-        { "State":<>,
-          "Data":[
-            {"Date":<>,"Turnover":<>},
-            {"Date":<>,"Turnover":<>}
+        {
+          "State":
+          <
+          >,
+          "Data": [
+            {
+              "Date":
+              <
+              >,
+              "Turnover":
+              <
+              >
+            },
+            {
+              "Date":
+              <
+              >,
+              "Turnover":
+              <
+              >
+            }
           ]
         }
       ]
@@ -37,34 +111,108 @@
 
 {
   "MonthlyCommodityExportData": [
-    {"Commodity":<>,
-      "RegionalData":[
-        { "State":<>,
-          "Data":[
-            {"Date":<>,"Value":<>},
-            {"Date":<>,"Value":<>}
+    {
+      "Commodity":
+      <
+      >,
+      "RegionalData": [
+        {
+          "State":
+          <
+          >,
+          "Data": [
+            {
+              "Date":
+              <
+              >,
+              "Value":
+              <
+              >
+            },
+            {
+              "Date":
+              <
+              >,
+              "Value":
+              <
+              >
+            }
           ]
         }
-        { "State":<>,
-          "Data":[
-            {"Date":<>,"Value":<>},
-            {"Date":<>,"Value":<>}
+        {
+          "State":
+          <
+          >,
+          "Data": [
+            {
+              "Date":
+              <
+              >,
+              "Value":
+              <
+              >
+            },
+            {
+              "Date":
+              <
+              >,
+              "Value":
+              <
+              >
+            }
           ]
         }
       ]
     }
-    {"Commodity":<>,
-      "RegionalData":[
-        { "State":<>,
-          "Data":[
-            {"Date":<>,"Value":<>},
-            {"Date":<>,"Value":<>}
+    {
+      "Commodity":
+      <
+      >,
+      "RegionalData": [
+        {
+          "State":
+          <
+          >,
+          "Data": [
+            {
+              "Date":
+              <
+              >,
+              "Value":
+              <
+              >
+            },
+            {
+              "Date":
+              <
+              >,
+              "Value":
+              <
+              >
+            }
           ]
         }
-        { "State":<>,
-          "Data":[
-            {"Date":<>,"Value":<>},
-            {"Date":<>,"Value":<>}
+        {
+          "State":
+          <
+          >,
+          "Data": [
+            {
+              "Date":
+              <
+              >,
+              "Value":
+              <
+              >
+            },
+            {
+              "Date":
+              <
+              >,
+              "Value":
+              <
+              >
+            }
           ]
         }
       ]

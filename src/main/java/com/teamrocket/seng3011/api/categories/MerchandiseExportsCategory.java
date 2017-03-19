@@ -4,7 +4,7 @@ import com.teamrocket.seng3011.api.HaveID;
 
 /**
  * Created by JHXSMatthew on 17/3/17.
- *
+ * <p>
  * TODO: fill those ids.
  */
 public enum MerchandiseExportsCategory implements HaveID {
@@ -22,11 +22,11 @@ public enum MerchandiseExportsCategory implements HaveID {
 
     private final int id;
 
-    MerchandiseExportsCategory(int id ){
+    MerchandiseExportsCategory(int id) {
         this.id = id;
     }
 
-    public int getId(){
+    public int getId() {
         return id;
     }
 

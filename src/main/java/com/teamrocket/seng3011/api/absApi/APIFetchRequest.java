@@ -21,7 +21,6 @@ public class APIFetchRequest {
     private static String RT_URL = "http://stat.data.abs.gov.au/sdmx-json/data/RT/";
     private static String EXPORT_URL = "http://stat.data.abs.gov.au/sdmx-json/data/MERCH_EXP/";
 
-    private String url = null;
     private EntryType type;
     private State[] states = null;
     private HaveID[] categories = null;
@@ -29,16 +28,7 @@ public class APIFetchRequest {
     private Date ending;
 
     public APIFetchRequest(String area) throws CannotParseStatsTypeException {
-        EntryType type = EntryType.parseType(area);
-        this.type = type;
-        if(type == EntryType.EXPORT){
-            url = EXPORT_URL;
-        }else if(type == EntryType.RETAIL){
-            url = RT_URL;
-        }else{
-            throw new CannotParseStatsTypeException(area);
-        }
-
+        type = EntryType.parseType(area);
     }
 
     public APIFetchRequest setState(State[] state){
@@ -58,6 +48,18 @@ public class APIFetchRequest {
     }
 
     public Object fetch() throws CannotFetchDataException {
+        String urlAddress = getURL();
+        System.err.println(urlAddress); //TODO: remove tests prints
+        return sendHTTPGet(urlAddress); //TODO: parse data fetched.
+    }
+
+    private String getURL(){
+        String url = null;
+        if(type == EntryType.EXPORT){
+            url = RT_URL;
+        }else if(type == EntryType.RETAIL){
+            url = EXPORT_URL;
+        }
         Map<String,String> vars = new HashMap<>();
         vars.put("timeLength","M");
         vars.put("starting", DateUtils.dateToStringYM(starting));
@@ -79,10 +81,12 @@ public class APIFetchRequest {
         url += "/all?startTime={starting}&endTime={ending}&dimensionAtObservation=allDimensions";
         for(String s : vars.keySet())
             url = url.replace("{"+ s+"}", vars.get(s));
+        return url;
+    }
 
-        System.err.println(url); //TODO: remove tests prints
+    private Object sendHTTPGet(String URL) throws CannotFetchDataException {
         try {
-            URL url = new URL(this.url);
+            URL url = new URL(URL);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("User_Agent", "Mozilla/5.0");
@@ -94,13 +98,12 @@ public class APIFetchRequest {
                 response.append(output);
             }
             in.close();
-            return response.toString(); //TODO: parse data fetched.
+            return response.toString();
 
         }catch (Exception e){
             e.printStackTrace();
             throw new CannotFetchDataException();
         }
     }
-
 
 }

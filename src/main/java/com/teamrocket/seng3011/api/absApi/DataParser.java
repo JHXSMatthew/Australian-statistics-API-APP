@@ -15,10 +15,15 @@ import java.util.*;
  * Created by JHXSMatthew on 20/03/2017.
  */
 public class DataParser {
-    private Map<String, Object> root;
     private JsonParser parser ;
+    private Map<String, Object> root;
     private Map<String, Object> data;
     private List<Object> struc;
+
+    private final static int POSITION_DATE =5;
+    private final static int POSITION_RETAIL_Industry = 2;
+    private final static int POSITION_STATE = 0;
+    private final static int POSITION_EXPORT_COMMODITY = 1;
 
 
     public DataParser(String json){
@@ -26,7 +31,7 @@ public class DataParser {
         root = parser.parseMap(json);
     }
 
-    public MonthlyDataEntry[] parseEntries(EntryType type) throws ParseException {
+    public MonthlyDataEntry[] getParsedEntries(EntryType type) throws ParseException {
         switch (type){
             case EXPORT:
                 return parseEntriesExport();
@@ -36,32 +41,32 @@ public class DataParser {
         throw new CannotParseStatsTypeException("unknown stats " + type,0);
     }
 
-    public MonthlyDataEntryExport[] parseEntriesExport() throws ParseException {
+    private MonthlyDataEntryExport[] parseEntriesExport() throws ParseException {
         List<List<Object>> positionValues = getPositionValuesList();
         int[] positions = new int[6];
         List<MonthlyDataEntryExport> entries = new ArrayList<>();
-        for(int i = 0 ; i < positionValues.get(1).size() ; i ++){
+        for(int i = 0 ; i < positionValues.get(POSITION_EXPORT_COMMODITY).size() ; i ++){
             //for Commodity by SITC
-            positions[1] = i;
-            String industry = (String) ((Map) positionValues.get(1).get(i)).get("id");
+            positions[POSITION_EXPORT_COMMODITY] = i;
+            String industry = (String) ((Map) positionValues.get(POSITION_EXPORT_COMMODITY).get(i)).get("id");
             MonthlyDataEntryExport export = (MonthlyDataEntryExport)
                     EntryFactory.getFactory().getMonthlyDataEntry(industry,EntryType.EXPORT);
 
             //ignore Data Type position
-            for(int j = 0; j < positionValues.get(0).size() ; j ++){
+            for(int j = 0; j < positionValues.get(POSITION_STATE).size() ; j ++){
                 //for each state
-                positions[0] = j;
-                String state = (String) ((Map) positionValues.get(0).get(j)).get("id");
+                positions[POSITION_STATE] = j;
+                String state = (String) ((Map) positionValues.get(POSITION_STATE).get(j)).get("id");
                 RegionalDataEntry regionalDataEntry = EntryFactory.getFactory()
                         .getRegionalDataEntry(State.parseState(state));
 
                 //ignore Adjustment Type
                 //ignore Frequency
 
-                for(int k = 0 ; k < positionValues.get(5).size() ; k++){
+                for(int k = 0 ; k < positionValues.get(POSITION_DATE).size() ; k++){
                     //for each months
-                    String dateYM = (String) ((Map) positionValues.get(5).get(k)).get("id");
-                    positions[5] = k;
+                    String dateYM = (String) ((Map) positionValues.get(POSITION_DATE).get(k)).get("id");
+                    positions[POSITION_DATE] = k;
                     //for each Time period
                     regionalDataEntry.addEntry(EntryFactory.getFactory().getDateDataEntry(DateUtils.stringToDateYM(dateYM)
                             ,getDataByPositions(positions),EntryType.EXPORT));
@@ -76,33 +81,33 @@ public class DataParser {
         return entries.toArray(new MonthlyDataEntryExport[entries.size()]);
     }
 
-    public MonthlyDataEntryRetail[] parseEntriesRetail() throws ParseException {
+    private MonthlyDataEntryRetail[] parseEntriesRetail() throws ParseException {
         List<List<Object>> positionValues = getPositionValuesList();
 
         int[] positions = new int[6];
         List<MonthlyDataEntryRetail> entries = new ArrayList<>();
-        for(int i = 0 ; i < positionValues.get(2).size() ; i ++){
+        for(int i = 0; i < positionValues.get(POSITION_RETAIL_Industry).size() ; i ++){
             //for Retail Industry
-            positions[2] = i;
-            String industry = (String) ((Map) positionValues.get(2).get(i)).get("id");
+            positions[POSITION_RETAIL_Industry] = i;
+            String industry = (String) ((Map) positionValues.get(POSITION_RETAIL_Industry).get(i)).get("id");
             MonthlyDataEntryRetail retail = (MonthlyDataEntryRetail)
                     EntryFactory.getFactory().getMonthlyDataEntry(industry,EntryType.RETAIL);
 
             //ignore Data Type position
-            for(int j = 0; j < positionValues.get(0).size() ; j ++){
+            for(int j = 0; j < positionValues.get(POSITION_STATE).size() ; j ++){
                 //for each state
-                positions[0] = j;
-                String state = (String) ((Map) positionValues.get(0).get(j)).get("id");
+                positions[POSITION_STATE] = j;
+                String state = (String) ((Map) positionValues.get(POSITION_STATE).get(j)).get("id");
                 RegionalDataEntry regionalDataEntry = EntryFactory.getFactory()
                         .getRegionalDataEntry(State.parseState(state));
 
                 //ignore Adjustment Type
                 //ignore Frequency
 
-                for(int k = 0 ; k < positionValues.get(5).size() ; k++){
+                for(int k = 0 ; k < positionValues.get(POSITION_DATE).size() ; k++){
                     //for each months
-                    String dateYM = (String) ((Map) positionValues.get(5).get(k)).get("id");
-                    positions[5] = k;
+                    String dateYM = (String) ((Map) positionValues.get(POSITION_DATE).get(k)).get("id");
+                    positions[POSITION_DATE] = k;
                     //for each Time period
                     regionalDataEntry.addEntry(EntryFactory.getFactory().getDateDataEntry(DateUtils.stringToDateYM(dateYM)
                             ,getDataByPositions(positions),EntryType.RETAIL));

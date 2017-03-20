@@ -62,7 +62,7 @@ public class APIRequest {
 
     public Object parse() throws ParseException {
         DataParser container = new DataParser(fetchedCache);
-        return container.parse().parseEntries(type);
+        return container.parse().getParsedEntries(type);
     }
 
     private String getURL() {

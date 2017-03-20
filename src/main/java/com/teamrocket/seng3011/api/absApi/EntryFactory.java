@@ -5,6 +5,7 @@ import com.teamrocket.seng3011.api.absApi.entries.*;
 import com.teamrocket.seng3011.api.categories.MerchandiseExportsCategory;
 import com.teamrocket.seng3011.api.categories.RetailCategory;
 import com.teamrocket.seng3011.api.exceptions.CannotParseCategoryException;
+import com.teamrocket.seng3011.api.exceptions.CannotParseStatsTypeException;
 
 import java.util.Date;
 import java.util.List;
@@ -91,6 +92,16 @@ public class EntryFactory {
 
     public MonthlyDataRetail assemblyOutput(MonthlyDataEntryRetail[] entryRetails) {
         return new MonthlyDataRetail(entryRetails);
+    }
+
+    public Object assemblyOutput(MonthlyDataEntry[] entries,EntryType type) throws CannotParseStatsTypeException {
+        switch (type){
+            case EXPORT:
+                return assemblyOutput((MonthlyDataEntryExport[]) entries);
+            case RETAIL:
+                return assemblyOutput((MonthlyDataEntryRetail[]) entries);
+        }
+        throw new CannotParseStatsTypeException("unknon type " + type ,0);
     }
 
 

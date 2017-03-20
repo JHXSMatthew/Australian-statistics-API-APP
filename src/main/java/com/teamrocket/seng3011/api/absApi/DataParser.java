@@ -29,12 +29,49 @@ public class DataParser {
     public MonthlyDataEntry[] parseEntries(EntryType type) throws ParseException {
         switch (type){
             case EXPORT:
-                //TODO: export
-                break;
+                return parseEntriesExport();
             case RETAIL:
                 return parseEntriesRetail();
         }
         throw new CannotParseStatsTypeException("unknown stats " + type,0);
+    }
+
+    public MonthlyDataEntryExport[] parseEntriesExport() throws ParseException {
+        List<List<Object>> positionValues = getPositionValuesList();
+        int[] positions = new int[6];
+        List<MonthlyDataEntryExport> entries = new ArrayList<>();
+        for(int i = 0 ; i < positionValues.get(1).size() ; i ++){
+            //for Commodity by SITC
+            String industry = (String) ((Map) positionValues.get(1).get(i)).get("id");
+            MonthlyDataEntryExport export = (MonthlyDataEntryExport)
+                    EntryFactory.getFactory().getMonthlyDataEntry(industry,EntryType.EXPORT);
+
+            //ignore Data Type position
+            for(int j = 0; j < positionValues.get(0).size() ; j ++){
+                //for each state
+                String state = (String) ((Map) positionValues.get(0).get(j)).get("id");
+                RegionalDataEntry regionalDataEntry = EntryFactory.getFactory()
+                        .getRegionalDataEntry(State.parseState(state));
+
+                //ignore Adjustment Type
+                //ignore Frequency
+
+                for(int k = 0 ; k < positionValues.get(5).size() ; k++){
+                    //for each months
+                    String dateYM = (String) ((Map) positionValues.get(5).get(k)).get("id");
+                    positions[5] = k;
+                    //for each Time period
+                    regionalDataEntry.addEntry(EntryFactory.getFactory().getDateDataEntry(DateUtils.stringToDateYM(dateYM)
+                            ,getDataByPositions(positions),EntryType.EXPORT));
+
+                }
+                regionalDataEntry.pack();
+                export.addRegionalDataEntry(regionalDataEntry);
+            }
+            export.pack();
+            entries.add(export);
+        }
+        return entries.toArray(new MonthlyDataEntryExport[entries.size()]);
     }
 
     public MonthlyDataEntryRetail[] parseEntriesRetail() throws ParseException {

@@ -1,5 +1,6 @@
 package com.teamrocket.seng3011.api.absApi;
 
+import com.teamrocket.seng3011.api.APIController;
 import com.teamrocket.seng3011.api.HaveID;
 import com.teamrocket.seng3011.api.State;
 import com.teamrocket.seng3011.api.absApi.entries.EntryType;
@@ -32,8 +33,8 @@ public class APIRequest {
     private Date ending;
     private String fetchedCache = null;
 
-    public APIRequest(String area) throws CannotParseStatsTypeException {
-        type = EntryType.parseType(area);
+    public APIRequest(EntryType area) throws CannotParseStatsTypeException {
+        type = area;
     }
 
     public APIRequest setState(State[] state) {
@@ -64,10 +65,6 @@ public class APIRequest {
         return container.parse().parseEntries(type);
     }
 
-
-
-
-
     private String getURL() {
         String url = null;
         Map<String, String> vars = new HashMap<>();
@@ -83,8 +80,9 @@ public class APIRequest {
             url = EXPORT_URL;
             vars.put("states", StringUtils.haveIdToIdString(states).replaceAll("0", "-")); //special case
             vars.put("categories", StringUtils.haveIdToIdString(categories));
-            vars.put("destination.", "-");
-            url += "{states}.{categories}.{destination}.{timeLength}";
+            vars.put("destination", "-");
+            vars.put("industryOfOrigin","-1");
+            url += "{states}.{categories}.{industryOfOrigin}.{destination}.{timeLength}";
             //http://stat.data.abs.gov.au/sdmx-json/data/MERCH_EXP/-.-1+0+1+2+3+4+5+6+7+8+9.-1.-.M/all?startTime=2016-06&endTime=2016-12&dimensionAtObservation=allDimensions
         }
         vars.put("timeLength", "M");
@@ -93,6 +91,7 @@ public class APIRequest {
         url += "/all?startTime={starting}&endTime={ending}&dimensionAtObservation=allDimensions";
         for (String s : vars.keySet())
             url = url.replace("{" + s + "}", vars.get(s));
+        APIController.debugPrint("gov API URL: " + url);
         return url;
     }
 

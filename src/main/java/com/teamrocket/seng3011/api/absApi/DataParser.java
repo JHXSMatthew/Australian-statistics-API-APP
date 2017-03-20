@@ -42,6 +42,7 @@ public class DataParser {
         List<MonthlyDataEntryExport> entries = new ArrayList<>();
         for(int i = 0 ; i < positionValues.get(1).size() ; i ++){
             //for Commodity by SITC
+            positions[1] = i;
             String industry = (String) ((Map) positionValues.get(1).get(i)).get("id");
             MonthlyDataEntryExport export = (MonthlyDataEntryExport)
                     EntryFactory.getFactory().getMonthlyDataEntry(industry,EntryType.EXPORT);
@@ -49,6 +50,7 @@ public class DataParser {
             //ignore Data Type position
             for(int j = 0; j < positionValues.get(0).size() ; j ++){
                 //for each state
+                positions[0] = j;
                 String state = (String) ((Map) positionValues.get(0).get(j)).get("id");
                 RegionalDataEntry regionalDataEntry = EntryFactory.getFactory()
                         .getRegionalDataEntry(State.parseState(state));
@@ -81,6 +83,7 @@ public class DataParser {
         List<MonthlyDataEntryRetail> entries = new ArrayList<>();
         for(int i = 0 ; i < positionValues.get(2).size() ; i ++){
             //for Retail Industry
+            positions[2] = i;
             String industry = (String) ((Map) positionValues.get(2).get(i)).get("id");
             MonthlyDataEntryRetail retail = (MonthlyDataEntryRetail)
                     EntryFactory.getFactory().getMonthlyDataEntry(industry,EntryType.RETAIL);
@@ -88,6 +91,7 @@ public class DataParser {
             //ignore Data Type position
             for(int j = 0; j < positionValues.get(0).size() ; j ++){
                 //for each state
+                positions[0] = j;
                 String state = (String) ((Map) positionValues.get(0).get(j)).get("id");
                 RegionalDataEntry regionalDataEntry = EntryFactory.getFactory()
                         .getRegionalDataEntry(State.parseState(state));

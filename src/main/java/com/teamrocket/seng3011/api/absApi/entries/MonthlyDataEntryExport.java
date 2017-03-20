@@ -1,25 +1,26 @@
 package com.teamrocket.seng3011.api.absApi.entries;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.teamrocket.seng3011.api.categories.MerchandiseExportsCategory;
 
 /**
  * Created by JHXSMatthew on 19/03/2017.
  */
 public class MonthlyDataEntryExport extends MonthlyDataEntry {
     @JsonProperty("Commodity")
-    private String commodity;
+    private MerchandiseExportsCategory commodity;
 
 
-    public MonthlyDataEntryExport(String commodity, RegionalDataEntry[] entries) {
+    public MonthlyDataEntryExport(MerchandiseExportsCategory commodity, RegionalDataEntry[] entries) {
         super(entries);
         this.commodity = commodity;
     }
 
-    public MonthlyDataEntryExport(String commodity) {
+    public MonthlyDataEntryExport(MerchandiseExportsCategory commodity) {
         this.commodity = commodity;
     }
 
-    public String getCommodity() {
+    public MerchandiseExportsCategory getCommodity() {
         return commodity;
     }
 }

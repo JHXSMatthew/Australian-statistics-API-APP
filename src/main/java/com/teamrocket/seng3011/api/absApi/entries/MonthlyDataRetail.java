@@ -1,4 +1,4 @@
-package com.teamrocket.seng3011.api.absApi;
+package com.teamrocket.seng3011.api.absApi.entries;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

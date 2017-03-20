@@ -10,15 +10,15 @@ import java.util.Date;
 public class DateDataEntryExport extends DateDataEntry {
 
     @JsonProperty("Value")
-    private float value;
+    private double value;
 
-    public DateDataEntryExport(Date date, float value) {
+    public DateDataEntryExport(Date date, double value) {
         super(date);
         this.value = value;
     }
 
 
-    public float getValue() {
+    public double getValue() {
         return value;
     }
 

@@ -2,15 +2,18 @@ package com.teamrocket.seng3011.api.absApi;
 
 import com.teamrocket.seng3011.api.HaveID;
 import com.teamrocket.seng3011.api.State;
+import com.teamrocket.seng3011.api.absApi.entries.EntryType;
 import com.teamrocket.seng3011.api.exceptions.CannotFetchDataException;
 import com.teamrocket.seng3011.api.exceptions.CannotParseStatsTypeException;
 import com.teamrocket.seng3011.utils.DateUtils;
 import com.teamrocket.seng3011.utils.StringUtils;
 
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +21,7 @@ import java.util.Map;
 /**
  * Created by JHXSMatthew on 19/03/2017.
  */
-public class APIFetchRequest {
+public class APIRequest {
     private static String RT_URL = "http://stat.data.abs.gov.au/sdmx-json/data/RT/";
     private static String EXPORT_URL = "http://stat.data.abs.gov.au/sdmx-json/data/MERCH_EXP/";
 
@@ -27,32 +30,43 @@ public class APIFetchRequest {
     private HaveID[] categories = null;
     private Date starting;
     private Date ending;
+    private String fetchedCache = null;
 
-    public APIFetchRequest(String area) throws CannotParseStatsTypeException {
+    public APIRequest(String area) throws CannotParseStatsTypeException {
         type = EntryType.parseType(area);
     }
 
-    public APIFetchRequest setState(State[] state) {
+    public APIRequest setState(State[] state) {
         states = state;
         return this;
     }
 
-    public APIFetchRequest setCategories(HaveID[] haveIDS) {
+    public APIRequest setCategories(HaveID[] haveIDS) {
         this.categories = haveIDS;
         return this;
     }
 
-    public APIFetchRequest setDate(Date starting, Date ending) {
+    public APIRequest setDate(Date starting, Date ending) {
         this.starting = starting;
         this.ending = ending;
         return this;
     }
 
-    public Object fetch() throws CannotFetchDataException {
-        String urlAddress = getURL();
-        System.err.println(urlAddress); //TODO: remove tests prints
-        return sendHTTPGet(urlAddress); //TODO: parse data fetched.
+    public APIRequest fetch() throws CannotFetchDataException, ParseException {
+        String jsonResponse = (String) sendHTTPGet(getURL());
+        fetchedCache = jsonResponse;
+        return this;
+        //return jsonResponse; //TODO: parse data fetched.
     }
+
+    public Object parse() throws ParseException {
+        DataParser container = new DataParser(fetchedCache);
+        return container.parse().parseEntries(type);
+    }
+
+
+
+
 
     private String getURL() {
         String url = null;
@@ -100,7 +114,7 @@ public class APIFetchRequest {
 
         } catch (Exception e) {
             e.printStackTrace();
-            throw new CannotFetchDataException();
+            throw new CannotFetchDataException("cannot fetch data HTTP error, API down?");
         }
     }
 

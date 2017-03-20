@@ -1,5 +1,9 @@
 package com.teamrocket.seng3011.api;
 
+import com.teamrocket.seng3011.api.exceptions.CannotParseStateException;
+
+import java.util.Arrays;
+
 /**
  * Created by JHXSMatthew on 17/3/17.
  */
@@ -11,7 +15,7 @@ public enum State implements HaveID {
     SA(4),  //South Australia
     WA(5),  //Western Australia
     TAS(6), //Tasmania
-    NT(7),  //Northern Territory TODO: this is not in spec, why ?
+    NT(7),  //Northern Territory
     ACT(8); //Australian Capital Territory
 
     private int id;
@@ -24,6 +28,29 @@ public enum State implements HaveID {
         return this.id;
     }
 
+    public static State parseState(int id) throws CannotParseStateException {
+        for(State s : values()){
+            if(s.getId() == id){
+                return s;
+            }
+        }
+        throw new CannotParseStateException("state id unknown :" + id,0);
+    }
 
+
+    public static State parseState(String id_str) throws CannotParseStateException {
+        int id = -999;
+        try{
+            id = Integer.parseInt(id_str);
+        }catch (Exception e){
+            throw new CannotParseStateException("state id unknown :" + id,0);
+        }
+        for(State s : values()){
+            if(s.getId() == id){
+                return s;
+            }
+        }
+        throw new CannotParseStateException("state id unknown :" + id,0);
+    }
 }
 

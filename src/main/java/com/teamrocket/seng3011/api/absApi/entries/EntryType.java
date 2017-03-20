@@ -1,4 +1,4 @@
-package com.teamrocket.seng3011.api.absApi;
+package com.teamrocket.seng3011.api.absApi.entries;
 
 import com.teamrocket.seng3011.api.exceptions.CannotParseStatsTypeException;
 
@@ -19,6 +19,6 @@ public enum EntryType {
             if (type.typeString.equals(arg))
                 return type;
         }
-        throw new CannotParseStatsTypeException(arg);
+        throw new CannotParseStatsTypeException(arg,0);
     }
 }

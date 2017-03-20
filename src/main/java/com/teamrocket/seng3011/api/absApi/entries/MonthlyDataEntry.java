@@ -34,7 +34,7 @@ public abstract class MonthlyDataEntry {
 
     public RegionalDataEntry[] getEntries() {
         if (entries == null) {
-            entries = entryList.toArray(new RegionalDataEntry[entryList.size()]);
+            pack();
         }
         return entries;
     }
@@ -49,5 +49,9 @@ public abstract class MonthlyDataEntry {
 
     public void setEntryList(List<RegionalDataEntry> entryList) {
         this.entryList = entryList;
+    }
+
+    public void pack(){
+        entries = entryList.toArray(new RegionalDataEntry[entryList.size()]);
     }
 }

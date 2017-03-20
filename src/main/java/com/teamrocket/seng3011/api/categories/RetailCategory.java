@@ -1,6 +1,7 @@
 package com.teamrocket.seng3011.api.categories;
 
 import com.teamrocket.seng3011.api.HaveID;
+import com.teamrocket.seng3011.api.exceptions.CannotParseCategoryException;
 
 /**
  * Created by JHXSMatthew on 17/3/17.
@@ -27,4 +28,28 @@ public enum RetailCategory implements HaveID {
         return this.id;
     }
 
+    public static RetailCategory parseCategory(int id) throws CannotParseCategoryException {
+        for(RetailCategory s : values()){
+            if(s.getId() == id){
+                return s;
+            }
+        }
+        throw new CannotParseCategoryException("state id unknown :" + id,0);
+    }
+
+
+    public static RetailCategory parseCategory(String id_str) throws CannotParseCategoryException {
+        int id = -999;
+        try{
+            id = Integer.parseInt(id_str);
+        }catch (Exception e){
+            throw new CannotParseCategoryException("category id unknown :" + id,0);
+        }
+        for(RetailCategory s : values()){
+            if(s.getId() == id){
+                return s;
+            }
+        }
+        throw new CannotParseCategoryException("state id unknown :" + id,0);
+    }
 }

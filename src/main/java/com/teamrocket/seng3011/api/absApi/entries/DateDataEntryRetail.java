@@ -10,14 +10,14 @@ import java.util.Date;
 public class DateDataEntryRetail extends DateDataEntry {
 
     @JsonProperty("Turnover")
-    private float turnover;
+    private double turnover;
 
-    public DateDataEntryRetail(Date date, float turnover) {
+    public DateDataEntryRetail(Date date, double turnover) {
         super(date);
         this.turnover = turnover;
     }
 
-    public float getTurnover() {
+    public double getTurnover() {
         return turnover;
     }
 

@@ -1,14 +1,17 @@
 package com.teamrocket.seng3011.api;
 
-import com.teamrocket.seng3011.api.absApi.APIFetchRequest;
-import com.teamrocket.seng3011.api.exceptions.CannotFetchDataException;
-import com.teamrocket.seng3011.api.exceptions.CannotParseCategoryException;
-import com.teamrocket.seng3011.api.exceptions.CannotParseStatsTypeException;
+import com.teamrocket.seng3011.api.absApi.APIRequest;
+import com.teamrocket.seng3011.api.absApi.EntryFactory;
+import com.teamrocket.seng3011.api.absApi.entries.MonthlyDataEntryRetail;
+import com.teamrocket.seng3011.api.absApi.entries.MonthlyDataExport;
+import com.teamrocket.seng3011.api.absApi.entries.MonthlyDataRetail;
+import com.teamrocket.seng3011.api.exceptions.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
@@ -24,22 +27,35 @@ public class APIController {
 
 
     @RequestMapping("/api")
-    public String statistics(@RequestParam(value = "StatisticsArea") String area,
-                             @RequestParam(value = "State") State[] state,
-                             @RequestParam(value = "Category") String[] category,
-                             @RequestParam(value = "startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
-                             @RequestParam(value = "endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) throws CannotParseCategoryException, CannotParseStatsTypeException, CannotFetchDataException {
-        APIFetchRequest request = new APIFetchRequest(area);
-        String s = (String) request.setState(state)
+    public MonthlyDataRetail statistics(@RequestParam(value = "StatisticsArea") String area,
+                                        @RequestParam(value = "State") String[] stateRaw,
+                                        @RequestParam(value = "Category") String[] category,
+                                        @RequestParam(value = "startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+                                        @RequestParam(value = "endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) throws ParseException, CannotFetchDataException {
+
+        State[] state = parseState(stateRaw);
+        APIRequest request = new APIRequest(area);
+        MonthlyDataRetail obj = EntryFactory.getFactory().assemblyOutput((MonthlyDataEntryRetail[]) request.setState(state)
                 .setCategories(parseCategory(category, area))
                 .setDate(startDate, endDate)
-                .fetch();
-        System.out.println(s);
+                .fetch().parse());
 
 
-        return s;
+        return obj;
     }
 
+    private State[] parseState(String[] stateRaw) throws CannotParseStateException {
+        State[] states = new State[stateRaw.length];
+        for(int i = 0 ; i < stateRaw.length ; i ++){
+            String s = stateRaw[i];
+            try {
+                states[i] = State.valueOf(s);
+            }catch (Exception e) {
+                throw new CannotParseStateException("State name: " + s + " not found!", 0);
+            }
+        }
+        return states;
+    }
 
     private HaveID[] parseCategory(String[] category, String area) throws CannotParseCategoryException {
         HaveID[] returnValue = null;

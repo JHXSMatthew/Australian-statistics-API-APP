@@ -2,6 +2,9 @@ package com.teamrocket.seng3011.api.absApi;
 
 import com.teamrocket.seng3011.api.State;
 import com.teamrocket.seng3011.api.absApi.entries.*;
+import com.teamrocket.seng3011.api.categories.MerchandiseExportsCategory;
+import com.teamrocket.seng3011.api.categories.RetailCategory;
+import com.teamrocket.seng3011.api.exceptions.CannotParseCategoryException;
 
 import java.util.Date;
 import java.util.List;
@@ -19,7 +22,7 @@ public class EntryFactory {
         return factory;
     }
 
-    public DateDataEntry getDateDataEntry(Date date, float value, EntryType type) {
+    public DateDataEntry getDateDataEntry(Date date, double value, EntryType type) {
         switch (type) {
             case EXPORT:
                 return new DateDataEntryExport(date, value);
@@ -47,39 +50,37 @@ public class EntryFactory {
         return new RegionalDataEntry(state);
     }
 
-    public MonthlyDataEntry getMonthlyDataEntry(String name, RegionalDataEntry[] entries, EntryType type) {
-        switch (type) {
-            case EXPORT:
-                return new MonthlyDataEntryExport(name, entries);
-            case RETAIL:
-                return new MonthlyDataEntryRetail(name, entries);
+    public MonthlyDataEntry getMonthlyDataEntry(String name, RegionalDataEntry[] entries, EntryType type) throws CannotParseCategoryException {
+        MonthlyDataEntry entry = getMonthlyDataEntry(name,type);
+        for(RegionalDataEntry i : entries){
+            entry.addRegionalDataEntry(i);
         }
-        return null;
+        entry.pack();
+        return entry;
     }
 
-    public MonthlyDataEntry getMonthlyDataEntry(String name, List<RegionalDataEntry> entries, EntryType type) {
-        switch (type) {
-            case EXPORT:
-                return new MonthlyDataEntryExport(name, entries.toArray(new RegionalDataEntry[entries.size()]));
-            case RETAIL:
-                return new MonthlyDataEntryRetail(name, entries.toArray(new RegionalDataEntry[entries.size()]));
+    public MonthlyDataEntry getMonthlyDataEntry(String name, List<RegionalDataEntry> entries, EntryType type) throws CannotParseCategoryException {
+        MonthlyDataEntry entry = getMonthlyDataEntry(name,type);
+        for(RegionalDataEntry i : entries){
+            entry.addRegionalDataEntry(i);
         }
+        entry.pack();
         return null;
     }
 
     /**
      * manually adding MonthlyDataEntry required.
      *
-     * @param name industry/commodity name
+     * @param id industry/commodity id
      * @param type the type either EXPORT OR RETAIL
      * @return MonthlyDataEntry
      */
-    public MonthlyDataEntry getMonthlyDataEntry(String name, EntryType type) {
+    public MonthlyDataEntry getMonthlyDataEntry(String id, EntryType type) throws CannotParseCategoryException {
         switch (type) {
             case EXPORT:
-                return new MonthlyDataEntryExport(name);
+                return new MonthlyDataEntryExport(MerchandiseExportsCategory.parseCategory(id));
             case RETAIL:
-                return new MonthlyDataEntryRetail(name);
+                return new MonthlyDataEntryRetail(RetailCategory.parseCategory(id));
         }
         return null;
     }

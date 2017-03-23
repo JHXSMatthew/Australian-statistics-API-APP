@@ -1,11 +1,8 @@
 package com.teamrocket.seng3011;
 
-import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Created by JHXSMatthew on 13/03/2017.
@@ -15,7 +12,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class exampleController {
 
     @RequestMapping("/")
-    public String greeting(HttpRequest request) {
+    public String greeting() {
         String s = "<!DOCTYPE html>\n" +
                 "<!-- saved from url=(0047)http://getbootstrap.com/examples/sticky-footer/ -->\n" +
                 "<html lang=\"en\"><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n" +

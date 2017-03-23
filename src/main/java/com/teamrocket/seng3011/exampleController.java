@@ -14,7 +14,6 @@ public class exampleController {
     @RequestMapping("/")
     public String greeting() {
         String s = "<!DOCTYPE html>\n" +
-                "<!-- saved from url=(0047)http://getbootstrap.com/examples/sticky-footer/ -->\n" +
                 "<html lang=\"en\"><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n" +
                 "    \n" +
                 "    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n" +
@@ -27,23 +26,14 @@ public class exampleController {
                 "    <title>Sticky Footer Template for Bootstrap</title>\n" +
                 "\n" +
                 "    <!-- Bootstrap core CSS -->\n" +
-                "    <link href=\"./Sticky Footer Template for Bootstrap_files/bootstrap.min.css\" rel=\"stylesheet\">\n" +
-                "\n" +
-                "    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->\n" +
-                "    <link href=\"./Sticky Footer Template for Bootstrap_files/ie10-viewport-bug-workaround.css\" rel=\"stylesheet\">\n" +
+                "    <link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css\" integrity=\"sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u\" crossorigin=\"anonymous\">\n" +
                 "\n" +
                 "    <!-- Custom styles for this template -->\n" +
-                "    <link href=\"./Sticky Footer Template for Bootstrap_files/sticky-footer.css\" rel=\"stylesheet\">\n" +
+                "    <link href=\"http://45.76.114.158/wow/temp.css\" rel=\"stylesheet\">\n" +
+                "\t\n" +
+                "\t<link href=\"https://afeld.github.io/emoji-css/emoji.css\" rel=\"stylesheet\">\n" +
                 "\n" +
-                "    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->\n" +
-                "    <!--[if lt IE 9]><script src=\"../../assets/js/ie8-responsive-file-warning.js\"></script><![endif]-->\n" +
-                "    <script src=\"./Sticky Footer Template for Bootstrap_files/ie-emulation-modes-warning.js.download\"></script>\n" +
                 "\n" +
-                "    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->\n" +
-                "    <!--[if lt IE 9]>\n" +
-                "      <script src=\"https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js\"></script>\n" +
-                "      <script src=\"https://oss.maxcdn.com/respond/1.4.2/respond.min.js\"></script>\n" +
-                "    <![endif]-->\n" +
                 "  </head>\n" +
                 "\n" +
                 "  <body>\n" +
@@ -51,7 +41,8 @@ public class exampleController {
                 "    <!-- Begin page content -->\n" +
                 "    <div class=\"container\">\n" +
                 "      <div class=\"page-header\">\n" +
-                "        <h1>TeamRocket\uD83D\uDE80</h1>\n" +
+                "        <h1>TeamRocket <i class=\"em em-rocket\"></i></h1>\n" +
+                "\n" +
                 "      </div>\n" +
                 "\t  <p class=\"lead\"> Hello, welcome to the teamRocket home page</p>\n" +
                 "\t  <p class=\"lead\"> Our homepage and docs are under-development. You may expect it very soon. We do have a working API so you may use the API right now right here.</p>\n" +
@@ -70,10 +61,6 @@ public class exampleController {
                 "      </div>\n" +
                 "    </footer>\n" +
                 "\n" +
-                "\n" +
-                "    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->\n" +
-                "    <script src=\"./Sticky Footer Template for Bootstrap_files/ie10-viewport-bug-workaround.js.download\"></script>\n" +
-                "  \n" +
                 "\n" +
                 "</body></html>";
         return  s;

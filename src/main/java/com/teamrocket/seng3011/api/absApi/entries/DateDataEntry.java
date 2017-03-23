@@ -3,6 +3,7 @@ package com.teamrocket.seng3011.api.absApi.entries;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.teamrocket.seng3011.utils.DateUtils;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -14,7 +15,11 @@ public abstract class DateDataEntry {
     private String date;
 
     public DateDataEntry(Date date) {
-        this.date = DateUtils.dateToStringYMD(date);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MONTH,1);
+        calendar.add(Calendar.DATE,-1);
+        this.date = DateUtils.dateToStringYMD(calendar.getTime());
     }
 
     public String getDate() {

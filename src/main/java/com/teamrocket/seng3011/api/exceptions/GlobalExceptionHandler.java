@@ -1,5 +1,8 @@
 package com.teamrocket.seng3011.api.exceptions;
 
+import com.teamrocket.seng3011.api.results.Header;
+import com.teamrocket.seng3011.api.results.ResultContainer;
+import com.teamrocket.seng3011.api.results.Status;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.FieldError;
@@ -25,39 +28,63 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map handle(MethodArgumentNotValidException exception) {
-        return error(exception.getBindingResult().getFieldErrors()
-                .stream()
-                .map(FieldError::getDefaultMessage)
-                .collect(Collectors.toList()));
+    public ResultContainer handle(MethodArgumentNotValidException exception) {
+        return error(0,exception.getMessage());
     }
 
     @ExceptionHandler
     @ResponseBody
     @ResponseStatus
-    public String handle(MethodArgumentTypeMismatchException exception) {
-        return exception.getName();
+    public ResultContainer handle(MethodArgumentTypeMismatchException exception) {
+        return error(1,exception.getMessage());
     }
 
     @ExceptionHandler
     @ResponseBody
     @ResponseStatus
-    public String handle(CannotParseCategoryException exp) {
-        return exp.getMessage();
+    public ResultContainer handle(CannotParseStatsTypeException exception) {
+        return error(2,exception.getMessage());
+
+    }
+
+    @ExceptionHandler
+    @ResponseBody
+    @ResponseStatus
+    public ResultContainer handle(CannotParseCategoryException exception) {
+        return error(3,exception.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseBody
+    @ResponseStatus
+    public ResultContainer handle(CannotParseStateException exception) {
+        return error(4,exception.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseBody
+    @ResponseStatus
+    public ResultContainer handle(CannotParseJSONException exception) {
+        return error(5,exception.getMessage());
+    }
+
+
+    @ExceptionHandler
+    @ResponseBody
+    @ResponseStatus
+    public ResultContainer handle(CannotFetchDataException exception) {
+        return error(6,exception.getErrorMessage());
     }
 
 
     @ExceptionHandler
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map handle(ConstraintViolationException exception) {
-        return error(exception.getConstraintViolations()
-                .stream()
-                .map(ConstraintViolation::getMessage)
-                .collect(Collectors.toList()));
+    public ResultContainer handle(ConstraintViolationException exception) {
+        return error(7,exception.getMessage());
     }
 
-    private Map error(Object message) {
-        return Collections.singletonMap("error", message);
+    private ResultContainer error(int id,String message) {
+        return new ResultContainer(new Header(Status.error),new Error(id,message));
     }
 }

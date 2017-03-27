@@ -57,7 +57,6 @@ public class APIRequest {
         String jsonResponse = (String) sendHTTPGet(getURL());
         fetchedCache = jsonResponse;
         return this;
-        //return jsonResponse; //TODO: parse data fetched.
     }
 
     public Object parse() throws ParseException {

@@ -8,7 +8,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Header {
 
     @JsonProperty("exceptions")
-    private boolean exceptions = false;
+    private Status status = null;
+
+
+    public Header (Status status){
+        this.status = status;
+    }
 
 
 

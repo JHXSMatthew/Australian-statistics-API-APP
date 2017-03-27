@@ -11,7 +11,6 @@ import java.util.Date;
  */
 public abstract class DateDataEntry {
     @JsonProperty("Date")
-    //TODO: date should be convented to yyyy-MM-dd where dd is the last day of the month.
     private String date;
 
     public DateDataEntry(Date date) {

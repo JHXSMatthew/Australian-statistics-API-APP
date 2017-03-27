@@ -6,7 +6,6 @@ import com.teamrocket.seng3011.api.exceptions.CannotParseCategoryException;
 /**
  * Created by JHXSMatthew on 17/3/17.
  * <p>
- * TODO: fill those ids.
  */
 public enum MerchandiseExportsCategory implements HaveID {
     Total(-1),

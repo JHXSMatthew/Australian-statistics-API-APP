@@ -1,10 +1,15 @@
 package com.teamrocket.seng3011.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.teamrocket.seng3011.api.absApi.APIRequest;
 import com.teamrocket.seng3011.api.absApi.EntryFactory;
 import com.teamrocket.seng3011.api.absApi.entries.*;
 import com.teamrocket.seng3011.api.exceptions.*;
+import com.teamrocket.seng3011.api.results.Header;
+import com.teamrocket.seng3011.api.results.ResultContainer;
+import com.teamrocket.seng3011.api.results.ResultObject;
+import com.teamrocket.seng3011.api.results.Status;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,11 +37,13 @@ public class APIController {
     public final static boolean DEBUG = true;
 
     @RequestMapping(value = "/api", method= RequestMethod.GET, produces = "application/json")
-    public void statistics(HttpServletResponse response, @RequestParam(value = "StatisticsArea") String area,
-                                        @RequestParam(value = "State") String[] stateRaw,
-                                        @RequestParam(value = "Category") String[] category,
-                                        @RequestParam(value = "startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
-                                        @RequestParam(value = "endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) throws ParseException, CannotFetchDataException, IOException {
+    public void statistics(HttpServletResponse response,
+                           @RequestParam(value = "false", required = false) boolean pretty,
+                           @RequestParam(value = "StatisticsArea") String area,
+                           @RequestParam(value = "State") String[] stateRaw,
+                           @RequestParam(value = "Category") String[] category,
+                           @RequestParam(value = "startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+                           @RequestParam(value = "endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) throws ParseException, CannotFetchDataException, IOException {
         debugPrint("---- Request received! ----");
         State[] state = parseState(stateRaw);
         EntryType entryType = EntryType.parseType(area);
@@ -49,8 +56,11 @@ public class APIController {
                 .fetch().parse(), entryType
         );
 
+        ResultContainer container = new ResultContainer(new Header(Status.success), (ResultObject) obj);
         ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(response.getOutputStream(),obj);
+        if(pretty)
+            mapper.enable(SerializationFeature.INDENT_OUTPUT);
+        mapper.writeValue(response.getOutputStream(),container);
         debugPrint("---- Request done! ----");
         debugPrint("  ");
 

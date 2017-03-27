@@ -1,5 +1,6 @@
 package com.teamrocket.seng3011.api.exceptions;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.teamrocket.seng3011.api.results.ResultObject;
 
 /**
@@ -7,5 +8,13 @@ import com.teamrocket.seng3011.api.results.ResultObject;
  *
  */
 public class Error implements ResultObject {
-    //TODO: finish error handling
+    @JsonProperty("code")
+    private int id;
+    @JsonProperty("message")
+    private String message;
+
+    public Error(int id, String message){
+        this.id = id;
+        this.message = message;
+    }
 }

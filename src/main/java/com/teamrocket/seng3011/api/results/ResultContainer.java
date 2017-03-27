@@ -12,6 +12,7 @@ public class ResultContainer {
     private ResultObject object;
 
     public ResultContainer(Header header, ResultObject object){
-
+        this.header = header;
+        this.object = object;
     }
 }

@@ -11,6 +11,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 
 @Configuration
 public class APIConfiguration extends WebMvcConfigurationSupport {
+    public static double version = 0.1;
+
 
     @Override
     public FormattingConversionService mvcConversionService() {

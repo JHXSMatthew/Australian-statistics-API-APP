@@ -108,9 +108,12 @@ public class DataParser {
                     //for each months
                     String dateYM = (String) ((Map) positionValues.get(POSITION_DATE).get(k)).get("id");
                     positions[POSITION_DATE] = k;
-                    //for each Time period
+                    //for each Time period TODO: notice user when some data is missing.
+                    double data = getDataByPositions(positions);
+                    if(data == -1.0)
+                        continue;
                     regionalDataEntry.addEntry(EntryFactory.getFactory().getDateDataEntry(DateUtils.stringToDateYM(dateYM)
-                            ,getDataByPositions(positions),EntryType.RETAIL));
+                           ,data,EntryType.RETAIL));
 
                 }
                 regionalDataEntry.pack();
@@ -141,7 +144,11 @@ public class DataParser {
     }
 
     private double getDataByPositions(int[] positions){
-        return (double) ((List) data.get(getKeyFromPositions(positions))).get(0);
+        try {
+            return (double) ((List) data.get(getKeyFromPositions(positions))).get(0);
+        }catch (NullPointerException e){
+            return -1.0;
+        }
     }
 
 

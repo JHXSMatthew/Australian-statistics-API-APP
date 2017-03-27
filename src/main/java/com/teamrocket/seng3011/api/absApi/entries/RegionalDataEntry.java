@@ -3,6 +3,7 @@ package com.teamrocket.seng3011.api.absApi.entries;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.teamrocket.seng3011.api.State;
+import com.teamrocket.seng3011.api.results.ResultObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
 /**
  * Created by JHXSMatthew on 19/03/2017.
  */
-public class RegionalDataEntry {
+public class RegionalDataEntry implements ResultObject {
     @JsonProperty("State")
     private State state;
     @JsonProperty("Data")

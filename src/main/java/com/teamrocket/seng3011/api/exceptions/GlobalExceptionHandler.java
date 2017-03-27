@@ -84,6 +84,14 @@ public class GlobalExceptionHandler {
         return error(7,exception.getMessage());
     }
 
+    @ExceptionHandler
+    @ResponseBody
+    @ResponseStatus()
+    public ResultContainer handle(NullPointerException exception) {
+        return error(8,exception.getMessage());
+    }
+
+
     private ResultContainer error(int id,String message) {
         return new ResultContainer(new Header(Status.error),new Error(id,message));
     }

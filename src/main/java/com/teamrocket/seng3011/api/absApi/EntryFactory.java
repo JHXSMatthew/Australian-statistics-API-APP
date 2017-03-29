@@ -101,7 +101,7 @@ public class EntryFactory {
             case RETAIL:
                 return assemblyOutput((MonthlyDataEntryRetail[]) entries);
         }
-        throw new CannotParseStatsTypeException("unknon type " + type ,0);
+        throw new CannotParseStatsTypeException("unknown type " + type);
     }
 
 

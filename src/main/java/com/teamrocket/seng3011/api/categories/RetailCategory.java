@@ -33,7 +33,7 @@ public enum RetailCategory implements HaveID {
                 return s;
             }
         }
-        throw new CannotParseCategoryException("state id unknown :" + id,0);
+        throw new CannotParseCategoryException("state id unknown :" + id);
     }
 
 
@@ -42,13 +42,13 @@ public enum RetailCategory implements HaveID {
         try{
             id = Integer.parseInt(id_str);
         }catch (Exception e){
-            throw new CannotParseCategoryException("category id unknown :" + id,0);
+            throw new CannotParseCategoryException("category id unknown :" + id);
         }
         for(RetailCategory s : values()){
             if(s.getId() == id){
                 return s;
             }
         }
-        throw new CannotParseCategoryException("state id unknown :" + id,0);
+        throw new CannotParseCategoryException("state id unknown :" + id);
     }
 }

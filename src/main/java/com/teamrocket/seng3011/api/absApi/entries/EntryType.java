@@ -19,6 +19,6 @@ public enum EntryType {
             if (type.typeString.equals(arg))
                 return type;
         }
-        throw new CannotParseStatsTypeException(arg,0);
+        throw new CannotParseStatsTypeException(arg);
     }
 }

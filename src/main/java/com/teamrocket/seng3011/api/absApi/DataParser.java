@@ -4,6 +4,7 @@ import com.teamrocket.seng3011.api.State;
 import com.teamrocket.seng3011.api.absApi.entries.*;
 import com.teamrocket.seng3011.api.exceptions.CannotParseJSONException;
 import com.teamrocket.seng3011.api.exceptions.CannotParseStatsTypeException;
+import com.teamrocket.seng3011.api.exceptions.KnownException;
 import com.teamrocket.seng3011.utils.DateUtils;
 import org.springframework.boot.json.JsonJsonParser;
 import org.springframework.boot.json.JsonParser;
@@ -31,17 +32,17 @@ public class DataParser {
         root = parser.parseMap(json);
     }
 
-    public MonthlyDataEntry[] getParsedEntries(EntryType type) throws ParseException {
+    public MonthlyDataEntry[] getParsedEntries(EntryType type) throws KnownException {
         switch (type){
             case EXPORT:
                 return parseEntriesExport();
             case RETAIL:
                 return parseEntriesRetail();
         }
-        throw new CannotParseStatsTypeException("unknown stats " + type,0);
+        throw new CannotParseStatsTypeException("unknown stats " + type);
     }
 
-    private MonthlyDataEntryExport[] parseEntriesExport() throws ParseException {
+    private MonthlyDataEntryExport[] parseEntriesExport() throws KnownException {
         List<List<Object>> positionValues = getPositionValuesList();
         int[] positions = new int[6];
         List<MonthlyDataEntryExport> entries = new ArrayList<>();
@@ -81,7 +82,7 @@ public class DataParser {
         return entries.toArray(new MonthlyDataEntryExport[entries.size()]);
     }
 
-    private MonthlyDataEntryRetail[] parseEntriesRetail() throws ParseException {
+    private MonthlyDataEntryRetail[] parseEntriesRetail() throws KnownException {
         List<List<Object>> positionValues = getPositionValuesList();
 
         int[] positions = new int[6];
@@ -154,7 +155,7 @@ public class DataParser {
 
     public DataParser parse () throws CannotParseJSONException {
         if(!root.containsKey("dataSets") || !root.containsKey("structure") )
-            throw new CannotParseJSONException("key: dataSets or structure do not exist!",0);
+            throw new CannotParseJSONException("key: dataSets or structure do not exist!");
         try {
             Map<String, Object> dataSets = (Map) ((List) root.get("dataSets")).get(0);
             Map<String, Object> structure = (Map) root.get("structure");
@@ -162,7 +163,7 @@ public class DataParser {
             struc = (List) ((Map) structure.get("dimensions")).get("observation");
         }catch (Exception e){
             e.printStackTrace();
-            throw new CannotParseJSONException(e.getMessage(),1);
+            throw new CannotParseJSONException(e.getMessage());
         }
         return this;
     }

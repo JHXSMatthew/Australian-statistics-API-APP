@@ -1,5 +1,8 @@
 package com.teamrocket.seng3011.utils;
 
+import com.teamrocket.seng3011.api.exceptions.DateInvalidException;
+import com.teamrocket.seng3011.api.exceptions.KnownException;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,12 +23,20 @@ public class DateUtils {
         return formatymd.format(date);
     }
 
-    public static Date stringToDateYM(String date) throws ParseException {
-        return formatym.parse(date);
+    public static Date stringToDateYM(String date) throws KnownException {
+        try {
+            return formatym.parse(date);
+        } catch (ParseException e) {
+            throw new DateInvalidException(date);
+        }
     }
 
-    public static Date stringToDateYMD(String date) throws ParseException {
-        return formatymd.parse(date);
+    public static Date stringToDateYMD(String date) throws KnownException {
+        try {
+            return formatym.parse(date);
+        } catch (ParseException e) {
+            throw new DateInvalidException(date);
+        }
     }
 
 

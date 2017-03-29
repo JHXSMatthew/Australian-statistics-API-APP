@@ -10,6 +10,7 @@ import com.teamrocket.seng3011.api.results.Header;
 import com.teamrocket.seng3011.api.results.ResultContainer;
 import com.teamrocket.seng3011.api.results.ResultObject;
 import com.teamrocket.seng3011.api.results.Status;
+import com.teamrocket.seng3011.utils.DateUtils;
 import com.teamrocket.seng3011.utils.StringUtils;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,14 +43,17 @@ public class APIController {
     @RequestMapping(value = "/api", method= RequestMethod.GET, produces = "application/json")
     public void statistics(HttpServletResponse response,
                            WebRequest r,
-                           @RequestParam(value = "false", required = false) String pretty,
+                           @RequestParam(value = "pretty", required = false) boolean pretty,
                            @RequestParam(value = "StatisticsArea") String area,
                            @RequestParam(value = "State") String[] stateRaw,
                            @RequestParam(value = "Category") String[] category,
                            @RequestParam(value = "startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
-                           @RequestParam(value = "endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) throws ParseException, CannotFetchDataException, IOException {
+                           @RequestParam(value = "endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) throws ParseException, IOException, DateInvalidException, KnownException {
 
         String parameters = StringUtils.mapToString(r.getParameterMap());
+        if(endDate.before(startDate))
+            throw new DateInvalidException("Date " + DateUtils.dateToStringYMD(startDate) +" is after " + DateUtils.dateToStringYMD(endDate));
+
         try {
             Date log_starting = Calendar.getInstance().getTime();
             debugPrint("---- Request received! ----");
@@ -67,7 +71,7 @@ public class APIController {
 
             ResultContainer container = new ResultContainer(new Header(Status.success), (ResultObject) obj);
             ObjectMapper mapper = new ObjectMapper();
-            if(pretty != null && pretty.equals("true"))
+            if(pretty)
                 mapper.enable(SerializationFeature.INDENT_OUTPUT);
             mapper.writeValue(response.getOutputStream(),container);
             debugPrint("---- Request done! ----");
@@ -75,6 +79,9 @@ public class APIController {
             LogManager.getInstance().log(parameters,log_starting,Calendar.getInstance().getTime());
         }catch (Exception e){
             LogManager.getInstance().log(parameters,e.getMessage(),e.getStackTrace()[0].toString());
+            if(e instanceof KnownException){
+                ((KnownException) e).setPretty(pretty);
+            }
             throw e;
         }
 
@@ -88,7 +95,7 @@ public class APIController {
             try {
                 states[i] = State.valueOf(s);
             }catch (Exception e) {
-                throw new CannotParseStateException("State name: " + s + " not found!", 0);
+                throw new CannotParseStateException(s);
             }
         }
         return states;
@@ -111,7 +118,10 @@ public class APIController {
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-            throw new CannotParseCategoryException("cannot find category type!", 0);
+            throw new CannotParseCategoryException(Arrays.toString(category));
+        }
+        if(category.length != returnValue.length){
+            throw new CannotParseCategoryException(Arrays.toString(category));
         }
         return returnValue;
     }

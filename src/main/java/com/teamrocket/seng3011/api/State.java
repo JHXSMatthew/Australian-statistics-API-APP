@@ -34,7 +34,7 @@ public enum State implements HaveID {
                 return s;
             }
         }
-        throw new CannotParseStateException("state id unknown :" + id,0);
+        throw new CannotParseStateException("state id unknown :" + id);
     }
 
 
@@ -43,14 +43,14 @@ public enum State implements HaveID {
         try{
             id = Integer.parseInt(id_str);
         }catch (Exception e){
-            throw new CannotParseStateException("state id unknown :" + id,0);
+            throw new CannotParseStateException("state id unknown :" + id);
         }
         for(State s : values()){
             if(s.getId() == id){
                 return s;
             }
         }
-        throw new CannotParseStateException("state id unknown :" + id,0);
+        throw new CannotParseStateException("state id unknown :" + id);
     }
 }
 

@@ -6,6 +6,7 @@ import com.teamrocket.seng3011.api.State;
 import com.teamrocket.seng3011.api.absApi.entries.EntryType;
 import com.teamrocket.seng3011.api.exceptions.CannotFetchDataException;
 import com.teamrocket.seng3011.api.exceptions.CannotParseStatsTypeException;
+import com.teamrocket.seng3011.api.exceptions.KnownException;
 import com.teamrocket.seng3011.utils.DateUtils;
 import com.teamrocket.seng3011.utils.StringUtils;
 
@@ -59,7 +60,7 @@ public class APIRequest {
         return this;
     }
 
-    public Object parse() throws ParseException {
+    public Object parse() throws KnownException {
         DataParser container = new DataParser(fetchedCache);
         return container.parse().getParsedEntries(type);
     }

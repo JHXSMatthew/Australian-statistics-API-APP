@@ -32,7 +32,7 @@ public class LogManager {
         if (isMac() || isWindows()) {
             path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separatorChar + "seng3011";
         } else if (isUnix()) {
-            path = "/var/logs/seng3011";
+            path = "/var/log/seng3011";
         } else {
             path = "logs";
         }

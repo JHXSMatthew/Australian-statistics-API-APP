@@ -15,9 +15,9 @@ public enum MerchandiseExportsCategory implements HaveID {
     MineralFuelLubricentAndRelatedMaterial(3),
     AnimalAndVegitableOilFatAndWaxes(4),
     ChemicalsAndRelatedProducts(5),
-    ManufacutedGoods(6),
+    ManufacturedGoods(6),
     MachineryAndTransportEquipments(7),
-    OtherManucacturedArticles(8),
+    OtherManufacturedArticles(8),
     Unclassified(9);
 
     private final int id;

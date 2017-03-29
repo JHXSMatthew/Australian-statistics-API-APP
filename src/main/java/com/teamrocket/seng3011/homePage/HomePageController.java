@@ -1,13 +1,11 @@
 package com.teamrocket.seng3011.homePage;
 
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 
 
 /**
@@ -17,11 +15,10 @@ import java.io.File;
 @RestController
 public class HomePageController {
 
-    @RequestMapping(value = "/dev", method = RequestMethod.GET)
-    public ModelAndView page(ModelAndView model, HttpServletRequest request) {
-        String test = "t";
-        model.addObject("test",test);
-
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public ModelAndView page( HttpServletRequest request) {
+        ModelAndView model = new ModelAndView();
+        model.setViewName("index");
         return model;
     }
 }

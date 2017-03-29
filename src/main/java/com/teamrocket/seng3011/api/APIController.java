@@ -60,8 +60,6 @@ public class APIController {
             State[] state = parseState(stateRaw);
             EntryType entryType = EntryType.parseType(area);
             APIRequest request = new APIRequest(entryType);
-
-
                 Object obj = EntryFactory.getFactory().assemblyOutput(
                         (MonthlyDataEntry[]) request.setState(state)
                                 .setCategories(parseCategory(category, area))

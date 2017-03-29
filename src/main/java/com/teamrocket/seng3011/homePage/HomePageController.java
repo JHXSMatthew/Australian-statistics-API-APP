@@ -18,7 +18,7 @@ import java.io.File;
 public class HomePageController {
 
     @RequestMapping(value = "/dev", method = RequestMethod.GET)
-    public ModelAndView greeting(ModelAndView model, HttpServletRequest request) {
+    public ModelAndView page(ModelAndView model, HttpServletRequest request) {
         String test = "t";
         model.addObject("test",test);
 

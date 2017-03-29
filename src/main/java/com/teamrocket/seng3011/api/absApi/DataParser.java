@@ -5,6 +5,7 @@ import com.teamrocket.seng3011.api.absApi.entries.*;
 import com.teamrocket.seng3011.api.exceptions.CannotParseJSONException;
 import com.teamrocket.seng3011.api.exceptions.CannotParseStatsTypeException;
 import com.teamrocket.seng3011.api.exceptions.KnownException;
+import com.teamrocket.seng3011.api.exceptions.NoDataAvailableException;
 import com.teamrocket.seng3011.utils.DateUtils;
 import org.springframework.boot.json.JsonJsonParser;
 import org.springframework.boot.json.JsonParser;
@@ -33,11 +34,19 @@ public class DataParser {
     }
 
     public MonthlyDataEntry[] getParsedEntries(EntryType type) throws KnownException {
-        switch (type){
-            case EXPORT:
-                return parseEntriesExport();
-            case RETAIL:
-                return parseEntriesRetail();
+        try {
+            switch (type) {
+                case EXPORT:
+                    return parseEntriesExport();
+                case RETAIL:
+                    return parseEntriesRetail();
+            }
+        }catch (Exception e){
+            if(e instanceof KnownException){
+                throw e;
+            }else {
+                throw new NoDataAvailableException("no date is available for those parameters");
+            }
         }
         throw new CannotParseStatsTypeException("unknown stats " + type);
     }

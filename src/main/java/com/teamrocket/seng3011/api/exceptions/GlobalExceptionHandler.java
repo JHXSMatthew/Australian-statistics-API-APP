@@ -6,7 +6,6 @@ import com.teamrocket.seng3011.api.results.Status;
 import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,11 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import java.util.Collections;
-import java.util.Map;
-import java.util.stream.Collectors;
+
 
 /**
  * Created by JHXSMatthew on 18/03/2017.
@@ -107,6 +103,21 @@ public class GlobalExceptionHandler {
     @ResponseStatus
     public ResultContainer handle(ConversionFailedException exception){
         return error(9,exception.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseBody
+    @ResponseStatus
+    public ResultContainer handle(NoDataAvailableException exception){
+        return error(10,exception.getMessage());
+    }
+
+
+    @ExceptionHandler
+    @ResponseBody
+    @ResponseStatus
+    public ResultContainer handle(DateInvalidException exception){
+        return error(11,exception.getMessage());
     }
 
 

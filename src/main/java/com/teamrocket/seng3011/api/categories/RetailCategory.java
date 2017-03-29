@@ -11,7 +11,7 @@ import com.teamrocket.seng3011.api.exceptions.CannotParseCategoryException;
 public enum RetailCategory implements HaveID {
     Total(20),
     Food(41),
-    HousholdGood(42),
+    HouseholdGood(42),
     ClothingFootwareAndPersonalAccessory(43),
     DepartmentStores(44),
     CafesResturantsAndTakeawayFood(46),

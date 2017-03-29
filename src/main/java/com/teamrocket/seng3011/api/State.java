@@ -40,17 +40,22 @@ public enum State implements HaveID {
 
     public static State parseState(String id_str) throws CannotParseStateException {
         int id = -999;
-        try{
-            id = Integer.parseInt(id_str);
-        }catch (Exception e){
-            throw new CannotParseStateException("state id unknown :" + id);
+        if(id_str.equals("-")){
+            // this is for export AUS parsing, bad practise.
+            id = 0;
+        }else {
+            try {
+                id = Integer.parseInt(id_str);
+            } catch (Exception e) {
+                throw new CannotParseStateException(" id unknown :" + id_str);
+            }
         }
         for(State s : values()){
             if(s.getId() == id){
                 return s;
             }
         }
-        throw new CannotParseStateException("state id unknown :" + id);
+        throw new CannotParseStateException(" id unknown :" + id_str);
     }
 }
 

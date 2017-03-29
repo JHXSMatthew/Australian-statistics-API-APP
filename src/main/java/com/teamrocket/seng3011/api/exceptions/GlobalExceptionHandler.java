@@ -27,29 +27,29 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     @ResponseBody
     @ResponseStatus
-    public ResultContainer handle (MissingServletRequestParameterException exception){
-        return error(-1,exception.getMessage());
+    public ResultContainer handle(MissingServletRequestParameterException exception) {
+        return error(-1, exception.getMessage());
     }
 
     @ExceptionHandler
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResultContainer handle(MethodArgumentNotValidException exception) {
-        return error(0,exception.getMessage());
+        return error(0, exception.getMessage());
     }
 
     @ExceptionHandler
     @ResponseBody
     @ResponseStatus
     public ResultContainer handle(MethodArgumentTypeMismatchException exception) {
-        return error(1,exception.getMessage());
+        return error(1, exception.getMessage());
     }
 
     @ExceptionHandler
     @ResponseBody
     @ResponseStatus
     public ResultContainer handle(CannotParseStatsTypeException exception) {
-        return error(2,exception.getMessage());
+        return error(2, exception.getMessage());
 
     }
 
@@ -57,21 +57,21 @@ public class GlobalExceptionHandler {
     @ResponseBody
     @ResponseStatus
     public ResultContainer handle(CannotParseCategoryException exception) {
-        return error(3,exception.getMessage());
+        return error(3, exception.getMessage());
     }
 
     @ExceptionHandler
     @ResponseBody
     @ResponseStatus
     public ResultContainer handle(CannotParseStateException exception) {
-        return error(4,exception.getMessage());
+        return error(4, exception.getMessage());
     }
 
     @ExceptionHandler
     @ResponseBody
     @ResponseStatus
     public ResultContainer handle(CannotParseJSONException exception) {
-        return error(5,exception.getMessage());
+        return error(5, exception.getMessage());
     }
 
 
@@ -79,7 +79,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     @ResponseStatus
     public ResultContainer handle(CannotFetchDataException exception) {
-        return error(6,exception.getMessage());
+        return error(6, exception.getMessage());
     }
 
 
@@ -87,42 +87,42 @@ public class GlobalExceptionHandler {
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResultContainer handle(ConstraintViolationException exception) {
-        return error(7,exception.getMessage());
+        return error(7, exception.getMessage());
     }
 
     @ExceptionHandler
     @ResponseBody
     @ResponseStatus()
     public ResultContainer handle(NullPointerException exception) {
-        return error(8,exception.getMessage());
+        return error(8, exception.getMessage());
     }
 
 
     @ExceptionHandler
     @ResponseBody
     @ResponseStatus
-    public ResultContainer handle(ConversionFailedException exception){
-        return error(9,exception.getMessage());
+    public ResultContainer handle(ConversionFailedException exception) {
+        return error(9, exception.getMessage());
     }
 
     @ExceptionHandler
     @ResponseBody
     @ResponseStatus
-    public ResultContainer handle(NoDataAvailableException exception){
-        return error(10,exception.getMessage());
+    public ResultContainer handle(NoDataAvailableException exception) {
+        return error(10, exception.getMessage());
     }
 
 
     @ExceptionHandler
     @ResponseBody
     @ResponseStatus
-    public ResultContainer handle(DateInvalidException exception){
-        return error(11,exception.getMessage());
+    public ResultContainer handle(DateInvalidException exception) {
+        return error(11, exception.getMessage());
     }
 
 
-    private ResultContainer error(int id,String message) {
+    private ResultContainer error(int id, String message) {
 
-        return new ResultContainer(new Header(Status.error),new Error(id,message));
+        return new ResultContainer(new Header(Status.error), new Error(id, message));
     }
 }

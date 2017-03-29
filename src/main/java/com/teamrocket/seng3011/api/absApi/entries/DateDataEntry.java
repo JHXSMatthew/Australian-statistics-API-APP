@@ -16,8 +16,8 @@ public abstract class DateDataEntry {
     public DateDataEntry(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        calendar.add(Calendar.MONTH,1);
-        calendar.add(Calendar.DATE,-1);
+        calendar.add(Calendar.MONTH, 1);
+        calendar.add(Calendar.DATE, -1);
         this.date = DateUtils.dateToStringYMD(calendar.getTime());
     }
 

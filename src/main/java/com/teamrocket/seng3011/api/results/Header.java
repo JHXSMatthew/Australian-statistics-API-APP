@@ -11,10 +11,9 @@ public class Header {
     private Status status = null;
 
 
-    public Header (Status status){
+    public Header(Status status) {
         this.status = status;
     }
-
 
 
 }

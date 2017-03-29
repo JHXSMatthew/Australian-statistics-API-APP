@@ -52,8 +52,8 @@ public class EntryFactory {
     }
 
     public MonthlyDataEntry getMonthlyDataEntry(String name, RegionalDataEntry[] entries, EntryType type) throws CannotParseCategoryException {
-        MonthlyDataEntry entry = getMonthlyDataEntry(name,type);
-        for(RegionalDataEntry i : entries){
+        MonthlyDataEntry entry = getMonthlyDataEntry(name, type);
+        for (RegionalDataEntry i : entries) {
             entry.addRegionalDataEntry(i);
         }
         entry.pack();
@@ -61,8 +61,8 @@ public class EntryFactory {
     }
 
     public MonthlyDataEntry getMonthlyDataEntry(String name, List<RegionalDataEntry> entries, EntryType type) throws CannotParseCategoryException {
-        MonthlyDataEntry entry = getMonthlyDataEntry(name,type);
-        for(RegionalDataEntry i : entries){
+        MonthlyDataEntry entry = getMonthlyDataEntry(name, type);
+        for (RegionalDataEntry i : entries) {
             entry.addRegionalDataEntry(i);
         }
         entry.pack();
@@ -72,7 +72,7 @@ public class EntryFactory {
     /**
      * manually adding MonthlyDataEntry required.
      *
-     * @param id industry/commodity id
+     * @param id   industry/commodity id
      * @param type the type either EXPORT OR RETAIL
      * @return MonthlyDataEntry
      */
@@ -94,8 +94,8 @@ public class EntryFactory {
         return new MonthlyDataRetail(entryRetails);
     }
 
-    public Object assemblyOutput(MonthlyDataEntry[] entries,EntryType type) throws CannotParseStatsTypeException {
-        switch (type){
+    public Object assemblyOutput(MonthlyDataEntry[] entries, EntryType type) throws CannotParseStatsTypeException {
+        switch (type) {
             case EXPORT:
                 return assemblyOutput((MonthlyDataEntryExport[]) entries);
             case RETAIL:

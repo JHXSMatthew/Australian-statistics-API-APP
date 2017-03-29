@@ -5,7 +5,7 @@ package com.teamrocket.seng3011.api.exceptions;
  */
 public class DateInvalidException extends KnownException {
 
-    public DateInvalidException(String message){
-        super(message,false);
+    public DateInvalidException(String message) {
+        super(message, false);
     }
 }

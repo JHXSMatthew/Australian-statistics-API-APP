@@ -6,7 +6,7 @@ package com.teamrocket.seng3011.api.exceptions;
 public class CannotFetchDataException extends KnownException {
 
     public CannotFetchDataException(String str) {
-        super(str,false);
+        super(str, false);
 
     }
 

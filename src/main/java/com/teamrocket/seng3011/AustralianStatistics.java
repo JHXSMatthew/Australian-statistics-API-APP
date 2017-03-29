@@ -9,13 +9,13 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 public class AustralianStatistics extends SpringBootServletInitializer {
 
 
+    public static void main(String[] args) {
+        SpringApplication.run(AustralianStatistics.class, args);
+    }
+
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(AustralianStatistics.class);
-    }
-
-    public static void main(String[] args) {
-        SpringApplication.run(AustralianStatistics.class, args);
     }
 
 }

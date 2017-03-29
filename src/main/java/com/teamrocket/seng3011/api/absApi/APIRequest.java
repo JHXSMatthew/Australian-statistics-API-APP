@@ -10,7 +10,6 @@ import com.teamrocket.seng3011.api.exceptions.KnownException;
 import com.teamrocket.seng3011.utils.DateUtils;
 import com.teamrocket.seng3011.utils.StringUtils;
 
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -81,7 +80,7 @@ public class APIRequest {
             vars.put("states", StringUtils.haveIdToIdString(states).replaceAll("0", "-")); //special case
             vars.put("categories", StringUtils.haveIdToIdString(categories));
             vars.put("destination", "-");
-            vars.put("industryOfOrigin","-1");
+            vars.put("industryOfOrigin", "-1");
             url += "{states}.{categories}.{industryOfOrigin}.{destination}.{timeLength}";
             //http://stat.data.abs.gov.au/sdmx-json/data/MERCH_EXP/-.-1+0+1+2+3+4+5+6+7+8+9.-1.-.M/all?startTime=2016-06&endTime=2016-12&dimensionAtObservation=allDimensions
         }

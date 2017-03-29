@@ -6,9 +6,8 @@ package com.teamrocket.seng3011.api.exceptions;
 public class CannotParseCategoryException extends KnownException {
 
 
-
     public CannotParseCategoryException(String s) {
-        super("cannot not parse the category " + s,false);
+        super("cannot not parse the category " + s, false);
     }
 
 

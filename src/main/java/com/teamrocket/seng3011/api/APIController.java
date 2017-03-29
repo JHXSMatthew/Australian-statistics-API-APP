@@ -4,8 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.teamrocket.seng3011.api.absApi.APIRequest;
 import com.teamrocket.seng3011.api.absApi.EntryFactory;
-import com.teamrocket.seng3011.api.absApi.entries.*;
-import com.teamrocket.seng3011.api.exceptions.*;
+import com.teamrocket.seng3011.api.absApi.entries.EntryType;
+import com.teamrocket.seng3011.api.absApi.entries.MonthlyDataEntry;
+import com.teamrocket.seng3011.api.exceptions.CannotParseCategoryException;
+import com.teamrocket.seng3011.api.exceptions.CannotParseStateException;
+import com.teamrocket.seng3011.api.exceptions.DateInvalidException;
+import com.teamrocket.seng3011.api.exceptions.KnownException;
 import com.teamrocket.seng3011.api.results.Header;
 import com.teamrocket.seng3011.api.results.ResultContainer;
 import com.teamrocket.seng3011.api.results.ResultObject;
@@ -31,16 +35,19 @@ import java.util.Objects;
  * Created by JHXSMatthew on 17/3/17.
  * <p>
  * http://127.0.0.1:8080/api?StatisticsArea=Retail&State=NSW&Category=ClothingFootwareAndPersonalAccessory,DepartmentStores&startDate=2013-01-01&&endDate=2014-01-01
- *
+ * <p>
  * http://127.0.0.1:8080/api?StatisticsArea=MerchandiseExports&State=NSW,SA&Category=CrudMaterialAndInedible,MineralFuelLubricentAndRelatedMaterial&startDate=2013-01-01&&endDate=2014-01-01
- *
  */
 @RestController
 public class APIController {
 
     private final static boolean DEBUG = true;
 
-    @RequestMapping(value = "/api", method= RequestMethod.GET, produces = "application/json")
+    public static void debugPrint(String str) {
+        if (DEBUG) System.err.println(str);
+    }
+
+    @RequestMapping(value = "/api", method = RequestMethod.GET, produces = "application/json")
     public void statistics(HttpServletResponse response,
                            WebRequest r,
                            @RequestParam(value = "pretty", required = false) boolean pretty,
@@ -51,8 +58,8 @@ public class APIController {
                            @RequestParam(value = "endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) throws ParseException, IOException, DateInvalidException, KnownException {
 
         String parameters = StringUtils.mapToString(r.getParameterMap());
-        if(endDate.before(startDate))
-            throw new DateInvalidException("Date " + DateUtils.dateToStringYMD(startDate) +" is after " + DateUtils.dateToStringYMD(endDate));
+        if (endDate.before(startDate))
+            throw new DateInvalidException("Date " + DateUtils.dateToStringYMD(startDate) + " is after " + DateUtils.dateToStringYMD(endDate));
 
         try {
             Date log_starting = Calendar.getInstance().getTime();
@@ -60,24 +67,24 @@ public class APIController {
             State[] state = parseState(stateRaw);
             EntryType entryType = EntryType.parseType(area);
             APIRequest request = new APIRequest(entryType);
-                Object obj = EntryFactory.getFactory().assemblyOutput(
-                        (MonthlyDataEntry[]) request.setState(state)
-                                .setCategories(parseCategory(category, area))
-                                .setDate(startDate, endDate)
-                                .fetch().parse(), entryType
-                );
+            Object obj = EntryFactory.getFactory().assemblyOutput(
+                    (MonthlyDataEntry[]) request.setState(state)
+                            .setCategories(parseCategory(category, area))
+                            .setDate(startDate, endDate)
+                            .fetch().parse(), entryType
+            );
 
             ResultContainer container = new ResultContainer(new Header(Status.success), (ResultObject) obj);
             ObjectMapper mapper = new ObjectMapper();
-            if(pretty)
+            if (pretty)
                 mapper.enable(SerializationFeature.INDENT_OUTPUT);
-            mapper.writeValue(response.getOutputStream(),container);
+            mapper.writeValue(response.getOutputStream(), container);
             debugPrint("---- Request done! ----");
             debugPrint("  ");
-            LogManager.getInstance().log(parameters,log_starting,Calendar.getInstance().getTime());
-        }catch (Exception e){
-            LogManager.getInstance().log(parameters,e.getMessage(),e.getStackTrace()[0].toString());
-            if(e instanceof KnownException){
+            LogManager.getInstance().log(parameters, log_starting, Calendar.getInstance().getTime());
+        } catch (Exception e) {
+            LogManager.getInstance().log(parameters, e.getMessage(), e.getStackTrace()[0].toString());
+            if (e instanceof KnownException) {
                 ((KnownException) e).setPretty(pretty);
             }
             throw e;
@@ -88,11 +95,11 @@ public class APIController {
 
     private State[] parseState(String[] stateRaw) throws CannotParseStateException {
         State[] states = new State[stateRaw.length];
-        for(int i = 0 ; i < stateRaw.length ; i ++){
+        for (int i = 0; i < stateRaw.length; i++) {
             String s = stateRaw[i];
             try {
                 states[i] = State.valueOf(s);
-            }catch (Exception e) {
+            } catch (Exception e) {
                 throw new CannotParseStateException(s);
             }
         }
@@ -118,14 +125,10 @@ public class APIController {
             e.printStackTrace();
             throw new CannotParseCategoryException(Arrays.toString(category));
         }
-        if(category.length != returnValue.length){
+        if (category.length != returnValue.length) {
             throw new CannotParseCategoryException(Arrays.toString(category));
         }
         return returnValue;
-    }
-
-    public static void debugPrint(String str){
-        if(DEBUG) System.err.println(str);
     }
 
 }

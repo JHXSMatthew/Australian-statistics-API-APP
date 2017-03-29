@@ -2,7 +2,6 @@ package com.teamrocket.seng3011.api.absApi.entries;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.teamrocket.seng3011.api.results.ResultObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +51,7 @@ public abstract class MonthlyDataEntry {
         this.entryList = entryList;
     }
 
-    public void pack(){
+    public void pack() {
         entries = entryList.toArray(new RegionalDataEntry[entryList.size()]);
     }
 }

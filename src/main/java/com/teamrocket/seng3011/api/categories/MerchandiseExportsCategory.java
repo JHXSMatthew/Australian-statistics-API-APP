@@ -26,33 +26,32 @@ public enum MerchandiseExportsCategory implements HaveID {
         this.id = id;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public static MerchandiseExportsCategory parseCategory(int id) throws CannotParseCategoryException {
-        for(MerchandiseExportsCategory s : values()){
-            if(s.getId() == id){
+        for (MerchandiseExportsCategory s : values()) {
+            if (s.getId() == id) {
                 return s;
             }
         }
         throw new CannotParseCategoryException("state id unknown :" + id);
     }
-
 
     public static MerchandiseExportsCategory parseCategory(String id_str) throws CannotParseCategoryException {
         int id = -999;
-        try{
+        try {
             id = Integer.parseInt(id_str);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new CannotParseCategoryException("category id unknown :" + id);
         }
-        for(MerchandiseExportsCategory s : values()){
-            if(s.getId() == id){
+        for (MerchandiseExportsCategory s : values()) {
+            if (s.getId() == id) {
                 return s;
             }
         }
         throw new CannotParseCategoryException("state id unknown :" + id);
+    }
+
+    public int getId() {
+        return id;
     }
 
 }

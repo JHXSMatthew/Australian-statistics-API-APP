@@ -11,7 +11,7 @@ public class ResultContainer {
     @JsonProperty("data")
     private ResultObject object;
 
-    public ResultContainer(Header header, ResultObject object){
+    public ResultContainer(Header header, ResultObject object) {
         this.header = header;
         this.object = object;
     }

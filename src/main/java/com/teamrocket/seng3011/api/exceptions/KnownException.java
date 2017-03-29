@@ -7,12 +7,12 @@ public class KnownException extends Exception {
 
     private boolean pretty = false;
 
-    public KnownException(String message , boolean pretty){
+    public KnownException(String message, boolean pretty) {
         super(message);
         this.pretty = pretty;
     }
 
-    public void setPretty(boolean pretty){
+    public void setPretty(boolean pretty) {
         this.pretty = pretty;
     }
 }

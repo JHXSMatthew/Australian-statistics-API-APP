@@ -23,32 +23,31 @@ public enum RetailCategory implements HaveID {
         this.id = id;
     }
 
-    public int getId() {
-        return this.id;
-    }
-
     public static RetailCategory parseCategory(int id) throws CannotParseCategoryException {
-        for(RetailCategory s : values()){
-            if(s.getId() == id){
+        for (RetailCategory s : values()) {
+            if (s.getId() == id) {
                 return s;
             }
         }
         throw new CannotParseCategoryException("state id unknown :" + id);
     }
-
 
     public static RetailCategory parseCategory(String id_str) throws CannotParseCategoryException {
         int id = -999;
-        try{
+        try {
             id = Integer.parseInt(id_str);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new CannotParseCategoryException("category id unknown :" + id);
         }
-        for(RetailCategory s : values()){
-            if(s.getId() == id){
+        for (RetailCategory s : values()) {
+            if (s.getId() == id) {
                 return s;
             }
         }
         throw new CannotParseCategoryException("state id unknown :" + id);
+    }
+
+    public int getId() {
+        return this.id;
     }
 }

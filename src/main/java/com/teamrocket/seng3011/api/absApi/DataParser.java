@@ -45,7 +45,7 @@ public class DataParser {
             if(e instanceof KnownException){
                 throw e;
             }else {
-                throw new NoDataAvailableException("no date is available for those parameters");
+                throw new NoDataAvailableException("no data is available for those parameters");
             }
         }
         throw new CannotParseStatsTypeException("unknown stats " + type);

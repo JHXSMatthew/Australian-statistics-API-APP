@@ -8,7 +8,7 @@ import java.util.Arrays;
  * Created by JHXSMatthew on 17/3/17.
  */
 public enum State implements HaveID {
-    AUS(0), //Australia
+    AUS(0), //Australia, for the retail
     NSW(1), //New South Wales
     VIC(2), //Victoria
     QLD(3), //Queensland

@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by JHXSMatthew on 19/03/2017.
  */
-public abstract class MonthlyDataEntry implements ResultObject {
+public abstract class MonthlyDataEntry {
 
     @JsonProperty("RegionalData")
     private RegionalDataEntry[] entries;

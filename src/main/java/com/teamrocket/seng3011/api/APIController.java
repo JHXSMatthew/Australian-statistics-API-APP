@@ -42,7 +42,7 @@ public class APIController {
     @RequestMapping(value = "/api", method= RequestMethod.GET, produces = "application/json")
     public void statistics(HttpServletResponse response,
                            WebRequest r,
-                           @RequestParam(value = "false", required = false) boolean pretty,
+                           @RequestParam(value = "false", required = false) String pretty,
                            @RequestParam(value = "StatisticsArea") String area,
                            @RequestParam(value = "State") String[] stateRaw,
                            @RequestParam(value = "Category") String[] category,
@@ -67,7 +67,7 @@ public class APIController {
 
             ResultContainer container = new ResultContainer(new Header(Status.success), (ResultObject) obj);
             ObjectMapper mapper = new ObjectMapper();
-            if(pretty)
+            if(pretty != null && pretty.equals("true"))
                 mapper.enable(SerializationFeature.INDENT_OUTPUT);
             mapper.writeValue(response.getOutputStream(),container);
             debugPrint("---- Request done! ----");

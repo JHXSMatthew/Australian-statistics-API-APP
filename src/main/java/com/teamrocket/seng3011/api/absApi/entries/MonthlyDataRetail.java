@@ -11,6 +11,7 @@ import java.util.List;
  * Created by JHXSMatthew on 19/03/2017.
  */
 public class MonthlyDataRetail implements ResultObject{
+
     @JsonProperty("MonthlyRetailData")
     private MonthlyDataEntryRetail[] entries;
     @JsonIgnore

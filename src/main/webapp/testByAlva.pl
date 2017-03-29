@@ -30,7 +30,7 @@ sub main
 	my @retailCategory;
 	$retailCategory[0] = "Total";
 	$retailCategory[1] = "Food";
-	$retailCategory[2] = "HouseholdGoods";
+	$retailCategory[2] = "HouseholdGood";
 	$retailCategory[3] = "ClothingFootwareAndPersonalAccessory";
 	$retailCategory[4] = "DepartmentStores";
 	$retailCategory[5] = "CafesResturantsAndTakeawayFood";

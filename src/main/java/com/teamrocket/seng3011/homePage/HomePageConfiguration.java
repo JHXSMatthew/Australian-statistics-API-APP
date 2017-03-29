@@ -20,7 +20,7 @@ public class HomePageConfiguration extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/**")
+        registry.addResourceHandler("/static/*")
                 .addResourceLocations("/static/");
     }
 

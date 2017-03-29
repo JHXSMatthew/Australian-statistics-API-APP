@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by JHXSMatthew on 19/03/2017.
  */
-public class RegionalDataEntry implements ResultObject {
+public class RegionalDataEntry {
     @JsonProperty("State")
     private State state;
     @JsonProperty("Data")

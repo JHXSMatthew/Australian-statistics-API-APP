@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
-import sun.rmi.runtime.Log;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -38,7 +37,7 @@ import java.util.Objects;
 @RestController
 public class APIController {
 
-    public final static boolean DEBUG = true;
+    private final static boolean DEBUG = true;
 
     @RequestMapping(value = "/api", method= RequestMethod.GET, produces = "application/json")
     public void statistics(HttpServletResponse response,

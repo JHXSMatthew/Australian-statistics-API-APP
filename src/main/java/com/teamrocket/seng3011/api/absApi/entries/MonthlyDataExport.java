@@ -3,13 +3,14 @@ package com.teamrocket.seng3011.api.absApi.entries;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.teamrocket.seng3011.api.absApi.entries.MonthlyDataEntryExport;
+import com.teamrocket.seng3011.api.results.ResultObject;
 
 import java.util.List;
 
 /**
  * Created by JHXSMatthew on 19/03/2017.
  */
-public class MonthlyDataExport {
+public class MonthlyDataExport implements ResultObject {
     @JsonProperty("MonthlyCommodityExportData")
     private MonthlyDataEntryExport[] entries;
     @JsonIgnore

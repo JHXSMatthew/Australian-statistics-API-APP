@@ -35,7 +35,7 @@
 
 <div class="blog-header">
     <div class="container">
-        <h1 class="blog-title">Austrlian Statistics API</h1>
+        <h1 class="blog-title">Australian Statistics API</h1>
         <p class="lead blog-description">An user-friendly API for retail and export data.</p>
     </div>
 </div>
@@ -154,8 +154,8 @@
         <div class="col-sm-3 offset-sm-1 blog-sidebar">
             <div class="sidebar-module sidebar-module-inset">
                 <h4>About</h4>
-                <p>TeamRocket is a dev team formed in SENG3011 @ UNSW. We are Software engineers that focus on web
-                    application developmenet.. </p>
+                <p>TeamRocket is a dev team formed in SENG3011 @ UNSW. We are Software engineers that focuses on web
+                    application development.. </p>
             </div>
             <div class="sidebar-module">
 

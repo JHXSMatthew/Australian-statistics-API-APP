@@ -35,9 +35,9 @@ export default (
     <Route path="/" name="Home" component={Full}>
       <IndexRoute component={Release}/>
       <Route path="release" name="Release" component={Release}/>
-      <Route path="dataAnalyzer" name="dataAnalyzer" component={DataAnalyzer}/>
+      <Route path="dataAnalyzer" name="Data Analyzer" component={DataAnalyzer}/>
       <Route path="documentation/" name="Documentation">
-        <Route path="developerAPI" name="DeveloperAPI" component={DeveloperAPI}/>
+        <Route path="developerAPI" name="Developer API" component={DeveloperAPI}/>
         <Route path="buttons" name="Buttons" component={Buttons}/>
       </Route>
       <Route path="about" name="About" component={About}/>

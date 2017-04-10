@@ -11,7 +11,7 @@ Software you will need to set up this
 
 - make sure you have installed npm correctly.
 - open a terminal somewhere, run command `npm install -g create-react-app` to install create-react-app globally.
-- open cd into `webapp/` folder and run command `npm install` to install dependencies of our front end.
+- cd into `webapp/` folder and run command `npm install` to install dependencies of our front end.
 - once you done, use `npm start` to run front end code in dev mode
 
 ## build

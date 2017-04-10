@@ -25,4 +25,4 @@ SENG3011/
 ├── .mvn/wrapper //for mvn command
 ```
 
-I have write README.md in every folder above to help you with setting up.
+I have written README.md in every folder above to help you with setting up.

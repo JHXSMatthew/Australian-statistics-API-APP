@@ -22,11 +22,50 @@ class Sidebar extends Component {
       <div className="sidebar">
         <nav className="sidebar-nav">
           <ul className="nav">
-            <li className="nav-item">
-              <Link to={'/release'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Release </Link>
-            </li>
             <li className="nav-title">
-              UI Elements
+              Australian Statistics
+            </li>
+            <li className="nav-item">
+              <Link to={'/release'} className="nav-link" activeClassName="active"><i className="icon-tag"></i> Release </Link>
+            </li>
+            <li className={this.activeRoute("/documentation")}>
+              <a className="nav-link nav-dropdown-toggle" href="#" onClick={this.handleClick.bind(this)}><i className="icon-folder"></i> Documentation</a>
+              <ul className="nav-dropdown-items">
+                <li className="nav-item">
+                  <Link to={'/documentation/GettingStarted'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Getting started</Link>
+                  <li className={this.activeRoute("/developerAPI")}>
+                    <a className="nav-link nav-dropdown-toggle" href="#" onClick={this.handleClick.bind(this)}><i className="icon-folder"></i> Developer API</a>
+                    <ul className="nav-dropdown-items">
+                      <li className="nav-item">
+                        <Link to={'/documentation/DeveloperAPI'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Introduction</Link>
+                      </li>
+                      <li className="nav-item">
+                        <Link to={'/documentation/GettingStarted'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Parameter Constraints</Link>
+                      </li>
+                      <li className="nav-item">
+                        <Link to={'/documentation/GettingStarted'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Merchandise Exports</Link>
+                      </li>
+                      <li className="nav-item">
+                        <Link to={'/documentation/GettingStarted'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Retail</Link>
+                      </li>
+                      <li className="nav-item">
+                        <Link to={'/documentation/GettingStarted'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Errors</Link>
+                      </li>
+                    </ul>
+                  </li>
+                </li>
+              </ul>
+            </li>
+
+            <li className="nav-title">
+              Others
+            </li>
+            <li className="nav-item">
+              <Link to={'/about'} className="nav-link" activeClassName="active"><i className="icon-rocket"></i> About </Link>
+            </li>
+
+            <li className="nav-title">
+              template Examples -- developing
             </li>
             <li className={this.activeRoute("/components")}>
               <a className="nav-link nav-dropdown-toggle" href="#" onClick={this.handleClick.bind(this)}><i className="icon-puzzle"></i> Components</a>
@@ -76,7 +115,7 @@ class Sidebar extends Component {
             </li>
             <li className="divider"></li>
             <li className="nav-title">
-              Extras
+              Others
             </li>
             <li className="nav-item nav-dropdown">
               <a className="nav-link nav-dropdown-toggle" href="#" onClick={this.handleClick.bind(this)}><i className="icon-star"></i> Pages</a>

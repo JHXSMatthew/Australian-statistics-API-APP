@@ -5,32 +5,42 @@ import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 import Full from './containers/Full/'
 import Simple from './containers/Simple/'
 
-import Release from './views/Release/'
+// OUR VIEWS
+import Release from './views/Statistics/Release/'
+import dataAnalyzer from './views/Statistics/DataAnalyzer'
+import DeveloperAPI from './views/Statistics/Doc/DeveloperAPI'
+import About from './views/Others/About/'
 
 
 //template examples
-import Charts from './views/Charts/'
-import Buttons from './views/Components/Buttons/'
-import Cards from './views/Components/Cards/'
-import Forms from './views/Components/Forms/'
-import Modals from './views/Components/Modals/'
-import SocialButtons from './views/Components/SocialButtons/'
-import Switches from './views/Components/Switches/'
-import Tables from './views/Components/Tables/'
-import Tabs from './views/Components/Tabs/'
-import FontAwesome from './views/Icons/FontAwesome/'
-import SimpleLineIcons from './views/Icons/SimpleLineIcons/'
-import Login from './views/Pages/Login/'
-import Register from './views/Pages/Register/'
-import Page404 from './views/Pages/Page404/'
-import Page500 from './views/Pages/Page500/'
-import Widgets from './views/Widgets/'
+import Charts from './views/Examples/Charts/'
+import Buttons from './views/Examples/Components/Buttons/'
+import Cards from './views/Examples/Components/Cards/'
+import Forms from './views/Examples/Components/Forms/'
+import Modals from './views/Examples/Components/Modals/'
+import SocialButtons from './views/Examples/Components/SocialButtons/'
+import Switches from './views/Examples/Components/Switches/'
+import Tables from './views/Examples/Components/Tables/'
+import Tabs from './views/Examples/Components/Tabs/'
+import FontAwesome from './views/Examples/Icons/FontAwesome/'
+import SimpleLineIcons from './views/Examples/Icons/SimpleLineIcons/'
+import Login from './views/Examples/Pages/Login/'
+import Register from './views/Examples/Pages/Register/'
+import Page404 from './views/Examples/Pages/Page404/'
+import Page500 from './views/Examples/Pages/Page500/'
+import Widgets from './views/Examples/Widgets/'
 
 export default (
   <Router history={hashHistory}>
     <Route path="/" name="Home" component={Full}>
       <IndexRoute component={Release}/>
       <Route path="release" name="Release" component={Release}/>
+      <Route path="dataAnalyzer" name="dataAnalyzer" component={DataAnalyzer}/>
+      <Route path="documentation/" name="Documentation">
+        <Route path="developerAPI" name="DeveloperAPI" component={DeveloperAPI}/>
+        <Route path="buttons" name="Buttons" component={Buttons}/>
+      </Route>
+      <Route path="about" name="About" component={About}/>
       <Route path="components/" name="Components">
         <IndexRoute component={Buttons}/>
         <Route path="buttons" name="Buttons" component={Buttons}/>

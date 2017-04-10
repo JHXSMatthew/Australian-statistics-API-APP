@@ -49,7 +49,7 @@ class Header extends Component {
             <a className="nav-link" href="#/doc">Documentation</a>
           </li>
           <li className="nav-item px-1">
-            <a className="nav-link" href="#">About</a>
+            <a className="nav-link" href="#/about">About</a>
           </li>
         </ul>
         <ul className="nav navbar-nav ml-auto">

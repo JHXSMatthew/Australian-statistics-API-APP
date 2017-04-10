@@ -19,6 +19,7 @@ import java.util.Map;
  */
 @Controller
 public class HomePageController {
+    /*
     @RequestMapping("/")
     public String page(Map<String, Object> model) {
 
@@ -36,4 +37,5 @@ public class HomePageController {
 
         return "about";
     }
+    */
 }

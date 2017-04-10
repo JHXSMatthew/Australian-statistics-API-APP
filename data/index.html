@@ -1,0 +1,1047 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Australian Statistics API by Teamrocket</title>
+
+    <style>
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight .gh {
+  color: #999999;
+}
+.highlight .sr {
+  color: #f6aa11;
+}
+.highlight .go {
+  color: #888888;
+}
+.highlight .gp {
+  color: #555555;
+}
+.highlight .gs {
+}
+.highlight .gu {
+  color: #aaaaaa;
+}
+.highlight .nb {
+  color: #f6aa11;
+}
+.highlight .cm {
+  color: #75715e;
+}
+.highlight .cp {
+  color: #75715e;
+}
+.highlight .c1 {
+  color: #75715e;
+}
+.highlight .cs {
+  color: #75715e;
+}
+.highlight .c, .highlight .cd {
+  color: #75715e;
+}
+.highlight .err {
+  color: #960050;
+}
+.highlight .gr {
+  color: #960050;
+}
+.highlight .gt {
+  color: #960050;
+}
+.highlight .gd {
+  color: #49483e;
+}
+.highlight .gi {
+  color: #49483e;
+}
+.highlight .ge {
+  color: #49483e;
+}
+.highlight .kc {
+  color: #66d9ef;
+}
+.highlight .kd {
+  color: #66d9ef;
+}
+.highlight .kr {
+  color: #66d9ef;
+}
+.highlight .no {
+  color: #66d9ef;
+}
+.highlight .kt {
+  color: #66d9ef;
+}
+.highlight .mf {
+  color: #ae81ff;
+}
+.highlight .mh {
+  color: #ae81ff;
+}
+.highlight .il {
+  color: #ae81ff;
+}
+.highlight .mi {
+  color: #ae81ff;
+}
+.highlight .mo {
+  color: #ae81ff;
+}
+.highlight .m, .highlight .mb, .highlight .mx {
+  color: #ae81ff;
+}
+.highlight .sc {
+  color: #ae81ff;
+}
+.highlight .se {
+  color: #ae81ff;
+}
+.highlight .ss {
+  color: #ae81ff;
+}
+.highlight .sd {
+  color: #e6db74;
+}
+.highlight .s2 {
+  color: #e6db74;
+}
+.highlight .sb {
+  color: #e6db74;
+}
+.highlight .sh {
+  color: #e6db74;
+}
+.highlight .si {
+  color: #e6db74;
+}
+.highlight .sx {
+  color: #e6db74;
+}
+.highlight .s1 {
+  color: #e6db74;
+}
+.highlight .s {
+  color: #e6db74;
+}
+.highlight .na {
+  color: #a6e22e;
+}
+.highlight .nc {
+  color: #a6e22e;
+}
+.highlight .nd {
+  color: #a6e22e;
+}
+.highlight .ne {
+  color: #a6e22e;
+}
+.highlight .nf {
+  color: #a6e22e;
+}
+.highlight .vc {
+  color: #ffffff;
+}
+.highlight .nn {
+  color: #ffffff;
+}
+.highlight .nl {
+  color: #ffffff;
+}
+.highlight .ni {
+  color: #ffffff;
+}
+.highlight .bp {
+  color: #ffffff;
+}
+.highlight .vg {
+  color: #ffffff;
+}
+.highlight .vi {
+  color: #ffffff;
+}
+.highlight .nv {
+  color: #ffffff;
+}
+.highlight .w {
+  color: #ffffff;
+}
+.highlight {
+  color: #ffffff;
+}
+.highlight .n, .highlight .py, .highlight .nx {
+  color: #ffffff;
+}
+.highlight .ow {
+  color: #f92672;
+}
+.highlight .nt {
+  color: #f92672;
+}
+.highlight .k, .highlight .kv {
+  color: #f92672;
+}
+.highlight .kn {
+  color: #f92672;
+}
+.highlight .kp {
+  color: #f92672;
+}
+.highlight .o {
+  color: #f92672;
+}
+    </style>
+    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all.js"></script>
+  </head>
+
+  <body class="index" data-languages="[&quot;Code example&quot;]">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" alt="Navbar" />
+      </span>
+    </a>
+    <div class="tocify-wrapper">
+      <img src="images/logo.png" alt="Logo" />
+        <div class="lang-selector">
+              <a href="#" data-language-name="Code example">Code example</a>
+        </div>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+      <div id="toc">
+      </div>
+        <ul class="toc-footer">
+            <li><a href='home'>API by TeamRocket</a></li>
+            <li><a href='http://www.abs.gov.au/'>Data from abs.gov.com</a></li>
+            <li><a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a></li>
+        </ul>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        <h1 id="introduction">Introduction</h1>
+
+<p>Australian Statistics API will receive a request from a third party software specifying an area of statistics, a list of regions, a list of categories (industries or commodities) and a period of time specified by start and end date.Our API returns the statistics according to the area of statistics.</p>
+
+<h1 id="parameter-values-constraints">Parameter Values Constraints</h1>
+
+<p>The parameter values constraint is required in our API. Whenever you pass a parameter,
+it should be in one of those values, Otherwise the API would simply return you an error.</p>
+
+<h2 id="statisticsarea">StatisticsArea</h2>
+
+<p>The API only provides two type of statistics area at the moment.</p>
+
+<table><thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Retail</td>
+<td>Querying the monthly retail turnover of each region and each category, for the specified period of time.</td>
+</tr>
+<tr>
+<td>MerchandiseExports</td>
+<td>Querying the monthly value of each commodity listed in the categories, for each region and for defined time period.</td>
+</tr>
+</tbody></table>
+
+<h2 id="state">State</h2>
+
+<p>A list of one or more regions separated by “,”. The API only returns data in
+regions you specified.</p>
+
+<table><thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>AUS</td>
+<td>Australian</td>
+</tr>
+<tr>
+<td>NSW</td>
+<td>New South Wales</td>
+</tr>
+<tr>
+<td>VIC</td>
+<td>Victoria</td>
+</tr>
+<tr>
+<td>QLD</td>
+<td>Queensland</td>
+</tr>
+<tr>
+<td>SA</td>
+<td>South Australia</td>
+</tr>
+<tr>
+<td>WA</td>
+<td>Western Australia</td>
+</tr>
+<tr>
+<td>TAS</td>
+<td>Tasmania</td>
+</tr>
+<tr>
+<td>NT</td>
+<td>Northern Territory</td>
+</tr>
+<tr>
+<td>ACT</td>
+<td>Australian Capital Territory</td>
+</tr>
+</tbody></table>
+
+<h2 id="category">Category</h2>
+
+<p>The category parameter indicates the categories in the specified area. Category values  are different for different areas and you can specified multiple categories separated by &ldquo;,&rdquo;.</p>
+
+<h3 id="retail">Retail</h3>
+
+<table><thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Total</td>
+<td>All categories</td>
+</tr>
+<tr>
+<td>Food</td>
+<td>Food related category</td>
+</tr>
+<tr>
+<td>HouseholdGood</td>
+<td>HouseholdGood category</td>
+</tr>
+<tr>
+<td>ClothingFootwareAndPersonalAccessory</td>
+<td>Clothing Footware And Personal Accessory category</td>
+</tr>
+<tr>
+<td>DepartmentStores</td>
+<td>Stores</td>
+</tr>
+<tr>
+<td>CafesResturantsAndTakeawayFood</td>
+<td>Resturants</td>
+</tr>
+<tr>
+<td>Other</td>
+<td>others</td>
+</tr>
+</tbody></table>
+
+<h3 id="merchandise-exports">Merchandise Exports</h3>
+
+<table><thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Total</td>
+<td>All categories</td>
+</tr>
+<tr>
+<td>FoodAndLiveAnimals</td>
+<td>Food And Live Animals</td>
+</tr>
+<tr>
+<td>BeveragesAndTobacco</td>
+<td>Beverages And Tobacco</td>
+</tr>
+<tr>
+<td>CrudMaterialAndInedible</td>
+<td>Crud Material And Inedible</td>
+</tr>
+<tr>
+<td>MineralFuelLubricentAndRelatedMaterial</td>
+<td>Mineral Fuel Lubricent And related material</td>
+</tr>
+<tr>
+<td>AnimalAndVegitableOilFatAndWaxes</td>
+<td>Animal and vegitable oil fat and waxes</td>
+</tr>
+<tr>
+<td>ChemicalsAndRelatedProducts</td>
+<td>Chemicals And Related Products</td>
+</tr>
+<tr>
+<td>ManufacturedGoods</td>
+<td>Manufacuted Goods</td>
+</tr>
+<tr>
+<td>MachineryAndTransportEquipments</td>
+<td>Machinery And Transport Equipments</td>
+</tr>
+<tr>
+<td>OtherManufacturedArticles</td>
+<td>Other Manucactured Articles</td>
+</tr>
+<tr>
+<td>Unclassified</td>
+<td>Unclassified</td>
+</tr>
+</tbody></table>
+
+<h2 id="date">Date</h2>
+
+<p>All the input date is in the format of YYYY-MM-DD.</p>
+
+<h1 id="retail">Retail</h1>
+
+<h2 id="get-retail-data">Get Retail data</h2>
+
+<p>The API should return the monthly retail turnover of each region and
+each category, for the specified period of time.</p>
+<pre class="highlight plaintext"><code>Example request:
+
+http://45.76.114.158/api
+        ?StatisticsArea=Retail
+        &amp;State=NSW&amp;Category=DepartmentStores
+        &amp;startDate=2013-12-01
+        &amp;endDate=2014-01-01
+</code></pre>
+<blockquote>
+<p>The example Request give JSON response like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">  
+   </span><span class="s2">"header"</span><span class="p">:{</span><span class="w">  
+      </span><span class="s2">"status"</span><span class="p">:</span><span class="s2">"success"</span><span class="w">
+   </span><span class="p">},</span><span class="w">
+   </span><span class="s2">"data"</span><span class="p">:{</span><span class="w">  
+      </span><span class="s2">"MonthlyRetailData"</span><span class="p">:[</span><span class="w">  
+         </span><span class="p">{</span><span class="w">  
+            </span><span class="s2">"RegionalData"</span><span class="p">:[</span><span class="w">  
+               </span><span class="p">{</span><span class="w">  
+                  </span><span class="s2">"State"</span><span class="p">:</span><span class="s2">"NSW"</span><span class="p">,</span><span class="w">
+                  </span><span class="s2">"Data"</span><span class="p">:[</span><span class="w">  
+                     </span><span class="p">{</span><span class="w">  
+                        </span><span class="s2">"Date"</span><span class="p">:</span><span class="s2">"2013-12-31"</span><span class="p">,</span><span class="w">
+                        </span><span class="s2">"Turnover"</span><span class="p">:</span><span class="mf">883.5</span><span class="w">
+                     </span><span class="p">},</span><span class="w">
+                     </span><span class="p">{</span><span class="w">  
+                        </span><span class="s2">"Date"</span><span class="p">:</span><span class="s2">"2014-01-31"</span><span class="p">,</span><span class="w">
+                        </span><span class="s2">"Turnover"</span><span class="p">:</span><span class="mf">473.5</span><span class="w">
+                     </span><span class="p">}</span><span class="w">
+                  </span><span class="p">]</span><span class="w">
+               </span><span class="p">}</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"RetailIndustry"</span><span class="p">:</span><span class="s2">"DepartmentStores"</span><span class="w">
+         </span><span class="p">}</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">GET http://45.76.114.158/api/</code></p>
+
+<h3 id="required-query-parameters">Required Query Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Values</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>StatisticsArea</td>
+<td>null</td>
+<td>Retail</td>
+<td>must be Retail to get retail data.</td>
+</tr>
+<tr>
+<td>State</td>
+<td>null</td>
+<td>State</td>
+<td>A list of one or more regions separated by &ldquo;,&rdquo;.</td>
+</tr>
+<tr>
+<td>Category</td>
+<td>null</td>
+<td>Category</td>
+<td>A list of one or more categories separated by &ldquo;,&rdquo;.</td>
+</tr>
+<tr>
+<td>startDate</td>
+<td>null</td>
+<td>Date</td>
+<td>The starting date.</td>
+</tr>
+<tr>
+<td>endDate</td>
+<td>null</td>
+<td>Date</td>
+<td>The ending date.</td>
+</tr>
+</tbody></table>
+
+<h3 id="optional-query-parameters">Optional Query Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>pretty</td>
+<td>null</td>
+<td>returns a Human readable pretty JSON</td>
+</tr>
+</tbody></table>
+
+<aside class="success">
+    Check parameter values constrain for legal values;
+</aside>
+
+<h3 id="retail-category">Retail Category</h3>
+
+<table><thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Total</td>
+<td>All categories</td>
+</tr>
+<tr>
+<td>Food</td>
+<td>Food related category</td>
+</tr>
+<tr>
+<td>HouseholdGood</td>
+<td>HouseholdGood category</td>
+</tr>
+<tr>
+<td>ClothingFootwareAndPersonalAccessory</td>
+<td>Clothing Footware And Personal Accessory category</td>
+</tr>
+<tr>
+<td>DepartmentStores</td>
+<td>Stores</td>
+</tr>
+<tr>
+<td>CafesResturantsAndTakeawayFood</td>
+<td>Resturants</td>
+</tr>
+<tr>
+<td>Other</td>
+<td>others</td>
+</tr>
+</tbody></table>
+
+<h2 id="response-format">Response format</h2>
+
+<p>Basically the response would be in JSON format. The response object has its header and data.</p>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">  
+   </span><span class="s2">"header"</span><span class="p">:{</span><span class="w">  
+      </span><span class="s2">"status"</span><span class="p">:</span><span class="s2">"success"</span><span class="w">
+   </span><span class="p">},</span><span class="w">
+   </span><span class="s2">"data"</span><span class="p">:{</span><span class="w">  
+      </span><span class="s2">"MonthlyRetailData"</span><span class="p">:[</span><span class="w">  
+         </span><span class="p">{</span><span class="w">  
+            </span><span class="s2">"RegionalData"</span><span class="p">:[</span><span class="w">  
+               </span><span class="p">{</span><span class="w">  
+                  </span><span class="s2">"State"</span><span class="p">:</span><span class="s2">"NSW"</span><span class="p">,</span><span class="w">
+                  </span><span class="s2">"Data"</span><span class="p">:[</span><span class="w">  
+                     </span><span class="p">{</span><span class="w">  
+                        </span><span class="s2">"Date"</span><span class="p">:</span><span class="s2">"2013-12-31"</span><span class="p">,</span><span class="w">
+                        </span><span class="s2">"Turnover"</span><span class="p">:</span><span class="mf">883.5</span><span class="w">
+                     </span><span class="p">},</span><span class="w">
+                     </span><span class="p">{</span><span class="w">  
+                        </span><span class="s2">"Date"</span><span class="p">:</span><span class="s2">"2014-01-31"</span><span class="p">,</span><span class="w">
+                        </span><span class="s2">"Turnover"</span><span class="p">:</span><span class="mf">473.5</span><span class="w">
+                     </span><span class="p">}</span><span class="w">
+                  </span><span class="p">]</span><span class="w">
+               </span><span class="p">}</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"RetailIndustry"</span><span class="p">:</span><span class="s2">"DepartmentStores"</span><span class="w">
+         </span><span class="p">}</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<h3 id="header">header</h3>
+
+<p>For header object, they only attribute would be its status.</p>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Values</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>status</td>
+<td>string</td>
+<td>success,error</td>
+<td>It shows if there is an error.</td>
+</tr>
+</tbody></table>
+
+<h3 id="data">data</h3>
+
+<p>For the data object.</p>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Values</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>MonthlyRetailData</td>
+<td>array</td>
+<td>RegionalData[] &amp; RetailIndustry</td>
+<td>An array of retail categories and actaul Data by regions.</td>
+</tr>
+</tbody></table>
+
+<p>For each object in MonthlyRetailData attribute of data object.</p>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Values</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>RegionalData</td>
+<td>array</td>
+<td>State &amp; Data[]</td>
+<td>An array of reginal data.</td>
+</tr>
+<tr>
+<td>RetailIndustry</td>
+<td>Category</td>
+<td>Category</td>
+<td>One category of the area.</td>
+</tr>
+</tbody></table>
+
+<p>For each object in RegionalData attribute.</p>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Values</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Data</td>
+<td>array</td>
+<td>Date &amp; Turnover</td>
+<td>An array of date and Turnover.</td>
+</tr>
+<tr>
+<td>State</td>
+<td>State</td>
+<td>State</td>
+<td>The region info of this Data array.</td>
+</tr>
+</tbody></table>
+
+<h1 id="merchandise-exports">Merchandise Exports</h1>
+
+<h2 id="get-merchandise-exports-data">Get Merchandise Exports data</h2>
+
+<p>Monthly value of each commodity listed in the categories, for each region and for defined time period, should be returned.</p>
+<pre class="highlight plaintext"><code>Example request:
+
+http://45.76.114.158/api
+    ?StatisticsArea=MerchandiseExports
+    &amp;State=NSW
+    &amp;Category=CrudMaterialAndInedible
+    &amp;startDate=2013-12-01
+    &amp;endDate=2014-01-01
+</code></pre>
+<blockquote>
+<p>The example Request give JSON response like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">  
+   </span><span class="s2">"header"</span><span class="p">:{</span><span class="w">  
+      </span><span class="s2">"status"</span><span class="p">:</span><span class="s2">"success"</span><span class="w">
+   </span><span class="p">},</span><span class="w">
+   </span><span class="s2">"data"</span><span class="p">:{</span><span class="w">  
+      </span><span class="s2">"MonthlyCommodityExportData"</span><span class="p">:[</span><span class="w">  
+         </span><span class="p">{</span><span class="w">  
+            </span><span class="s2">"RegionalData"</span><span class="p">:[</span><span class="w">  
+               </span><span class="p">{</span><span class="w">  
+                  </span><span class="s2">"State"</span><span class="p">:</span><span class="s2">"NSW"</span><span class="p">,</span><span class="w">
+                  </span><span class="s2">"Data"</span><span class="p">:[</span><span class="w">  
+                     </span><span class="p">{</span><span class="w">  
+                        </span><span class="s2">"Date"</span><span class="p">:</span><span class="s2">"2013-12-31"</span><span class="p">,</span><span class="w">
+                        </span><span class="s2">"Value"</span><span class="p">:</span><span class="mf">461563.709</span><span class="w">
+                     </span><span class="p">},</span><span class="w">
+                     </span><span class="p">{</span><span class="w">  
+                        </span><span class="s2">"Date"</span><span class="p">:</span><span class="s2">"2014-01-31"</span><span class="p">,</span><span class="w">
+                        </span><span class="s2">"Value"</span><span class="p">:</span><span class="mf">317914.026</span><span class="w">
+                     </span><span class="p">}</span><span class="w">
+                  </span><span class="p">]</span><span class="w">
+               </span><span class="p">}</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"Commodity"</span><span class="p">:</span><span class="s2">"CrudMaterialAndInedible"</span><span class="w">
+         </span><span class="p">}</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Merchandise Exports data.</p>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">GET http://45.76.114.158/api/</code></p>
+
+<h3 id="required-query-parameters">Required Query Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Values</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>StatisticsArea</td>
+<td>null</td>
+<td>MerchandiseExports</td>
+<td>must be Retail to get retail data.</td>
+</tr>
+<tr>
+<td>State</td>
+<td>null</td>
+<td>State</td>
+<td>A list of one or more regions separated by &ldquo;,&rdquo;.</td>
+</tr>
+<tr>
+<td>Category</td>
+<td>null</td>
+<td>Category</td>
+<td>A list of one or more categories separated by &ldquo;,&rdquo;.</td>
+</tr>
+<tr>
+<td>startDate</td>
+<td>null</td>
+<td>Date</td>
+<td>The starting date.</td>
+</tr>
+<tr>
+<td>endDate</td>
+<td>null</td>
+<td>Date</td>
+<td>The ending date.</td>
+</tr>
+</tbody></table>
+
+<h3 id="optional-query-parameters">Optional Query Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>pretty</td>
+<td>null</td>
+<td>returns a Human readable pretty JSON</td>
+</tr>
+</tbody></table>
+
+<aside class="success">
+    Check parameter values constrain for legal values.
+</aside>
+
+<h3 id="merchandise-exports-category">Merchandise Exports Category</h3>
+
+<table><thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Total</td>
+<td>All categories</td>
+</tr>
+<tr>
+<td>FoodAndLiveAnimals</td>
+<td>Food And Live Animals</td>
+</tr>
+<tr>
+<td>BeveragesAndTobacco</td>
+<td>Beverages And Tobacco</td>
+</tr>
+<tr>
+<td>CrudMaterialAndInedible</td>
+<td>Crud Material And Inedible</td>
+</tr>
+<tr>
+<td>MineralFuelLubricentAndRelatedMaterial</td>
+<td>Mineral Fuel Lubricent And related material</td>
+</tr>
+<tr>
+<td>AnimalAndVegitableOilFatAndWaxes</td>
+<td>Animal and vegitable oil fat and waxes</td>
+</tr>
+<tr>
+<td>ChemicalsAndRelatedProducts</td>
+<td>Chemicals And Related Products</td>
+</tr>
+<tr>
+<td>ManufacturedGoods</td>
+<td>Manufacuted Goods</td>
+</tr>
+<tr>
+<td>MachineryAndTransportEquipments</td>
+<td>Machinery And Transport Equipments</td>
+</tr>
+<tr>
+<td>OtherManufacturedArticles</td>
+<td>Other Manucactured Articles</td>
+</tr>
+<tr>
+<td>Unclassified</td>
+<td>Unclassified</td>
+</tr>
+</tbody></table>
+
+<h2 id="response-format">Response format</h2>
+
+<p>Basically the response would be in JSON format. The response object has its header and data.</p>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">  
+   </span><span class="s2">"header"</span><span class="p">:{</span><span class="w">  
+      </span><span class="s2">"status"</span><span class="p">:</span><span class="s2">"success"</span><span class="w">
+   </span><span class="p">},</span><span class="w">
+   </span><span class="s2">"data"</span><span class="p">:{</span><span class="w">  
+      </span><span class="s2">"MonthlyCommodityExportData"</span><span class="p">:[</span><span class="w">  
+         </span><span class="p">{</span><span class="w">  
+            </span><span class="s2">"RegionalData"</span><span class="p">:[</span><span class="w">  
+               </span><span class="p">{</span><span class="w">  
+                  </span><span class="s2">"State"</span><span class="p">:</span><span class="s2">"NSW"</span><span class="p">,</span><span class="w">
+                  </span><span class="s2">"Data"</span><span class="p">:[</span><span class="w">  
+                     </span><span class="p">{</span><span class="w">  
+                        </span><span class="s2">"Date"</span><span class="p">:</span><span class="s2">"2013-12-31"</span><span class="p">,</span><span class="w">
+                        </span><span class="s2">"Value"</span><span class="p">:</span><span class="mf">461563.709</span><span class="w">
+                     </span><span class="p">},</span><span class="w">
+                     </span><span class="p">{</span><span class="w">  
+                        </span><span class="s2">"Date"</span><span class="p">:</span><span class="s2">"2014-01-31"</span><span class="p">,</span><span class="w">
+                        </span><span class="s2">"Value"</span><span class="p">:</span><span class="mf">317914.026</span><span class="w">
+                     </span><span class="p">}</span><span class="w">
+                  </span><span class="p">]</span><span class="w">
+               </span><span class="p">}</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"Commodity"</span><span class="p">:</span><span class="s2">"CrudMaterialAndInedible"</span><span class="w">
+         </span><span class="p">}</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<h3 id="header">header</h3>
+
+<p>For header object, they only attribute would be its status.</p>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Values</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>status</td>
+<td>string</td>
+<td>success,error</td>
+<td>It shows if there is an error.</td>
+</tr>
+</tbody></table>
+
+<h3 id="data">data</h3>
+
+<p>For the data object.</p>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Values</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>MonthlyCommodityExportData</td>
+<td>array</td>
+<td>RegionalData[] &amp; Commodity</td>
+<td>An array of retail categories and actaul Data by regions.</td>
+</tr>
+</tbody></table>
+
+<p>For each object in MonthlyRetailData attribute of data object.</p>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Values</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>RegionalData</td>
+<td>array</td>
+<td>State &amp; Data[]</td>
+<td>An array of reginal data.</td>
+</tr>
+<tr>
+<td>Commodity</td>
+<td>Category</td>
+<td>Category</td>
+<td>One category of the area.</td>
+</tr>
+</tbody></table>
+
+<p>For each object in RegionalData attribute.</p>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Values</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Data</td>
+<td>array</td>
+<td>Date &amp; Value</td>
+<td>An array of date and Value.</td>
+</tr>
+<tr>
+<td>State</td>
+<td>State</td>
+<td>State</td>
+<td>The region info of this Data array.</td>
+</tr>
+</tbody></table>
+
+          <h1 id="errors">Errors</h1>
+<pre class="highlight plaintext"><code>{  
+   "header":{  
+      "status":"error"
+   },
+   "data":{  
+      "code":-1,
+      "message":"Required String parameter 'StatisticsArea' is not present"
+   }
+}
+</code></pre>
+<p>When you get an error, you alway GET a JSON response. The data section contains the error information.
+If you DID NOT get any JSON response, please report to our team and we will fix it or you may try again later.
+The Australian statistics API uses the following error codes in JSON format:</p>
+
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Meaning</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>-1</td>
+<td>MissingServletRequestParameterException &ndash; Required parameters Articles missing.</td>
+</tr>
+<tr>
+<td>0</td>
+<td>MethodArgumentNotValidException &ndash; Your request sucks.</td>
+</tr>
+<tr>
+<td>1</td>
+<td>MethodArgumentTypeMismatchException &ndash; Your request gives illegal format.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>CannotParseStatsTypeException &ndash; The area you specified not supported yet.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>CannotParseCategoryException &ndash; The Category you specificed does not exist.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>CannotParseStateException &ndash; The State you specificed does not exist.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>CannotParseJSONException &ndash; Our DB is down.</td>
+</tr>
+<tr>
+<td>6</td>
+<td>CannotFetchDataException &ndash; Our DB is down.</td>
+</tr>
+<tr>
+<td>7</td>
+<td>ConstraintViolationException &ndash; Bad reqeust. You are sending some invalid data.</td>
+</tr>
+<tr>
+<td>8</td>
+<td>NullPointerException &ndash; We had a problem with our server. Report please.</td>
+</tr>
+<tr>
+<td>9</td>
+<td>ConversionFailedException &ndash; We&rsquo;re temporarily offline for maintenance. Please try again later.</td>
+</tr>
+<tr>
+<td>10</td>
+<td>NoDataAvailableException &ndash; Our DB does not have such data you required.</td>
+</tr>
+<tr>
+<td>11</td>
+<td>DateInvalidException &ndash; No trolling please!</td>
+</tr>
+</tbody></table>
+
+<p>NOTE: if error happens, no pretty JSON output is available.</p>
+
+      </div>
+      <div class="dark-box">
+          <div class="lang-selector">
+                <a href="#" data-language-name="Code example">Code example</a>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>

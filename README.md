@@ -17,6 +17,12 @@ Since multi-language and frameworks getting involved, I have re-organized the pr
 structure.
 
 ```
-- 
+SENG3011/
+├── doc  //documentations
+├── src //Spring framework and backend java codes
+├── webapp // ReactJS code for front end
+├── webapp_old // ignore it.
+├── .mvn/wrapper //for mvn command
 ```
 
+I have write README.md in every folder above to help you with setting up.

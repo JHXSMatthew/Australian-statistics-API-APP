@@ -7,7 +7,7 @@ import Simple from './containers/Simple/'
 
 // OUR VIEWS
 import Release from './views/Statistics/Release/'
-import dataAnalyzer from './views/Statistics/DataAnalyzer'
+import DataAnalyzer from './views/Statistics/DataAnalyzer'
 import DeveloperAPI from './views/Statistics/Doc/DeveloperAPI'
 import About from './views/Others/About/'
 

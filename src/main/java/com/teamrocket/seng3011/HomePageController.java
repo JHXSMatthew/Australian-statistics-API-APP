@@ -2,7 +2,14 @@ package com.teamrocket.seng3011;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Map;
 
 
@@ -12,12 +19,26 @@ import java.util.Map;
 @Controller
 public class HomePageController {
 
+    @RequestMapping("/data")
+    public String data(@RequestParam(value = "type") String type){
+        String path = "/var/seng3011/" + type;
+        File f = new File(path);
+        if(!f.exists()){
+            return "nothing";
+        }
+        try {
+            byte[] encoded = Files.readAllBytes(Paths.get(path));
+            return new String(encoded, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            return "nothing with error" + e.getMessage();
+        }
+    }
+
     @RequestMapping("/")
     public String page(Map<String, Object> model) {
 
         return "home";
     }
-
 
     @RequestMapping("/getting-started")
     public String start(Map<String, Object> model) {

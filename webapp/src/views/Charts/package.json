@@ -1,6 +1,6 @@
 {
-  "name": "about",
+  "name": "Charts",
   "version": "0.0.0",
   "private": true,
-  "main": "./about.js"
+  "main": "./Charts.js"
 }

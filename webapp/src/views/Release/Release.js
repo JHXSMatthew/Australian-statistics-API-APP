@@ -10,14 +10,16 @@ class Release extends Component {
 
   componentDidMount() {
     var that = this;
-    var url = 'http://45.76.114.158/data/release.json'
+    var proxyUrl = 'https://cors-anywhere.herokuapp.com/'
+    var url = 'http://45.76.114.158/data?type=release.json'
 
-    fetch(url)
+    fetch(proxyUrl + url)
     .then(function(response) {
       if (response.status >= 400) {
         throw new Error("Bad response from server");
       }
       that.setState = response.json();
+      console.log(response);
     })
     .then(function(data) {
       that.setState({ person: data.person });

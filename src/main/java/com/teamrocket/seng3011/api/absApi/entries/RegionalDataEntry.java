@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by JHXSMatthew on 19/03/2017.
  */
-public class RegionalDataEntry {
+public class RegionalDataEntry implements Validation {
     @JsonProperty("State")
     private State state;
     @JsonProperty("Data")
@@ -51,6 +51,10 @@ public class RegionalDataEntry {
             entryList = new ArrayList<>();
         }
         entryList.add(entry);
+    }
+
+    public boolean valid(){
+        return (entryList!=null && entryList.size() > 0 || entry!= null && entry.length > 0) && state!= null;
     }
 
     public void pack() {

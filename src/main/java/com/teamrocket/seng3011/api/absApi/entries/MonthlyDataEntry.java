@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by JHXSMatthew on 19/03/2017.
  */
-public abstract class MonthlyDataEntry {
+public abstract class MonthlyDataEntry implements Validation{
 
     @JsonProperty("RegionalData")
     private RegionalDataEntry[] entries;
@@ -49,6 +49,10 @@ public abstract class MonthlyDataEntry {
 
     public void setEntryList(List<RegionalDataEntry> entryList) {
         this.entryList = entryList;
+    }
+
+    public boolean valid(){
+        return (entryList!=null && entryList.size() > 0 || entries!= null && entries.length > 0) ;
     }
 
     public void pack() {

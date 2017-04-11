@@ -83,13 +83,21 @@ public class DataParser {
                             , getDataByPositions(positions), EntryType.EXPORT));
 
                 }
-                regionalDataEntry.pack();
-                export.addRegionalDataEntry(regionalDataEntry);
+                if(regionalDataEntry.valid()){
+                    regionalDataEntry.pack();
+                    export.addRegionalDataEntry(regionalDataEntry);
+                }
             }
-            export.pack();
-            entries.add(export);
+            if(export.valid()) {
+                export.pack();
+                entries.add(export);
+            }
         }
-        return entries.toArray(new MonthlyDataEntryExport[entries.size()]);
+        if(entries.size() > 0) {
+            return entries.toArray(new MonthlyDataEntryExport[entries.size()]);
+        }else{
+            throw new NoDataAvailableException("no data available");
+        }
     }
 
     private MonthlyDataEntryRetail[] parseEntriesRetail() throws KnownException {
@@ -127,13 +135,21 @@ public class DataParser {
                             , data, EntryType.RETAIL));
 
                 }
-                regionalDataEntry.pack();
-                retail.addRegionalDataEntry(regionalDataEntry);
+                if(regionalDataEntry.valid()){
+                    regionalDataEntry.pack();
+                    retail.addRegionalDataEntry(regionalDataEntry);
+                }
             }
-            retail.pack();
-            entries.add(retail);
+            if(retail.valid()) {
+                retail.pack();
+                entries.add(retail);
+            }
         }
-        return entries.toArray(new MonthlyDataEntryRetail[entries.size()]);
+        if(entries.size() > 0){
+            return entries.toArray(new MonthlyDataEntryRetail[entries.size()]);
+        }else{
+            throw new NoDataAvailableException("no data available");
+        }
     }
 
     private List<List<Object>> getPositionValuesList() {

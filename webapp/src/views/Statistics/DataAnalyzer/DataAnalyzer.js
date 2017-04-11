@@ -217,8 +217,10 @@ class DataFetcher extends Component {
       if (response.status >= 400) {
         throw new Error("Bad response from server");
       }
-      return response.text().then(function (text) {
-        console.log(text);
+      return response.json().then(function (json) {
+        //TODO: deal with empty data
+        that.props.addDataEntry(json.data);
+        console.log(json);
       })
 
     });

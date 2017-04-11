@@ -157,7 +157,7 @@ public class DataParser {
     private double getDataByPositions(int[] positions) {
         try {
             return (double) ((List) data.get(getKeyFromPositions(positions))).get(0);
-        } catch (NullPointerException e) {
+        } catch (Exception e) { //TODO: oh, this api sucks, null or empty entry
             return -1.0;
         }
     }

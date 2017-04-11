@@ -127,6 +127,7 @@ class DataSet extends Component {
           <strong>Data Set</strong>
         </div>
         <div className="card-block">
+        {this.props.entries}
 
         </div>
       </div>
@@ -196,6 +197,10 @@ class DataFetcher extends Component {
     this.setState( {mrange: value} )
   }
 
+  addEntry(e) {
+    this.props.addDataEntry(e);
+  }
+
   fetch(e){
     var that = this;
     var url = 'http://45.76.114.158/api'
@@ -219,6 +224,7 @@ class DataFetcher extends Component {
       }
       return response.text().then(function (text) {
         console.log(text);
+        that.addEntry(text);
       })
 
     });

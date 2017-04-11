@@ -220,7 +220,6 @@ class DataFetcher extends Component {
       return response.json().then(function (json) {
         //TODO: deal with empty data
         that.props.addDataEntry(json.data);
-        console.log(json);
       })
 
     });

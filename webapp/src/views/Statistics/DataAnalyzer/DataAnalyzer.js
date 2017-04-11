@@ -128,10 +128,9 @@ class DataTable extends Component {
     super(props);
     this.toggle = this.toggle.bind(this);
     this.state ={
-      rawShowing: false
+      rawShowing: false,
     }
   }
-
 
   toggle() {
     this.setState({
@@ -139,73 +138,84 @@ class DataTable extends Component {
     });
   }
 
+  componentWillReceiveProps(){
 
-  render() {
-    var data = this.props.data;
-    if(data){
-      if(data.MonthlyCommodityExportData){
-        data = data.MonthlyCommodityExportData;
-        for(var i = 0 ; i < data.length; i++){
-          var total = 0;
-          var count = 0;
-          if(data[i].Commodity){
-            data[i].Category = valueToLabel(CATEGORY_ME,data[i].Commodity);
+
+    this.setState(function (prevState, props) {
+      var data = props.data;
+      if(data){
+        if(data.MonthlyCommodityExportData){
+          data = data.MonthlyCommodityExportData;
+          for(var i = 0 ; i < data.length; i++){
+            var total = 0;
+            var count = 0;
+            if(data[i].Commodity){
+              data[i].Category = valueToLabel(CATEGORY_ME,data[i].Commodity);
+            }
+            if(data[i].RegionalData){
+              var reginal = data[i].RegionalData;
+              for(var j = 0 ; j < reginal.length ; j ++){
+                //state and data
+                var reginalTotal = 0;
+                var reginalCount = 0;
+                reginal[j].State = valueToLabel(STATE,reginal[j].State);
+                if(reginal[j].Data){
+                  var dateData = reginal[j].Data;
+                  for(var k = 0; k < dateData.length ; k ++){
+                    total += dateData[k].Value;
+                    reginalTotal += dateData[k].Value;
+                    reginalCount++;
+                  }
+                  reginal[j].average = parseFloat(reginalTotal/reginalCount).toFixed(4);
+                  total += reginalTotal/reginalCount;
+                  count ++ ;
+                }
+              }
+            }
+            data[i].average = parseFloat(total/count).toFixed(4);
           }
-          if(data[i].RegionalData){
-            var reginal = data[i].RegionalData;
-            for(var j = 0 ; j < reginal.length ; j ++){
-              //state and data
-              var reginalTotal = 0;
-              var reginalCount = 0;
-              reginal[j].State = valueToLabel(STATE,reginal[j].State);
-              if(reginal[j].Data){
-                var dateData = reginal[j].Data;
-                for(var k = 0; k < dateData.length ; k ++){
-                  total += dateData[k].Value;
-                  reginalTotal += dateData[k].Value;
-                  reginalCount++;
+
+        }else if(data.MonthlyRetailData){
+          data = data.MonthlyRetailData;
+          for( i = 0 ; i < data.length; i++){
+            total = 0;
+            count = 0;
+            if(data[i].RetailIndustry){
+              data[i].Category = valueToLabel(CATEGORY_RT,data[i].RetailIndustry);
+            }
+            if(data[i].RegionalData){
+              reginal = data[i].RegionalData;
+              for( j = 0 ; j < reginal.length ; j ++){
+                //state and data
+                reginalTotal = 0;
+                reginalCount = 0;
+                reginal[j].State = valueToLabel(STATE,reginal[j].State);
+                if(reginal[j].Data){
+                  dateData = reginal[j].Data;
+                  for(k = 0; k < dateData.length ; k ++){
+                    dateData[k].Value = dateData[k].Turnover;
+                    reginalTotal += dateData[k].Value;
+                    reginalCount++;
+                  }
                 }
                 reginal[j].average = parseFloat(reginalTotal/reginalCount).toFixed(4);
                 total += reginalTotal/reginalCount;
                 count ++ ;
               }
             }
+            data[i].average = parseFloat(total/count).toFixed(4);
           }
-          data[i].average = parseFloat(total/count).toFixed(4);
-        }
-
-      }else if(data.MonthlyRetailData){
-        data = data.MonthlyRetailData;
-        for( i = 0 ; i < data.length; i++){
-          total = 0;
-          count = 0;
-          if(data[i].RetailIndustry){
-            data[i].Category = valueToLabel(CATEGORY_RT,data[i].RetailIndustry);
-          }
-          if(data[i].RegionalData){
-            reginal = data[i].RegionalData;
-            for( j = 0 ; j < reginal.length ; j ++){
-              //state and data
-              reginalTotal = 0;
-              reginalCount = 0;
-              reginal[j].State = valueToLabel(STATE,reginal[j].State);
-              if(reginal[j].Data){
-                dateData = reginal[j].Data;
-                for(k = 0; k < dateData.length ; k ++){
-                  dateData[k].Value = dateData[k].Turnover;
-                  reginalTotal += dateData[k].Value;
-                  reginalCount++;
-                }
-              }
-              reginal[j].average = parseFloat(reginalTotal/reginalCount).toFixed(4);
-              total += reginalTotal/reginalCount;
-              count ++ ;
-            }
-          }
-          data[i].average = parseFloat(total/count).toFixed(4);
         }
       }
-    }
+      console.log(data);
+        return {
+          data: data
+        };
+    })
+  }
+
+  render() {
+    var data = this.state.data;
 
     console.log(data);
     const categoryValue = [{

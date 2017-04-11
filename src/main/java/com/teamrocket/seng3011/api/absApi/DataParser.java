@@ -46,6 +46,7 @@ public class DataParser {
             if (e instanceof KnownException) {
                 throw e;
             } else {
+                e.printStackTrace();
                 throw new NoDataAvailableException("no data is available for those parameters");
             }
         }
@@ -79,8 +80,11 @@ public class DataParser {
                     String dateYM = (String) ((Map) positionValues.get(POSITION_DATE).get(k)).get("id");
                     positions[POSITION_DATE] = k;
                     //for each Time period
+                    double data = getDataByPositions(positions);
+                    if (data == -1.0)
+                        continue;
                     regionalDataEntry.addEntry(EntryFactory.getFactory().getDateDataEntry(DateUtils.stringToDateYM(dateYM)
-                            , getDataByPositions(positions), EntryType.EXPORT));
+                            , data, EntryType.EXPORT));
 
                 }
                 if(regionalDataEntry.valid()){
@@ -127,7 +131,7 @@ public class DataParser {
                     //for each months
                     String dateYM = (String) ((Map) positionValues.get(POSITION_DATE).get(k)).get("id");
                     positions[POSITION_DATE] = k;
-                    //for each Time period TODO: notice user when some data is missing.
+                    //for each Time period TODO: notice user when some data is missing., don't forget export above
                     double data = getDataByPositions(positions);
                     if (data == -1.0)
                         continue;

@@ -44,16 +44,16 @@ class Sidebar extends Component {
                       <Link to={'/documentation/DeveloperAPI'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Introduction</Link>
                     </li>
                     <li className="nav-item">
-                      <Link to={'/documentation/GettingStarted'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Parameter Constraints</Link>
+                      <Link to={'/documentation/ParameterConstraints'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Parameter Constraints</Link>
                     </li>
                     <li className="nav-item">
-                      <Link to={'/documentation/GettingStarted'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Merchandise Exports</Link>
+                      <Link to={'/documentation/MerchandiseExports'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Merchandise Exports</Link>
                     </li>
                     <li className="nav-item">
-                      <Link to={'/documentation/GettingStarted'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Retail</Link>
+                      <Link to={'/documentation/Retail'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Retail</Link>
                     </li>
                     <li className="nav-item">
-                      <Link to={'/documentation/GettingStarted'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Errors</Link>
+                      <Link to={'/documentation/Errors'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Errors</Link>
                     </li>
                   </ul>
                 </li>

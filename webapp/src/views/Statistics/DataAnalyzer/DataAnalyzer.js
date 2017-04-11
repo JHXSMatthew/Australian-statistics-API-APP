@@ -61,7 +61,7 @@ class DataAnalyzer extends Component {
 
   addDataEntry(e){
     var d= this.state.dataEntries;
-    d.push(e);
+    d.push(<DataEntry key={d.length} json={e}/>);
     this.setState({
       dataEntries: d,
     });
@@ -95,9 +95,6 @@ class Charts extends Component {
 
   }
 
-
-
-
   render(){
     return (
       <div className="card">
@@ -110,7 +107,6 @@ class Charts extends Component {
       </div>
     )
   }
-
 }
 
 //data set componenets
@@ -128,7 +124,6 @@ class DataSet extends Component {
         </div>
         <div className="card-block">
         {this.props.entries}
-
         </div>
       </div>
     )
@@ -138,6 +133,7 @@ class DataSet extends Component {
 class DataEntry extends Component{
   constructor(props){
     super(props);
+    //this.props.json to get raw json.
   }
 
   render(){
@@ -197,10 +193,6 @@ class DataFetcher extends Component {
     this.setState( {mrange: value} )
   }
 
-  addEntry(e) {
-    this.props.addDataEntry(e);
-  }
-
   fetch(e){
     var that = this;
     var url = 'http://45.76.114.158/api'
@@ -222,21 +214,18 @@ class DataFetcher extends Component {
       if (response.status >= 400) {
         throw new Error("Bad response from server");
       }
-<<<<<<< HEAD
       return response.text().then(function (text) {
-        console.log(text);
-        that.addEntry(text);
-=======
-      return response.json().then(function (json) {
         //TODO: deal with empty data
-        that.props.addDataEntry(json.data);
->>>>>>> 236d89fb53f59944dc2e9e42fdcd57e1b2017d0e
+        that.props.addDataEntry(text);
+
       })
 
     });
   }
 
   render(){
+    var button = (this.state.area && this.state.region && this.state.category && this.state.region.length > 0 && this.state.category.length > 0) ? null : "disabled";
+
     return (
         <div className="card">
           <div className="card-header">
@@ -288,7 +277,7 @@ class DataFetcher extends Component {
               </Picker>
           </div>
           <div className="card-footer">
-            <button className="btn btn-sm btn-primary" onClick={this.fetch}><i className="fa fa-dot-circle-o" ></i> Fetch</button>
+            <button className="btn btn-sm btn-primary" onClick={this.fetch} ><i className="fa fa-dot-circle-o" ></i> Fetch</button>
           </div>
 
         </div>

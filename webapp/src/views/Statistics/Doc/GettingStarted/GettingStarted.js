@@ -11,7 +11,18 @@ class GettingStarted extends Component {
                 Introduction
               </div>
               <div className="card-block">
-                PogChamp
+                We have developed an Australian Statistics API that will receive a request from any third party, with specifications
+                on various filters such as area of statistics, regions, list of categories (industried or commodities) and a time 
+                period. Our API then returns the relevant statistics to the user. 
+                <br/><br/>
+                Users are able to call our API using HTTP request methods. In this case, our API will return the relevant statistical
+                results back through a JSON format.
+                <br/><br/>
+                Our website also offers an interface to test various calls to our API, for demonstration purposes.
+                <br/><br/>
+
+
+
               </div>
             </div>
         </div>

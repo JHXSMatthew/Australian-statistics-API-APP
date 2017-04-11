@@ -206,7 +206,7 @@ class DataFetcher extends Component {
     }));
     var that = this;
     var proxyUrl = 'https://cors-anywhere.herokuapp.com/'
-    var url = 'http://127.0.0.1:8080/api'
+    var url = 'http://45.76.114.158/api'
     fetch( url,{
       mode: 'no-cors',
       method: 'POST',

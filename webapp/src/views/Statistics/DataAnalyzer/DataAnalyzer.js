@@ -1,6 +1,12 @@
 import React, {Component} from 'react';
 import Select from 'react-select';
 import Picker from 'react-month-picker';
+import ReactTable from 'react-table';
+import 'react-table/react-table.css';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import CopyToClipboard from 'react-copy-to-clipboard';
+
+
 
 const STATE = [
 { label: 'Australian', value: 'AUS' },
@@ -43,6 +49,15 @@ const CATEGORY_RT = [
 { label: 'others', value: 'Other' },
 ];
 
+function valueToLabel(array,value){
+  for(var i = 0 ; i < array.length ; i ++){
+    if(array[i].value && array[i].value === value){
+      return array[i].label;
+    }
+  }
+  return null;
+}
+
 const DATE_LANG = {
        months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
        , from: 'From', to: 'To'
@@ -54,16 +69,14 @@ class DataAnalyzer extends Component {
   constructor(props){
     super(props);
     this.state = {
-        dataEntries: [],
+        data: [],
     }
     this.addDataEntry = this.addDataEntry.bind(this);
   }
 
   addDataEntry(e){
-    var d= this.state.dataEntries;
-    d.push(e);
     this.setState({
-      dataEntries: d,
+      data: e,
     });
   }
 
@@ -71,16 +84,16 @@ class DataAnalyzer extends Component {
     return (
       <div className="animated fadeIn">
         <div className="row">
+          <div className="col-sm-12">
+            <Charts/>
+          </div>
+        </div>
+        <div className="row">
           <div className="col-sm-6">
             <DataFetcher addDataEntry={this.addDataEntry} />
           </div>
           <div className="col-sm-6">
-            <DataSet entries={this.state.dataEntries} />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-sm-12">
-            <Charts/>
+            <DataTable data={this.state.data.data}/>
           </div>
         </div>
       </div>
@@ -95,9 +108,6 @@ class Charts extends Component {
 
   }
 
-
-
-
   render(){
     return (
       <div className="card">
@@ -110,9 +120,192 @@ class Charts extends Component {
       </div>
     )
   }
-
 }
 
+
+class DataTable extends Component {
+  constructor(props){
+    super(props);
+    this.toggle = this.toggle.bind(this);
+    this.state ={
+      rawShowing: false,
+    }
+  }
+
+  toggle() {
+    this.setState({
+      rawShowing: !this.state.rawShowing
+    });
+  }
+
+  componentWillReceiveProps(){
+
+
+    this.setState(function (prevState, props) {
+      var data = props.data;
+      if(data){
+        if(data.MonthlyCommodityExportData){
+          data = data.MonthlyCommodityExportData;
+          for(var i = 0 ; i < data.length; i++){
+            var total = 0;
+            var count = 0;
+            if(data[i].Commodity){
+              data[i].Category = valueToLabel(CATEGORY_ME,data[i].Commodity);
+            }
+            if(data[i].RegionalData){
+              var reginal = data[i].RegionalData;
+              for(var j = 0 ; j < reginal.length ; j ++){
+                //state and data
+                var reginalTotal = 0;
+                var reginalCount = 0;
+                reginal[j].State = valueToLabel(STATE,reginal[j].State);
+                if(reginal[j].Data){
+                  var dateData = reginal[j].Data;
+                  for(var k = 0; k < dateData.length ; k ++){
+                    total += dateData[k].Value;
+                    reginalTotal += dateData[k].Value;
+                    reginalCount++;
+                  }
+                  reginal[j].average = parseFloat(reginalTotal/reginalCount).toFixed(4);
+                  total += reginalTotal/reginalCount;
+                  count ++ ;
+                }
+              }
+            }
+            data[i].average = parseFloat(total/count).toFixed(4);
+          }
+
+        }else if(data.MonthlyRetailData){
+          data = data.MonthlyRetailData;
+          for( i = 0 ; i < data.length; i++){
+            total = 0;
+            count = 0;
+            if(data[i].RetailIndustry){
+              data[i].Category = valueToLabel(CATEGORY_RT,data[i].RetailIndustry);
+            }
+            if(data[i].RegionalData){
+              reginal = data[i].RegionalData;
+              for( j = 0 ; j < reginal.length ; j ++){
+                //state and data
+                reginalTotal = 0;
+                reginalCount = 0;
+                reginal[j].State = valueToLabel(STATE,reginal[j].State);
+                if(reginal[j].Data){
+                  dateData = reginal[j].Data;
+                  for(k = 0; k < dateData.length ; k ++){
+                    dateData[k].Value = dateData[k].Turnover;
+                    reginalTotal += dateData[k].Value;
+                    reginalCount++;
+                  }
+                }
+                reginal[j].average = parseFloat(reginalTotal/reginalCount).toFixed(4);
+                total += reginalTotal/reginalCount;
+                count ++ ;
+              }
+            }
+            data[i].average = parseFloat(total/count).toFixed(4);
+          }
+        }
+      }
+      console.log(data);
+        return {
+          data: data
+        };
+    })
+  }
+
+  render() {
+    var data = this.state.data;
+
+    console.log(data);
+    const categoryValue = [{
+      header: 'Category',
+      accessor: 'Category' // String-based value accessors!
+    }, {
+      header: 'Average',
+      accessor: 'average',
+    }]
+
+    const reginalData = [{
+      header: 'State',
+      accessor: 'State' // String-based value accessors!
+    }, {
+      header: 'Average',
+      accessor: 'average',
+    }]
+
+    const Datedata = [{
+      header: 'Date',
+      accessor: 'Date' // String-based value accessors!
+    }, {
+      header: 'Value',
+      accessor: 'Value',
+    }]
+
+    return(
+      <div className="card">
+        <div className="card-header">
+          <strong>Data Set</strong>
+        </div>
+        <div className="card-block">
+          <div className="row">
+            <div className="col-sm-12 col-md-12">
+              <ReactTable
+                data={data}
+                columns={categoryValue}
+                defaultPageSize={5}
+                noDataText='Use Data Fetcher to fetch data.'
+                pageSize={(data) ? data.length : 7}
+                SubComponent={(row) => {
+                  return(
+                    <ReactTable
+                      data={row.row.RegionalData}
+                      columns={reginalData}
+                      defaultPageSize={10}
+                      pageSize={row.row.RegionalData.length}
+                      showPagination={false}
+                      SubComponent={(row) => {
+                        return(
+                          <ReactTable
+                            data={row.row.Data}
+                            pageSize={row.row.Data.length}
+                            columns={Datedata}
+                            defaultPageSize={10}
+                            showPagination={false}
+                          />
+                        )
+                      }}
+                    />
+                  )
+                }}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="card-footer">
+          <button className="btn btn-sm btn-primary" onClick={this.toggle} disabled={!data} ><i className="fa fa-dot-circle-o" ></i> Raw</button>
+        </div>
+        <Modal isOpen={this.state.rawShowing} toggle={this.toggle} className={'modal-lg '+ this.props.className}>
+          <ModalHeader toggle={this.toggle}>JSON</ModalHeader>
+          <ModalBody>
+            {JSON.stringify(this.props.data,null,2)}
+          </ModalBody>
+          <ModalFooter>
+            <CopyToClipboard text={(this.props.data)?JSON.stringify(this.props.data,null,2):""}>
+              <Button color="primary" onClick={this.toggle}>Copy</Button>
+            </CopyToClipboard>
+            <Button color="secondary" onClick={this.toggle}>Close</Button>
+          </ModalFooter>
+        </Modal>
+      </div>
+
+
+
+    )
+  }
+
+}
+/*
 //data set componenets
 
 class DataSet extends Component {
@@ -127,7 +320,9 @@ class DataSet extends Component {
           <strong>Data Set</strong>
         </div>
         <div className="card-block">
-
+          <div id="accordion" role="tablist" aria-multiselectable="true">
+            {this.props.entries}
+          </div>
         </div>
       </div>
     )
@@ -137,17 +332,20 @@ class DataSet extends Component {
 class DataEntry extends Component{
   constructor(props){
     super(props);
+    this.state ={
+      json: this.props.json
+    }
   }
 
   render(){
     return (
-      null
+
     )
   }
 
 }
 
-
+*/
 
 //data fetcher components
 
@@ -160,6 +358,7 @@ class DataFetcher extends Component {
       region: [],
       category: [],
       mrange: {from: {year: 2016, month: 7}, to: {year: 2017, month: 2}},
+      count: 0,
     }
     this.setArea = this.setArea.bind(this);
     this.setCategory = this.setCategory.bind(this);
@@ -197,18 +396,9 @@ class DataFetcher extends Component {
   }
 
   fetch(e){
-    console.log(JSON.stringify({
-      StatisticsArea: this.state.area,
-      State: this.state.region,
-      Category: this.state.category,
-      startDate: this.state.mrange.from.year + "-" + this.state.mrange.from.month + "-01",
-      endDate: this.state.mrange.to.year + "-" + this.state.mrange.to.month + "-01"
-    }));
     var that = this;
-    var proxyUrl = 'https://cors-anywhere.herokuapp.com/'
-    var url = 'http://127.0.0.1:8080/api'
+    var url = 'http://45.76.114.158/api'
     fetch( url,{
-      mode: 'no-cors',
       method: 'POST',
       headers: {
        'Accept': 'application/json',
@@ -220,21 +410,23 @@ class DataFetcher extends Component {
         Category: this.state.category,
         startDate: this.state.mrange.from.year + "-" + this.state.mrange.from.month + "-01",
         endDate: this.state.mrange.to.year + "-" + this.state.mrange.to.month + "-01"
-      })
+      }),
     })
     .then(function(response) {
       if (response.status >= 400) {
         throw new Error("Bad response from server");
-      }else{
-        return response.json().then(function(json) {
-          that.props.addDataEntry(<DataEntry data={json}/>);
-          console.log(json);
-        });
       }
+      return response.json().then(function (json) {
+        //TODO: deal with empty data
+        that.props.addDataEntry(json,"Data Entry"+that.state.count++);
+      })
+
     });
   }
 
   render(){
+    var button = (this.state.area && this.state.region && this.state.category && this.state.region.length > 0 && this.state.category.length > 0) ? false : true;
+
     return (
         <div className="card">
           <div className="card-header">
@@ -286,7 +478,7 @@ class DataFetcher extends Component {
               </Picker>
           </div>
           <div className="card-footer">
-            <button className="btn btn-sm btn-primary" onClick={this.fetch}><i className="fa fa-dot-circle-o" ></i> Fetch</button>
+            <button className="btn btn-sm btn-primary" onClick={this.fetch} disabled={button} ><i className="fa fa-dot-circle-o" ></i> Fetch</button>
           </div>
 
         </div>

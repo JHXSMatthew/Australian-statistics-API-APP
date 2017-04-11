@@ -6,6 +6,7 @@ package com.teamrocket.seng3011.api.exceptions;
 public class KnownException extends Exception {
 
     private boolean pretty = false;
+    private String traceNumber = "";
 
     public KnownException(String message, boolean pretty) {
         super(message);
@@ -14,5 +15,13 @@ public class KnownException extends Exception {
 
     public void setPretty(boolean pretty) {
         this.pretty = pretty;
+    }
+
+    public void setTraceNumber(String s){
+        this.traceNumber = s;
+    }
+
+    public String getTraceNumber(){
+        return this.traceNumber ;
     }
 }

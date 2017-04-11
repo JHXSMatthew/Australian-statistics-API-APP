@@ -6,10 +6,7 @@ import com.teamrocket.seng3011.api.absApi.APIRequest;
 import com.teamrocket.seng3011.api.absApi.EntryFactory;
 import com.teamrocket.seng3011.api.absApi.entries.EntryType;
 import com.teamrocket.seng3011.api.absApi.entries.MonthlyDataEntry;
-import com.teamrocket.seng3011.api.exceptions.CannotParseCategoryException;
-import com.teamrocket.seng3011.api.exceptions.CannotParseStateException;
-import com.teamrocket.seng3011.api.exceptions.DateInvalidException;
-import com.teamrocket.seng3011.api.exceptions.KnownException;
+import com.teamrocket.seng3011.api.exceptions.*;
 import com.teamrocket.seng3011.api.results.Header;
 import com.teamrocket.seng3011.api.results.ResultContainer;
 import com.teamrocket.seng3011.api.results.ResultObject;
@@ -37,6 +34,7 @@ import java.util.Objects;
  * http://127.0.0.1:8080/api?StatisticsArea=MerchandiseExports&State=NSW,SA&Category=CrudMaterialAndInedible,MineralFuelLubricentAndRelatedMaterial&startDate=2013-01-01&&endDate=2014-01-01
  */
 @RestController
+@CrossOrigin
 public class APIController {
 
     private final static boolean DEBUG = true;
@@ -47,10 +45,10 @@ public class APIController {
 
 
     @RequestMapping(value = "/api",method = RequestMethod.POST, produces = "application/json")
-    public void statisticsPOST(HttpServletResponse response,WebRequest r,HttpEntity<String> requestEntity) throws IOException, ParseException, KnownException {
+    public String statisticsPOST(HttpServletResponse response,WebRequest r,HttpEntity<String> requestEntity) throws IOException, ParseException, KnownException, ExceptionWrapper {
         ObjectMapper mapper = new ObjectMapper();
         ClientRequestContainer container = mapper.readValue(requestEntity.getBody(),ClientRequestContainer.class);
-        statistics(response,r,
+        return statistics(response,r,
                 container.isPretty(),
                 container.getArea(),
                 container.getStateRaw(),
@@ -60,16 +58,17 @@ public class APIController {
     }
 
     @RequestMapping(value = "/api", method = RequestMethod.GET, produces = "application/json")
-    public void statistics(HttpServletResponse response,
+    public String statistics(HttpServletResponse response,
                            WebRequest r,
                            @RequestParam(value = "pretty", required = false) boolean pretty,
                            @RequestParam(value = "StatisticsArea") String area,
                            @RequestParam(value = "State") String[] stateRaw,
                            @RequestParam(value = "Category") String[] category,
                            @RequestParam(value = "startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
-                           @RequestParam(value = "endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) throws ParseException, IOException, DateInvalidException, KnownException {
+                           @RequestParam(value = "endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) throws ParseException, IOException, DateInvalidException, KnownException, ExceptionWrapper {
 
         String parameters = StringUtils.mapToString(r.getParameterMap());
+        String returnValue = null;
         if (endDate.before(startDate))
             throw new DateInvalidException("Date " + DateUtils.dateToStringYMD(startDate) + " is after " + DateUtils.dateToStringYMD(endDate));
 
@@ -85,22 +84,21 @@ public class APIController {
                             .setDate(startDate, endDate)
                             .fetch().parse(), entryType
             );
-
-            ResultContainer container = new ResultContainer(new Header(Status.success), (ResultObject) obj);
+            String trace = LogManager.getInstance().log(parameters, log_starting, Calendar.getInstance().getTime());
+            ResultContainer container = new ResultContainer(new Header(Status.success,trace), (ResultObject) obj);
             ObjectMapper mapper = new ObjectMapper();
             if (pretty)
                 mapper.enable(SerializationFeature.INDENT_OUTPUT);
-            mapper.writeValue(response.getOutputStream(), container);
+            returnValue =  mapper.writeValueAsString(container);
             debugPrint("---- Request done! ----");
             debugPrint("  ");
-            LogManager.getInstance().log(parameters, log_starting, Calendar.getInstance().getTime());
         } catch (Exception e) {
-            LogManager.getInstance().log(parameters, e.getMessage(), e.getStackTrace()[0].toString());
-            if (e instanceof KnownException) {
-                ((KnownException) e).setPretty(pretty);
-            }
-            throw e;
+            String trace = LogManager.getInstance().log(parameters, e.getMessage(), e.getStackTrace()[0].toString());
+            ExceptionWrapper wrapper = new ExceptionWrapper(e,trace,pretty);
+
+            throw wrapper;
         }
+        return returnValue;
     }
 
 

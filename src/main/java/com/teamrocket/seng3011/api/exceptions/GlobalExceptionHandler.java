@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.validation.ConstraintViolationException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -24,105 +26,55 @@ import javax.validation.ConstraintViolationException;
 @Component
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler
-    @ResponseBody
-    @ResponseStatus
-    public ResultContainer handle(MissingServletRequestParameterException exception) {
-        return error(-1, exception.getMessage());
+    private Map<Class< ? extends Exception>,Integer> idMap;
+
+    public GlobalExceptionHandler(){
+        super();
+        idMap = new HashMap<>();
+        System.out.println("test, called.");
+        register();
     }
 
-    @ExceptionHandler
-    @ResponseBody
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResultContainer handle(MethodArgumentNotValidException exception) {
-        return error(0, exception.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseBody
-    @ResponseStatus
-    public ResultContainer handle(MethodArgumentTypeMismatchException exception) {
-        return error(1, exception.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseBody
-    @ResponseStatus
-    public ResultContainer handle(CannotParseStatsTypeException exception) {
-        return error(2, exception.getMessage());
-
-    }
-
-    @ExceptionHandler
-    @ResponseBody
-    @ResponseStatus
-    public ResultContainer handle(CannotParseCategoryException exception) {
-        return error(3, exception.getMessage());
+    private void register(){
+        idMap.put(MissingServletRequestParameterException.class,-1);
+        idMap.put(MethodArgumentNotValidException.class,0);
+        idMap.put(MethodArgumentTypeMismatchException.class,1);
+        idMap.put(CannotParseStatsTypeException.class,2);
+        idMap.put(CannotParseCategoryException.class,3);
+        idMap.put(CannotParseStateException.class,4);
+        idMap.put(CannotParseJSONException.class,5);
+        idMap.put(CannotFetchDataException.class,6);
+        idMap.put(ConstraintViolationException.class,7);
+        idMap.put(NullPointerException.class,8);
+        idMap.put(ConversionFailedException.class,9);
+        idMap.put(NoDataAvailableException.class,10);
+        idMap.put(DateInvalidException.class,11);
     }
 
     @ExceptionHandler
     @ResponseBody
     @ResponseStatus
-    public ResultContainer handle(CannotParseStateException exception) {
-        return error(4, exception.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseBody
-    @ResponseStatus
-    public ResultContainer handle(CannotParseJSONException exception) {
-        return error(5, exception.getMessage());
-    }
-
-
-    @ExceptionHandler
-    @ResponseBody
-    @ResponseStatus
-    public ResultContainer handle(CannotFetchDataException exception) {
-        return error(6, exception.getMessage());
+    public ResultContainer handle(Exception e){
+        if(e instanceof ExceptionWrapper){
+            Exception ex = ((ExceptionWrapper) e).getE();
+            if(idMap.containsKey(ex.getClass())){
+                return error(idMap.get(ex.getClass()),ex.getMessage(),((ExceptionWrapper) e).getTraceNumber());
+            }else{
+                return error(-999,ex.getMessage(),((ExceptionWrapper) e).getTraceNumber());
+            }
+        }else{
+            return error(-999,e.getMessage());
+        }
     }
 
 
-    @ExceptionHandler
-    @ResponseBody
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResultContainer handle(ConstraintViolationException exception) {
-        return error(7, exception.getMessage());
+    private ResultContainer error(int id, String message,String trace) {
+
+        return new ResultContainer(new Header(Status.error,trace), new Error(id, message));
     }
-
-    @ExceptionHandler
-    @ResponseBody
-    @ResponseStatus()
-    public ResultContainer handle(NullPointerException exception) {
-        return error(8, exception.getMessage());
-    }
-
-
-    @ExceptionHandler
-    @ResponseBody
-    @ResponseStatus
-    public ResultContainer handle(ConversionFailedException exception) {
-        return error(9, exception.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseBody
-    @ResponseStatus
-    public ResultContainer handle(NoDataAvailableException exception) {
-        return error(10, exception.getMessage());
-    }
-
-
-    @ExceptionHandler
-    @ResponseBody
-    @ResponseStatus
-    public ResultContainer handle(DateInvalidException exception) {
-        return error(11, exception.getMessage());
-    }
-
 
     private ResultContainer error(int id, String message) {
 
-        return new ResultContainer(new Header(Status.error), new Error(id, message));
+        return new ResultContainer(new Header(Status.error,""), new Error(id, message));
     }
 }

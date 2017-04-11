@@ -76,26 +76,28 @@ public class LogManager {
         return map;
     }
 
-    public void log(String parameters, String exceptionMessage, String stackTrack) {
+    public String log(String parameters, String exceptionMessage, String stackTrack) {
         Map<String, String> map = log(parameters);
         map.put("exception", "true");
         map.put("exception_message", exceptionMessage);
         map.put("stackTrack", stackTrack);
-        save(map);
+        return save(map);
     }
 
-    public void log(String parameters, Date starting, Date ending) {
+    public String log(String parameters, Date starting, Date ending) {
         Map<String, String> map = log(parameters);
         map.put("starting", df.format(starting));
         map.put("ending", df.format(ending));
-        save(map);
+        return save(map);
     }
 
-    public void save(Map<String, String> map) {
-        File f = new File(folder, par.format(Calendar.getInstance().getTime()));
+    public String save(Map<String, String> map) {
+        String returnValue = par.format(Calendar.getInstance().getTime());
+        File f = new File(folder, returnValue);
         int i = 0;
         while (f.exists()) {
-            f = new File(folder, par.format(Calendar.getInstance().getTime()) + "_" + i);
+            returnValue = par.format(Calendar.getInstance().getTime()) + "_" + i;
+            f = new File(folder, returnValue );
             i++;
         }
         try {
@@ -110,5 +112,6 @@ public class LogManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return returnValue;
     }
 }

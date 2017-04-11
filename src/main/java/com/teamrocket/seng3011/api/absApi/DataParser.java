@@ -46,6 +46,7 @@ public class DataParser {
             if (e instanceof KnownException) {
                 throw e;
             } else {
+                e.printStackTrace();
                 throw new NoDataAvailableException("no data is available for those parameters");
             }
         }
@@ -79,17 +80,28 @@ public class DataParser {
                     String dateYM = (String) ((Map) positionValues.get(POSITION_DATE).get(k)).get("id");
                     positions[POSITION_DATE] = k;
                     //for each Time period
+                    double data = getDataByPositions(positions);
+                    if (data == -1.0)
+                        continue;
                     regionalDataEntry.addEntry(EntryFactory.getFactory().getDateDataEntry(DateUtils.stringToDateYM(dateYM)
-                            , getDataByPositions(positions), EntryType.EXPORT));
+                            , data, EntryType.EXPORT));
 
                 }
-                regionalDataEntry.pack();
-                export.addRegionalDataEntry(regionalDataEntry);
+                if(regionalDataEntry.valid()){
+                    regionalDataEntry.pack();
+                    export.addRegionalDataEntry(regionalDataEntry);
+                }
             }
-            export.pack();
-            entries.add(export);
+            if(export.valid()) {
+                export.pack();
+                entries.add(export);
+            }
         }
-        return entries.toArray(new MonthlyDataEntryExport[entries.size()]);
+        if(entries.size() > 0) {
+            return entries.toArray(new MonthlyDataEntryExport[entries.size()]);
+        }else{
+            throw new NoDataAvailableException("no data available");
+        }
     }
 
     private MonthlyDataEntryRetail[] parseEntriesRetail() throws KnownException {
@@ -119,7 +131,7 @@ public class DataParser {
                     //for each months
                     String dateYM = (String) ((Map) positionValues.get(POSITION_DATE).get(k)).get("id");
                     positions[POSITION_DATE] = k;
-                    //for each Time period TODO: notice user when some data is missing.
+                    //for each Time period TODO: notice user when some data is missing., don't forget export above
                     double data = getDataByPositions(positions);
                     if (data == -1.0)
                         continue;
@@ -127,13 +139,21 @@ public class DataParser {
                             , data, EntryType.RETAIL));
 
                 }
-                regionalDataEntry.pack();
-                retail.addRegionalDataEntry(regionalDataEntry);
+                if(regionalDataEntry.valid()){
+                    regionalDataEntry.pack();
+                    retail.addRegionalDataEntry(regionalDataEntry);
+                }
             }
-            retail.pack();
-            entries.add(retail);
+            if(retail.valid()) {
+                retail.pack();
+                entries.add(retail);
+            }
         }
-        return entries.toArray(new MonthlyDataEntryRetail[entries.size()]);
+        if(entries.size() > 0){
+            return entries.toArray(new MonthlyDataEntryRetail[entries.size()]);
+        }else{
+            throw new NoDataAvailableException("no data available");
+        }
     }
 
     private List<List<Object>> getPositionValuesList() {
@@ -157,7 +177,7 @@ public class DataParser {
     private double getDataByPositions(int[] positions) {
         try {
             return (double) ((List) data.get(getKeyFromPositions(positions))).get(0);
-        } catch (NullPointerException e) {
+        } catch (Exception e) { //TODO: oh, this api sucks, null or empty entry
             return -1.0;
         }
     }

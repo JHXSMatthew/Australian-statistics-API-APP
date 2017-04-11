@@ -17,10 +17,8 @@ import com.teamrocket.seng3011.api.results.Status;
 import com.teamrocket.seng3011.utils.DateUtils;
 import com.teamrocket.seng3011.utils.StringUtils;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpServletResponse;
@@ -47,7 +45,21 @@ public class APIController {
         if (DEBUG) System.err.println(str);
     }
 
-    @RequestMapping(value = "/api", produces = "application/json")
+
+    @RequestMapping(value = "/api",method = RequestMethod.POST, produces = "application/json")
+    public void statisticsPOST(HttpServletResponse response,WebRequest r,HttpEntity<String> requestEntity) throws IOException, ParseException, KnownException {
+        ObjectMapper mapper = new ObjectMapper();
+        ClientRequestContainer container = mapper.readValue(requestEntity.getBody(),ClientRequestContainer.class);
+        statistics(response,r,
+                container.isPretty(),
+                container.getArea(),
+                container.getStateRaw(),
+                container.getCategory(),
+                container.getStartDate(),
+                container.getEndDate());
+    }
+
+    @RequestMapping(value = "/api", method = RequestMethod.GET, produces = "application/json")
     public void statistics(HttpServletResponse response,
                            WebRequest r,
                            @RequestParam(value = "pretty", required = false) boolean pretty,
@@ -89,9 +101,15 @@ public class APIController {
             }
             throw e;
         }
+    }
 
+
+    public void handle(ClientRequestContainer container){
 
     }
+
+
+
 
     private State[] parseState(String[] stateRaw) throws CannotParseStateException {
         State[] states = new State[stateRaw.length];

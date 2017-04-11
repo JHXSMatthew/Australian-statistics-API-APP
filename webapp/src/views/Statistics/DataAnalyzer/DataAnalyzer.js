@@ -197,13 +197,19 @@ class DataFetcher extends Component {
   }
 
   fetch(e){
-    console.log(e);
+    console.log(JSON.stringify({
+      StatisticsArea: this.state.area,
+      State: this.state.region,
+      Category: this.state.category,
+      startDate: this.state.mrange.from.year + "-" + this.state.mrange.from.month + "-01",
+      endDate: this.state.mrange.to.year + "-" + this.state.mrange.to.month + "-01"
+    }));
     var that = this;
     var proxyUrl = 'https://cors-anywhere.herokuapp.com/'
-    var url = 'http://45.76.114.158/api'
+    var url = 'http://127.0.0.1:8080/api'
     fetch( url,{
       mode: 'no-cors',
-      method: 'GET',
+      method: 'POST',
       headers: {
        'Accept': 'application/json',
        'Content-Type': 'application/json',
@@ -219,11 +225,12 @@ class DataFetcher extends Component {
     .then(function(response) {
       if (response.status >= 400) {
         throw new Error("Bad response from server");
+      }else{
+        return response.json().then(function(json) {
+          that.props.addDataEntry(<DataEntry data={json}/>);
+          console.log(json);
+        });
       }
-      return response.json().then(function(json) {
-        that.props.addDataEntry(<DataEntry data={json}/>);
-        console.log(json);
-      });
     });
   }
 

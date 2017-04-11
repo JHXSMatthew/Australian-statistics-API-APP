@@ -10,6 +10,7 @@ import Release from './views/Statistics/Release/'
 import DataAnalyzer from './views/Statistics/DataAnalyzer'
 import DeveloperAPI from './views/Statistics/Doc/DeveloperAPI'
 import About from './views/Others/About/'
+import Documentation from './views/Others/Documentation/'
 
 
 //template examples
@@ -40,6 +41,7 @@ export default (
         <Route path="developerAPI" name="Developer API" component={DeveloperAPI}/>
         <Route path="buttons" name="Buttons" component={Buttons}/>
       </Route>
+      <Route path="doc" name="Documentation" component={Documentation}/>
       <Route path="about" name="About" component={About}/>
       <Route path="components/" name="Components">
         <IndexRoute component={Buttons}/>

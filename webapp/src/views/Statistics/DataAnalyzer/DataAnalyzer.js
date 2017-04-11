@@ -61,7 +61,7 @@ class DataAnalyzer extends Component {
 
   addDataEntry(e){
     var d= this.state.dataEntries;
-    d.push(e);
+    d.push(<DataEntry json={e}/>);
     this.setState({
       dataEntries: d,
     });
@@ -95,9 +95,6 @@ class Charts extends Component {
 
   }
 
-
-
-
   render(){
     return (
       <div className="card">
@@ -110,7 +107,6 @@ class Charts extends Component {
       </div>
     )
   }
-
 }
 
 //data set componenets
@@ -137,6 +133,7 @@ class DataSet extends Component {
 class DataEntry extends Component{
   constructor(props){
     super(props);
+    //this.props.json to get raw json.
   }
 
   render(){

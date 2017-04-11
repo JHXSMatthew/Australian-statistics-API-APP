@@ -37,6 +37,7 @@ import java.util.Objects;
  * http://127.0.0.1:8080/api?StatisticsArea=MerchandiseExports&State=NSW,SA&Category=CrudMaterialAndInedible,MineralFuelLubricentAndRelatedMaterial&startDate=2013-01-01&&endDate=2014-01-01
  */
 @RestController
+@CrossOrigin
 public class APIController {
 
     private final static boolean DEBUG = true;
@@ -47,10 +48,10 @@ public class APIController {
 
 
     @RequestMapping(value = "/api",method = RequestMethod.POST, produces = "application/json")
-    public void statisticsPOST(HttpServletResponse response,WebRequest r,HttpEntity<String> requestEntity) throws IOException, ParseException, KnownException {
+    public String statisticsPOST(HttpServletResponse response,WebRequest r,HttpEntity<String> requestEntity) throws IOException, ParseException, KnownException {
         ObjectMapper mapper = new ObjectMapper();
         ClientRequestContainer container = mapper.readValue(requestEntity.getBody(),ClientRequestContainer.class);
-        statistics(response,r,
+        return statistics(response,r,
                 container.isPretty(),
                 container.getArea(),
                 container.getStateRaw(),
@@ -60,7 +61,7 @@ public class APIController {
     }
 
     @RequestMapping(value = "/api", method = RequestMethod.GET, produces = "application/json")
-    public void statistics(HttpServletResponse response,
+    public String statistics(HttpServletResponse response,
                            WebRequest r,
                            @RequestParam(value = "pretty", required = false) boolean pretty,
                            @RequestParam(value = "StatisticsArea") String area,
@@ -70,6 +71,7 @@ public class APIController {
                            @RequestParam(value = "endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) throws ParseException, IOException, DateInvalidException, KnownException {
 
         String parameters = StringUtils.mapToString(r.getParameterMap());
+        String returnValue = null;
         if (endDate.before(startDate))
             throw new DateInvalidException("Date " + DateUtils.dateToStringYMD(startDate) + " is after " + DateUtils.dateToStringYMD(endDate));
 
@@ -90,7 +92,7 @@ public class APIController {
             ObjectMapper mapper = new ObjectMapper();
             if (pretty)
                 mapper.enable(SerializationFeature.INDENT_OUTPUT);
-            mapper.writeValue(response.getOutputStream(), container);
+            returnValue =  mapper.writeValueAsString(container);
             debugPrint("---- Request done! ----");
             debugPrint("  ");
             LogManager.getInstance().log(parameters, log_starting, Calendar.getInstance().getTime());
@@ -101,6 +103,7 @@ public class APIController {
             }
             throw e;
         }
+        return returnValue;
     }
 
 

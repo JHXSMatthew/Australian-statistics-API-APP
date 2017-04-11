@@ -16,7 +16,7 @@ class GettingStarted extends Component {
                 period. Our API then returns the relevant statistics to the user. 
                 <br/><br/>
                 Users are able to call our API using HTTP request methods. In this case, our API will return the relevant statistical
-                results back through a JSON format.
+                results back through a JSON format. <a href="#/">here</a>
                 <br/><br/>
                 Our website also offers an interface to test various calls to our API, for demonstration purposes.
                 <br/><br/>

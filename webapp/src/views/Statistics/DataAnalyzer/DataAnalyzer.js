@@ -3,6 +3,9 @@ import Select from 'react-select';
 import Picker from 'react-month-picker';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import CopyToClipboard from 'react-copy-to-clipboard';
+
 
 
 const STATE = [
@@ -123,7 +126,17 @@ class Charts extends Component {
 class DataTable extends Component {
   constructor(props){
     super(props);
+    this.toggle = this.toggle.bind(this);
+    this.state ={
+      rawShowing: false
+    }
+  }
 
+
+  toggle() {
+    this.setState({
+      rawShowing: !this.state.rawShowing
+    });
   }
 
 
@@ -220,34 +233,63 @@ class DataTable extends Component {
     }]
 
     return(
-      <ReactTable
-        data={data}
-        columns={categoryValue}
-        defaultPageSize={11}
-        pageSize={(data) ? data.length : 11}
-        SubComponent={(row) => {
-          return(
-            <ReactTable
-              data={row.row.RegionalData}
-              columns={reginalData}
-              defaultPageSize={10}
-              pageSize={row.row.RegionalData.length}
-              showPagination={false}
-              SubComponent={(row) => {
-                return(
-                  <ReactTable
-                    data={row.row.Data}
-                    pageSize={row.row.Data.length}
-                    columns={Datedata}
-                    defaultPageSize={10}
-                    showPagination={false}
-                  />
-                )
-              }}
-            />
-          )
-        }}
-      />
+      <div className="card">
+        <div className="card-header">
+          <strong>Data Set</strong>
+        </div>
+        <div className="card-block">
+          <div className="row">
+            <div className="col-sm-12 col-md-12">
+              <ReactTable
+                data={data}
+                columns={categoryValue}
+                defaultPageSize={5}
+                noDataText='Use Data Fetcher to fetch data.'
+                pageSize={(data) ? data.length : 7}
+                SubComponent={(row) => {
+                  return(
+                    <ReactTable
+                      data={row.row.RegionalData}
+                      columns={reginalData}
+                      defaultPageSize={10}
+                      pageSize={row.row.RegionalData.length}
+                      showPagination={false}
+                      SubComponent={(row) => {
+                        return(
+                          <ReactTable
+                            data={row.row.Data}
+                            pageSize={row.row.Data.length}
+                            columns={Datedata}
+                            defaultPageSize={10}
+                            showPagination={false}
+                          />
+                        )
+                      }}
+                    />
+                  )
+                }}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="card-footer">
+          <button className="btn btn-sm btn-primary" onClick={this.toggle} disabled={!data} ><i className="fa fa-dot-circle-o" ></i> Raw</button>
+        </div>
+        <Modal isOpen={this.state.rawShowing} toggle={this.toggle} className={'modal-lg '+ this.props.className}>
+          <ModalHeader toggle={this.toggle}>JSON</ModalHeader>
+          <ModalBody>
+            {JSON.stringify(this.props.data,null,2)}
+          </ModalBody>
+          <ModalFooter>
+            <CopyToClipboard text={(this.props.data)?JSON.stringify(this.props.data,null,2):""}>
+              <Button color="primary" onClick={this.toggle}>Copy</Button>
+            </CopyToClipboard>
+            <Button color="secondary" onClick={this.toggle}>Close</Button>
+          </ModalFooter>
+        </Modal>
+      </div>
+
+
 
     )
   }

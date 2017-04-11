@@ -44,7 +44,7 @@ public class APIController {
     }
 
 
-    @RequestMapping(value = "/api",method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "/",method = RequestMethod.POST, produces = "application/json")
     public String statisticsPOST(HttpServletResponse response,WebRequest r,HttpEntity<String> requestEntity) throws IOException, ParseException, KnownException, ExceptionWrapper {
         ObjectMapper mapper = new ObjectMapper();
         ClientRequestContainer container = mapper.readValue(requestEntity.getBody(),ClientRequestContainer.class);
@@ -57,7 +57,7 @@ public class APIController {
                 container.getEndDate());
     }
 
-    @RequestMapping(value = "/api", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/", method = RequestMethod.GET, produces = "application/json")
     public String statistics(HttpServletResponse response,
                            WebRequest r,
                            @RequestParam(value = "pretty", required = false) boolean pretty,

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router'
 
+var Scroll = require('react-scroll');
+
 class Sidebar extends Component {
 
   handleClick(e) {

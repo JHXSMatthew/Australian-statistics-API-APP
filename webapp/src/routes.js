@@ -17,7 +17,6 @@ import About from './views/Others/About/'
 import Documentation from './views/Others/Documentation/' //yeh nah
 import GettingStarted from './views/Statistics/Doc/GettingStarted'
 
-
 //template examples
 import Charts from './views/Examples/Charts/'
 import Buttons from './views/Examples/Components/Buttons/'

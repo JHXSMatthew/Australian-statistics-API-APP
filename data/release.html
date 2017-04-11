@@ -1,36 +1,39 @@
-import React, { Component } from 'react';
+<div className="animated fadeIn">
+                       <div className="card">
+              <div className="card-header">
+                Release 1.0
+              </div>
+              <div className="card-block">
+                <p> March 28, 2017 by <a href="#">TeamRocket</a> </p>
 
-class Dashboard extends Component {
-
-  render() {
-    return (
-      <div className="animated fadeIn">
-            <h2 class="blog-post-title">Release 1.0</h2>
-            <p class="blog-post-meta">Marck 28, 2017 by <a href="#">TeamRocket</a></p>
-
-            <p>
-                This is the release for prototype one. We sucessfully implemented the API from specification.
-                Currently we are focusing on effeiciency and accuracy of our backend and improving our
-                documentation.
-            </p>
-            <p>
-                You may find instructions to use our API and integrate the module with your own system from our <a
+                <p>
+                  This is the release for prototype one. We sucessfully implemented the API from specification.
+                  Currently we are focusing on effeiciency and accuracy of our backend and improving our
+                  documentation.
+                </p>
+                <p>
+                  You may find instructions to use our API and integrate the module with your own system from our <a
                     href="http://45.76.114.158/doc">Documentation </a>. The input parameters are exactly like
-                specification says.For output, we introduced headers to indicate errors.
-            </p>
-            <p>
-                The test script was made by one of our team mate and here is it <a href="http://45.76.114.158/doc">File</a>
-            </p>
-            <ul>
-                <li>Fix all reported unhandled exceptions.</li>
-                <li>Fix error when parse state to export data.</li>
-            </ul>
+                  specification says.For output, we introduced headers to indicate errors.
+                </p>
+                <p>
+                  The test script was made by one of our team mate and here is it <a href="http://45.76.114.158/doc">File</a>
+                </p>
+                <ul>
+                  <li>Fix all reported unhandled exceptions.</li>
+                  <li>Fix error when parse state to export data.</li>
+                </ul>
 
-            <p>New Features</p>
-            <ul>
-                <li>If no data are in our databse, API returns you a error message instead of giving 404.</li>
-            </ul>
-            
+                <p>New Features</p>
+                <ul>
+                  <li>If no data are in our databse, API returns you a error message instead of giving 404.</li>
+                </ul>
+              </div>
+              <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+
+            </div>
+          </div>
+
             <h2 class="blog-post-title">Release 0.12</h2>
             <p class="blog-post-meta">Marck 26, 2017 by <a href="#">TeamRocket</a></p>
 
@@ -69,8 +72,3 @@ class Dashboard extends Component {
                 </li>
             </ul>
       </div>
-    )
-  }
-}
-
-export default Dashboard;

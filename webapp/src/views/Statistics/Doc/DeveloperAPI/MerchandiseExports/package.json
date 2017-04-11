@@ -1,0 +1,6 @@
+{
+  "name": "MerchandiseExports",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./MerchandiseExports.js"
+}

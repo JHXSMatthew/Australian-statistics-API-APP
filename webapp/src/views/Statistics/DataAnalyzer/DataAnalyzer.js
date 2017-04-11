@@ -224,17 +224,20 @@ class DataTable extends Component {
         data={data}
         columns={categoryValue}
         defaultPageSize={11}
+        pageSize={(data) ? data.length : 11}
         SubComponent={(row) => {
           return(
             <ReactTable
               data={row.row.RegionalData}
               columns={reginalData}
               defaultPageSize={10}
+              pageSize={row.row.RegionalData.length}
               showPagination={false}
               SubComponent={(row) => {
                 return(
                   <ReactTable
                     data={row.row.Data}
+                    pageSize={row.row.Data.length}
                     columns={Datedata}
                     defaultPageSize={10}
                     showPagination={false}

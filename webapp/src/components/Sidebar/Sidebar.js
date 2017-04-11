@@ -36,26 +36,26 @@ class Sidebar extends Component {
               <ul className="nav-dropdown-items">
                 <li className="nav-item">
                   <Link to={'/documentation/GettingStarted'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Getting started</Link>
-                  <li className={this.activeRoute("/developerAPI")}>
-                    <a className="nav-link nav-dropdown-toggle" href="#" onClick={this.handleClick.bind(this)}><i className="icon-folder"></i> Developer API</a>
-                    <ul className="nav-dropdown-items">
-                      <li className="nav-item">
-                        <Link to={'/documentation/DeveloperAPI'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Introduction</Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link to={'/documentation/GettingStarted'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Parameter Constraints</Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link to={'/documentation/GettingStarted'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Merchandise Exports</Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link to={'/documentation/GettingStarted'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Retail</Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link to={'/documentation/GettingStarted'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Errors</Link>
-                      </li>
-                    </ul>
-                  </li>
+                </li>
+                <li className={this.activeRoute("/developerAPI")}>
+                  <a className="nav-link nav-dropdown-toggle" href="#" onClick={this.handleClick.bind(this)}><i className="icon-folder"></i> Developer API</a>
+                  <ul className="nav-dropdown-items">
+                    <li className="nav-item">
+                      <Link to={'/documentation/DeveloperAPI'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Introduction</Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link to={'/documentation/GettingStarted'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Parameter Constraints</Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link to={'/documentation/GettingStarted'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Merchandise Exports</Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link to={'/documentation/GettingStarted'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Retail</Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link to={'/documentation/GettingStarted'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Errors</Link>
+                    </li>
+                  </ul>
                 </li>
               </ul>
             </li>

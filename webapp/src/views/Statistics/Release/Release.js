@@ -82,14 +82,15 @@ class Release extends Component {
 
 
 function getCard(cardRep){
-  return <div className="col-sm-6 col-md-4">
+  return <div key={cardRep.title} className="col-sm-6 col-md-4">
             <div className="card">
             {getHeader(cardRep.title,cardRep.date)}
             <div className="card-block">
               {getText(cardRep.contenet)}
-              <p> Bug Fixes </p>
+              <p> </p>
+              Bug Fixes
               {getDot(cardRep.fix)}
-              <p> New Features </p>
+              New Features
               {getDot(cardRep.new)}
             </div>
           </div>
@@ -97,15 +98,15 @@ function getCard(cardRep){
 }
 
 function getHeader(title,date){
-  return <div className="card-header"> {title}  <small class="text-muted">{forceHTML(date)}</small> </div>;
+  return <div className="card-header"> {title}  <small className="text-muted">{forceHTML(date)}</small> </div>;
 }
 
 function getText(t){
-  return <div> {t.map((a) => <p> {forceHTML(a)} </p>)} </div>;
+  return  t.map((a,index) => <span key={index}> <p>{forceHTML(a)}</p> </span>);
 }
 
 function getDot(t){
-  return <ul> {t.map((b) => <li key={b} > {forceHTML(b)}</li>)} </ul>;
+  return <ul> {t.map((b,index) => <li key={index} > {forceHTML(b)}</li>)} </ul>;
 }
 
 function forceHTML(t){

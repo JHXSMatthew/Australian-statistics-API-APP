@@ -123,6 +123,7 @@ class DataSet extends Component {
           <strong>Data Set</strong>
         </div>
         <div className="card-block">
+        {this.props.entries}
 
         </div>
       </div>
@@ -193,6 +194,10 @@ class DataFetcher extends Component {
     this.setState( {mrange: value} )
   }
 
+  addEntry(e) {
+    this.props.addDataEntry(e);
+  }
+
   fetch(e){
     var that = this;
     var url = 'http://45.76.114.158/api'
@@ -214,9 +219,15 @@ class DataFetcher extends Component {
       if (response.status >= 400) {
         throw new Error("Bad response from server");
       }
+<<<<<<< HEAD
+      return response.text().then(function (text) {
+        console.log(text);
+        that.addEntry(text);
+=======
       return response.json().then(function (json) {
         //TODO: deal with empty data
         that.props.addDataEntry(json.data);
+>>>>>>> 236d89fb53f59944dc2e9e42fdcd57e1b2017d0e
       })
 
     });

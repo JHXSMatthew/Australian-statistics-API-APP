@@ -53,13 +53,35 @@ class DataAnalyzer extends Component {
 
   constructor(props){
     super(props);
+    this.state = {
+        dataEntries: [],
+    }
+    this.addDataEntry = this.addDataEntry.bind(this);
+  }
+
+  addDataEntry(e){
+    var d= this.state.dataEntries;
+    d.push(e);
+    this.setState({
+      dataEntries: d,
+    });
   }
 
   render(){
     return (
       <div className="animated fadeIn">
-        <div className="col-sm-6">
-          <DataFetcher />
+        <div className="row">
+          <div className="col-sm-6">
+            <DataFetcher addDataEntry={this.addDataEntry} />
+          </div>
+          <div className="col-sm-6">
+            <DataSet entries={this.state.dataEntries} />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-sm-12">
+            <Charts/>
+          </div>
         </div>
       </div>
     )
@@ -67,11 +89,63 @@ class DataAnalyzer extends Component {
 }
 
 // chats components
+class Charts extends Component {
+  constructor(props){
+    super(props);
+
+  }
 
 
+
+
+  render(){
+    return (
+      <div className="card">
+        <div className="card-header">
+          <strong>Charts</strong>
+        </div>
+        <div className="card-block">
+
+        </div>
+      </div>
+    )
+  }
+
+}
 
 //data set componenets
 
+class DataSet extends Component {
+  constructor(props){
+    super(props);
+  }
+
+  render(){
+    return (
+      <div className="card">
+        <div className="card-header">
+          <strong>Data Set</strong>
+        </div>
+        <div className="card-block">
+
+        </div>
+      </div>
+    )
+  }
+}
+
+class DataEntry extends Component{
+  constructor(props){
+    super(props);
+  }
+
+  render(){
+    return (
+      null
+    )
+  }
+
+}
 
 
 
@@ -83,13 +157,14 @@ class DataFetcher extends Component {
     super(props);
     this.state = {
       area: null,
+      region: [],
       category: [],
-      startDate: null,
-      endDate: null,
       mrange: {from: {year: 2016, month: 7}, to: {year: 2017, month: 2}},
     }
     this.setArea = this.setArea.bind(this);
     this.setCategory = this.setCategory.bind(this);
+    this.setRegion = this.setRegion.bind(this);
+    this.fetch = this.fetch.bind(this);
     this.handleClickRangeBox = this.handleClickRangeBox.bind(this);
     this.handleRangeDissmis = this.handleRangeDissmis.bind(this);
   }
@@ -98,6 +173,12 @@ class DataFetcher extends Component {
     this.setState({
       area: a,
       category: []
+    })
+  }
+
+  setRegion(a){
+    this.setState({
+      region: a,
     })
   }
 
@@ -111,14 +192,39 @@ class DataFetcher extends Component {
       this.refs.pickRange.show()
   }
 
-
-
   handleRangeDissmis(value) {
     this.setState( {mrange: value} )
   }
 
-  fetch(){
-
+  fetch(e){
+    console.log(e);
+    var that = this;
+    var proxyUrl = 'https://cors-anywhere.herokuapp.com/'
+    var url = 'http://45.76.114.158/api'
+    fetch( url,{
+      mode: 'no-cors',
+      method: 'GET',
+      headers: {
+       'Accept': 'application/json',
+       'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        StatisticsArea: this.state.area,
+        State: this.state.region,
+        Category: this.state.category,
+        startDate: this.state.mrange.from.year + "-" + this.state.mrange.from.month + "-01",
+        endDate: this.state.mrange.to.year + "-" + this.state.mrange.to.month + "-01"
+      })
+    })
+    .then(function(response) {
+      if (response.status >= 400) {
+        throw new Error("Bad response from server");
+      }
+      return response.json().then(function(json) {
+        that.props.addDataEntry(<DataEntry data={json}/>);
+        console.log(json);
+      });
+    });
   }
 
   render(){
@@ -135,24 +241,31 @@ class DataFetcher extends Component {
                   <AreaSelector setArea={this.setArea}/>
                 </div>
               </div>
+            </div>
+            <div className="row">
               <div className="col-sm-12 col-md-12">
                 <div className="form-group">
                   <label htmlFor="regions">Regions</label>
-                  <StateSelector />
+                  <StateSelector setRegion={this.setRegion}/>
                 </div>
               </div>
+            </div>
+            <div className="row">
               <div className="col-sm-12 col-md-12">
                 <div className="form-group">
                   <label htmlFor="category">Category</label>
                   <CategorySelector setCategory={this.setCategory} area={this.state.area} category={this.state.category}/>
                 </div>
               </div>
+            </div>
+            <div className="row">
               <div className="col-sm-12 col-md-12">
                 <div className="form-group">
                   <label htmlFor="daterange">Date Range</label>
                   <MonthBox value={this.state.mrange} ClickRangeBox={this.handleClickRangeBox} />
                 </div>
               </div>
+            </div>
 
               <Picker
                   ref="pickRange"
@@ -164,9 +277,13 @@ class DataFetcher extends Component {
                   onDismiss={this.handleRangeDissmis}
                   >
               </Picker>
-            </div>
           </div>
-      </div>
+          <div className="card-footer">
+            <button className="btn btn-sm btn-primary" onClick={this.fetch}><i className="fa fa-dot-circle-o" ></i> Fetch</button>
+          </div>
+
+        </div>
+
     )
   }
 }
@@ -243,6 +360,7 @@ class StateSelector extends Component{
 
   handleSelectChange(value) {
   		this.setState({ value });
+      this.props.setRegion(value);
   }
 
   render(){

@@ -47,7 +47,7 @@ public class APIController {
         if (DEBUG) System.err.println(str);
     }
 
-    @RequestMapping(value = "/api", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/api", produces = "application/json")
     public void statistics(HttpServletResponse response,
                            WebRequest r,
                            @RequestParam(value = "pretty", required = false) boolean pretty,

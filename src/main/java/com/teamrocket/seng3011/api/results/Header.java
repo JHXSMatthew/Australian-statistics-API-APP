@@ -9,10 +9,12 @@ public class Header {
 
     @JsonProperty("status")
     private Status status = null;
+    @JsonProperty("requestNumber")
+    private String requestNumber = null;
 
-
-    public Header(Status status) {
+    public Header(Status status,String requestNumber) {
         this.status = status;
+        this.requestNumber = requestNumber;
     }
 
 

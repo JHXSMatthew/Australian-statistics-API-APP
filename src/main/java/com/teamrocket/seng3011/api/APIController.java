@@ -6,10 +6,7 @@ import com.teamrocket.seng3011.api.absApi.APIRequest;
 import com.teamrocket.seng3011.api.absApi.EntryFactory;
 import com.teamrocket.seng3011.api.absApi.entries.EntryType;
 import com.teamrocket.seng3011.api.absApi.entries.MonthlyDataEntry;
-import com.teamrocket.seng3011.api.exceptions.CannotParseCategoryException;
-import com.teamrocket.seng3011.api.exceptions.CannotParseStateException;
-import com.teamrocket.seng3011.api.exceptions.DateInvalidException;
-import com.teamrocket.seng3011.api.exceptions.KnownException;
+import com.teamrocket.seng3011.api.exceptions.*;
 import com.teamrocket.seng3011.api.results.Header;
 import com.teamrocket.seng3011.api.results.ResultContainer;
 import com.teamrocket.seng3011.api.results.ResultObject;
@@ -48,7 +45,7 @@ public class APIController {
 
 
     @RequestMapping(value = "/api",method = RequestMethod.POST, produces = "application/json")
-    public String statisticsPOST(HttpServletResponse response,WebRequest r,HttpEntity<String> requestEntity) throws IOException, ParseException, KnownException {
+    public String statisticsPOST(HttpServletResponse response,WebRequest r,HttpEntity<String> requestEntity) throws IOException, ParseException, KnownException, ExceptionWrapper {
         ObjectMapper mapper = new ObjectMapper();
         ClientRequestContainer container = mapper.readValue(requestEntity.getBody(),ClientRequestContainer.class);
         return statistics(response,r,
@@ -68,7 +65,7 @@ public class APIController {
                            @RequestParam(value = "State") String[] stateRaw,
                            @RequestParam(value = "Category") String[] category,
                            @RequestParam(value = "startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
-                           @RequestParam(value = "endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) throws ParseException, IOException, DateInvalidException, KnownException {
+                           @RequestParam(value = "endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) throws ParseException, IOException, DateInvalidException, KnownException, ExceptionWrapper {
 
         String parameters = StringUtils.mapToString(r.getParameterMap());
         String returnValue = null;
@@ -87,21 +84,19 @@ public class APIController {
                             .setDate(startDate, endDate)
                             .fetch().parse(), entryType
             );
-
-            ResultContainer container = new ResultContainer(new Header(Status.success), (ResultObject) obj);
+            String trace = LogManager.getInstance().log(parameters, log_starting, Calendar.getInstance().getTime());
+            ResultContainer container = new ResultContainer(new Header(Status.success,trace), (ResultObject) obj);
             ObjectMapper mapper = new ObjectMapper();
             if (pretty)
                 mapper.enable(SerializationFeature.INDENT_OUTPUT);
             returnValue =  mapper.writeValueAsString(container);
             debugPrint("---- Request done! ----");
             debugPrint("  ");
-            LogManager.getInstance().log(parameters, log_starting, Calendar.getInstance().getTime());
         } catch (Exception e) {
-            LogManager.getInstance().log(parameters, e.getMessage(), e.getStackTrace()[0].toString());
-            if (e instanceof KnownException) {
-                ((KnownException) e).setPretty(pretty);
-            }
-            throw e;
+            String trace = LogManager.getInstance().log(parameters, e.getMessage(), e.getStackTrace()[0].toString());
+            ExceptionWrapper wrapper = new ExceptionWrapper(e,trace,pretty);
+
+            throw wrapper;
         }
         return returnValue;
     }

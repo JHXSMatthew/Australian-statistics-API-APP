@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import Select from 'react-select';
 import Picker from 'react-month-picker';
+import ReactTable from 'react-table';
+import 'react-table/react-table.css';
+
 
 const STATE = [
 { label: 'Australian', value: 'AUS' },
@@ -43,6 +46,15 @@ const CATEGORY_RT = [
 { label: 'others', value: 'Other' },
 ];
 
+function valueToLabel(array,value){
+  for(var i = 0 ; i < array.length ; i ++){
+    if(array[i].value && array[i].value === value){
+      return array[i].label;
+    }
+  }
+  return null;
+}
+
 const DATE_LANG = {
        months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
        , from: 'From', to: 'To'
@@ -54,16 +66,14 @@ class DataAnalyzer extends Component {
   constructor(props){
     super(props);
     this.state = {
-        dataEntries: [],
+        data: [],
     }
     this.addDataEntry = this.addDataEntry.bind(this);
   }
 
   addDataEntry(e){
-    var d= this.state.dataEntries;
-    d.push(<DataEntry key={d.length} json={e}/>);
     this.setState({
-      dataEntries: d,
+      data: e,
     });
   }
 
@@ -71,16 +81,16 @@ class DataAnalyzer extends Component {
     return (
       <div className="animated fadeIn">
         <div className="row">
+          <div className="col-sm-12">
+            <Charts/>
+          </div>
+        </div>
+        <div className="row">
           <div className="col-sm-6">
             <DataFetcher addDataEntry={this.addDataEntry} />
           </div>
           <div className="col-sm-6">
-            <DataSet entries={this.state.dataEntries} />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-sm-12">
-            <Charts/>
+            <DataTable data={this.state.data.data}/>
           </div>
         </div>
       </div>
@@ -109,6 +119,138 @@ class Charts extends Component {
   }
 }
 
+
+class DataTable extends Component {
+  constructor(props){
+    super(props);
+
+  }
+
+
+  render() {
+    var data = this.props.data;
+    if(data){
+      if(data.MonthlyCommodityExportData){
+        data = data.MonthlyCommodityExportData;
+        for(var i = 0 ; i < data.length; i++){
+          var total = 0;
+          var count = 0;
+          if(data[i].Commodity){
+            data[i].Category = valueToLabel(CATEGORY_ME,data[i].Commodity);
+          }
+          if(data[i].RegionalData){
+            var reginal = data[i].RegionalData;
+            for(var j = 0 ; j < reginal.length ; j ++){
+              //state and data
+              var reginalTotal = 0;
+              var reginalCount = 0;
+              reginal[j].State = valueToLabel(STATE,reginal[j].State);
+              if(reginal[j].Data){
+                var dateData = reginal[j].Data;
+                for(var k = 0; k < dateData.length ; k ++){
+                  total += dateData[k].Value;
+                  reginalTotal += dateData[k].Value;
+                  reginalCount++;
+                }
+                reginal[j].average = parseFloat(reginalTotal/reginalCount).toFixed(4);
+                total += reginalTotal/reginalCount;
+                count ++ ;
+              }
+            }
+          }
+          data[i].average = parseFloat(total/count).toFixed(4);
+        }
+
+      }else if(data.MonthlyRetailData){
+        data = data.MonthlyRetailData;
+        for( i = 0 ; i < data.length; i++){
+          total = 0;
+          count = 0;
+          if(data[i].RetailIndustry){
+            data[i].Category = valueToLabel(CATEGORY_RT,data[i].RetailIndustry);
+          }
+          if(data[i].RegionalData){
+            reginal = data[i].RegionalData;
+            for( j = 0 ; j < reginal.length ; j ++){
+              //state and data
+              reginalTotal = 0;
+              reginalCount = 0;
+              reginal[j].State = valueToLabel(STATE,reginal[j].State);
+              if(reginal[j].Data){
+                dateData = reginal[j].Data;
+                for(k = 0; k < dateData.length ; k ++){
+                  dateData[k].Value = dateData[k].Turnover;
+                  reginalTotal += dateData[k].Value;
+                  reginalCount++;
+                }
+              }
+              reginal[j].average = parseFloat(reginalTotal/reginalCount).toFixed(4);
+              total += reginalTotal/reginalCount;
+              count ++ ;
+            }
+          }
+          data[i].average = parseFloat(total/count).toFixed(4);
+        }
+      }
+    }
+
+    console.log(data);
+    const categoryValue = [{
+      header: 'Category',
+      accessor: 'Category' // String-based value accessors!
+    }, {
+      header: 'Average',
+      accessor: 'average',
+    }]
+
+    const reginalData = [{
+      header: 'State',
+      accessor: 'State' // String-based value accessors!
+    }, {
+      header: 'Average',
+      accessor: 'average',
+    }]
+
+    const Datedata = [{
+      header: 'Date',
+      accessor: 'Date' // String-based value accessors!
+    }, {
+      header: 'Value',
+      accessor: 'Value',
+    }]
+
+    return(
+      <ReactTable
+        data={data}
+        columns={categoryValue}
+        defaultPageSize={11}
+        SubComponent={(row) => {
+          return(
+            <ReactTable
+              data={row.row.RegionalData}
+              columns={reginalData}
+              defaultPageSize={10}
+              showPagination={false}
+              SubComponent={(row) => {
+                return(
+                  <ReactTable
+                    data={row.row.Data}
+                    columns={Datedata}
+                    defaultPageSize={10}
+                    showPagination={false}
+                  />
+                )
+              }}
+            />
+          )
+        }}
+      />
+
+    )
+  }
+
+}
+/*
 //data set componenets
 
 class DataSet extends Component {
@@ -123,7 +265,9 @@ class DataSet extends Component {
           <strong>Data Set</strong>
         </div>
         <div className="card-block">
-        {this.props.entries}
+          <div id="accordion" role="tablist" aria-multiselectable="true">
+            {this.props.entries}
+          </div>
         </div>
       </div>
     )
@@ -133,18 +277,20 @@ class DataSet extends Component {
 class DataEntry extends Component{
   constructor(props){
     super(props);
-    //this.props.json to get raw json.
+    this.state ={
+      json: this.props.json
+    }
   }
 
   render(){
     return (
-      null
+
     )
   }
 
 }
 
-
+*/
 
 //data fetcher components
 
@@ -157,6 +303,7 @@ class DataFetcher extends Component {
       region: [],
       category: [],
       mrange: {from: {year: 2016, month: 7}, to: {year: 2017, month: 2}},
+      count: 0,
     }
     this.setArea = this.setArea.bind(this);
     this.setCategory = this.setCategory.bind(this);
@@ -214,17 +361,16 @@ class DataFetcher extends Component {
       if (response.status >= 400) {
         throw new Error("Bad response from server");
       }
-      return response.text().then(function (text) {
+      return response.json().then(function (json) {
         //TODO: deal with empty data
-        that.props.addDataEntry(text);
-
+        that.props.addDataEntry(json,"Data Entry"+that.state.count++);
       })
 
     });
   }
 
   render(){
-    var button = (this.state.area && this.state.region && this.state.category && this.state.region.length > 0 && this.state.category.length > 0) ? null : "disabled";
+    var button = (this.state.area && this.state.region && this.state.category && this.state.region.length > 0 && this.state.category.length > 0) ? false : true;
 
     return (
         <div className="card">
@@ -277,7 +423,7 @@ class DataFetcher extends Component {
               </Picker>
           </div>
           <div className="card-footer">
-            <button className="btn btn-sm btn-primary" onClick={this.fetch} ><i className="fa fa-dot-circle-o" ></i> Fetch</button>
+            <button className="btn btn-sm btn-primary" onClick={this.fetch} disabled={button} ><i className="fa fa-dot-circle-o" ></i> Fetch</button>
           </div>
 
         </div>

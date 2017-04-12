@@ -33,9 +33,9 @@ const CATEGORY_ME = [
   { label: 'Mineral Fuel Lubricent And related material', value: 'MineralFuelLubricentAndRelatedMaterial' },
   { label: 'Animal and vegitable oil fat and waxes', value: 'AnimalAndVegitableOilFatAndWaxes' },
   { label: 'Chemicals And Related Products', value: 'ChemicalsAndRelatedProducts' },
-  { label: 'Manufacuted Goods', value: 'ManufacturedGoods' },
+  { label: 'Manufacture Goods', value: 'ManufacturedGoods' },
   { label: 'Machinery And Transport Equipments', value: 'MachineryAndTransportEquipments' },
-  { label: 'Other Manucactured Articles', value: 'OtherManufacturedArticles' },
+  { label: 'Other Manufactured Articles', value: 'OtherManufacturedArticles' },
   { label: 'Unclassified', value: 'Unclassified' },
 ];
 
@@ -45,7 +45,7 @@ const CATEGORY_RT = [
 { label: 'HouseholdGood category', value: 'HouseholdGood' },
 { label: 'Clothing Footware And Personal Accessory category', value: 'ClothingFootwareAndPersonalAccessory' },
 { label: 'Stores', value: 'DepartmentStores' },
-{ label: 'Resturants', value: 'CafesResturantsAndTakeawayFood' },
+{ label: 'Restaurants', value: 'CafesResturantsAndTakeawayFood' },
 { label: 'others', value: 'Other' },
 ];
 
@@ -70,6 +70,7 @@ class DataAnalyzer extends Component {
     super(props);
     this.state = {
         data: [],
+        dataType: null
     }
     this.addDataEntry = this.addDataEntry.bind(this);
   }
@@ -77,7 +78,9 @@ class DataAnalyzer extends Component {
   addDataEntry(e){
     var data = e.data;
     if(data){
+      var dataType = null;
       if(data.MonthlyCommodityExportData){
+        dataType = "Export";
         data = data.MonthlyCommodityExportData;
         for(var i = 0 ; i < data.length; i++){
           var total = 0;
@@ -114,6 +117,7 @@ class DataAnalyzer extends Component {
         }
 
       }else if(data.MonthlyRetailData){
+        dataType = "Retail";
         data = data.MonthlyRetailData;
         for( i = 0 ; i < data.length; i++){
           total = 0;
@@ -151,7 +155,8 @@ class DataAnalyzer extends Component {
     }
     this.setState(function (prevState, props) {
         return {
-          data: data
+          data: data,
+          dataType: dataType
         };
     });
 
@@ -162,7 +167,7 @@ class DataAnalyzer extends Component {
       <div className="animated fadeIn">
         <div className="row">
           <div className="col-sm-12">
-            <Charts data={this.state.data}/>
+            <Charts data={this.state.data} dataType={this.state.dataType}/>
           </div>
         </div>
         <div className="row">
@@ -170,7 +175,7 @@ class DataAnalyzer extends Component {
             <DataFetcher addDataEntry={this.addDataEntry} />
           </div>
           <div className="col-sm-6">
-            <DataTable data={this.state.data}/>
+            <DataTable data={this.state.data} dataType={this.state.dataType}/>
           </div>
         </div>
       </div>
@@ -207,7 +212,12 @@ class Charts extends Component {
       var labels=[];
       var charts=[];
       var navs=[];
-
+      var ylabel = null;
+      if(nextProps.dataType === "Export"){
+        ylabel = "Value ($ thousands)"
+      }else if(nextProps.dataType === "Retail"){
+        ylabel = "Value ($ millions)";
+      }
       for(var i = 0; i < data.length ; i ++){
         //for each category
         var dataSet=[];
@@ -268,7 +278,24 @@ class Charts extends Component {
                   labels: labels
                 }}
                 options={{
-                  maintainAspectRatio: false
+                  maintainAspectRatio: true,
+                  responsive: true,
+                  scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Date'
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: ylabel
+                        }
+                    }]
+                }
                 }}
               />
             </div>
@@ -305,7 +332,6 @@ class Charts extends Component {
         <div className="card-block">
           <div className="col-md-12 mb-12">
             <Tabs
-
               selectedIndex={0}
             >
               <TabList>
@@ -363,11 +389,17 @@ class DataTable extends Component {
       header: 'Value',
       accessor: 'Value',
     }]
+    var unit = null;
+    if(this.props.dataType === "Export"){
+      unit = "($ thousands)"
+    }else if(this.props.dataType === "Retail"){
+      unit = "($ millions)";
+    }
 
     return(
       <div className="card">
         <div className="card-header">
-          <strong>Data Set</strong>
+          <strong>Data Set {unit}</strong>
         </div>
         <div className="card-block">
           <div className="row">

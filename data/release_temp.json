@@ -1,5 +1,43 @@
 [
    {
+      "title":"Release 2.0",
+      "date":"April 12, 2017 by TeamRocket",
+      "contenet":[
+		"We are still working on moving the old documentation to the new one we are using.It should be finished soon."
+	  ],
+      "fix":[
+         "Handle more dirty data from our data source",
+      ],
+      "new":[
+         "Introducing Australian Statistics 2.0. New UI and faster response.",
+		 "Introducing Data Analyzer. It connects to our backend API and gives you a GUI to access data. It displays data into user-friendly approach such as charts and tables."
+      ]
+   },
+    
+	{
+      "title":"Release 1.3",
+      "date":"April 04, 2017 by TeamRocket",
+      "contenet":[],
+      "fix":[
+         "Fix access-origin problem with our API."
+      ],
+      "new":[
+         "Introducing POST queries. You can now use http POST request and put all parameters into POST body. "
+      ]
+	},
+    {
+      "title":"Release 1.2",
+      "date":"April 02, 2017 by TeamRocket",
+      "contenet":[],
+      "fix":[
+         "Fix some negative value while no such data avaliable"
+      ],
+      "new":[
+         "Introducing requestNumber in our API header. RequestNumber is a unique ID that identified this request to our backend log."
+      ]
+   },
+   
+   {
       "title":"Release 1.0",
       "date":"March 28, 2017 by TeamRocket",
       "contenet":[

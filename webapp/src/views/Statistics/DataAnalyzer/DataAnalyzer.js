@@ -397,7 +397,7 @@ class DataFetcher extends Component {
 
   fetch(e){
     var that = this;
-    var url = 'http://45.76.114.158/api'
+    var url = 'http://45.76.114.158/api/'
     fetch( url,{
       method: 'POST',
       headers: {

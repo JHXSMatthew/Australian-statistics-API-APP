@@ -6,9 +6,10 @@ class Release extends Component {
      super();
      this.state = null;
      var that = this;
-     var proxyUrl = 'https://cors-anywhere.herokuapp.com/'
+     //TODO: note: I'v denied the permission to fetch on local machine. if you wanna fetch this from local machine, UNCOMMENT the proxyURL part.
+     //var proxyUrl = 'https://cors-anywhere.herokuapp.com/'
      var url = 'http://45.76.114.158/data/release.json'
-     fetch(proxyUrl + url)
+     fetch(/*proxyUrl +*/ url)
      .then(function(response) {
        if (response.status >= 400) {
          throw new Error("Bad response from server");

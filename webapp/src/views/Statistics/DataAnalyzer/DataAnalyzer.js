@@ -5,7 +5,9 @@ import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import CopyToClipboard from 'react-copy-to-clipboard';
-
+import { Bar, Doughnut, Line, Pie, Polar, Radar } from 'react-chartjs-2';
+import { TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
+import classnames from 'classnames';
 
 
 const STATE = [
@@ -75,9 +77,86 @@ class DataAnalyzer extends Component {
   }
 
   addDataEntry(e){
-    this.setState({
-      data: e,
+    var data = e.data;
+    if(data){
+      if(data.MonthlyCommodityExportData){
+        data = data.MonthlyCommodityExportData;
+        for(var i = 0 ; i < data.length; i++){
+          var total = 0;
+          var count = 0;
+          if(data[i].Commodity){
+            data[i].Category = valueToLabel(CATEGORY_ME,data[i].Commodity);
+          }
+          if(data[i].RegionalData){
+            var reginal = data[i].RegionalData;
+            for(var j = 0 ; j < reginal.length ; j ++){
+              //state and data
+              var reginalTotal = 0;
+              var reginalCount = 0;
+              reginal[j].State = valueToLabel(STATE,reginal[j].State);
+              if(reginal[j].Data){
+                var dateData = reginal[j].Data;
+                for(var k = 0; k < dateData.length ; k ++){
+                  total += dateData[k].Value;
+                  reginalTotal += dateData[k].Value;
+                  reginalCount++;
+                }
+                reginal[j].average = parseFloat(reginalTotal/reginalCount).toFixed(4);
+                if(reginal[j].State === "Australia"){
+                  //don't add it. logically AU contains all states
+                }else{
+                  total += reginalTotal/reginalCount;
+                  count ++ ;
+                }
+
+              }
+            }
+          }
+          data[i].average = parseFloat(total/count).toFixed(4);
+        }
+
+      }else if(data.MonthlyRetailData){
+        data = data.MonthlyRetailData;
+        for( i = 0 ; i < data.length; i++){
+          total = 0;
+          count = 0;
+          if(data[i].RetailIndustry){
+            data[i].Category = valueToLabel(CATEGORY_RT,data[i].RetailIndustry);
+          }
+          if(data[i].RegionalData){
+            reginal = data[i].RegionalData;
+            for( j = 0 ; j < reginal.length ; j ++){
+              //state and data
+              reginalTotal = 0;
+              reginalCount = 0;
+              reginal[j].State = valueToLabel(STATE,reginal[j].State);
+              if(reginal[j].Data){
+                dateData = reginal[j].Data;
+                for(k = 0; k < dateData.length ; k ++){
+                  dateData[k].Value = dateData[k].Turnover;
+                  reginalTotal += dateData[k].Value;
+                  reginalCount++;
+                }
+              }
+              reginal[j].average = parseFloat(reginalTotal/reginalCount).toFixed(4);
+              if(reginal[j].State === "Australia"){
+                //don't add it. logically AU contains all states
+              }else{
+                total += reginalTotal/reginalCount;
+                count ++ ;
+              }
+            }
+          }
+          data[i].average = parseFloat(total/count).toFixed(4);
+        }
+      }
+    }
+    this.setState(function (prevState, props) {
+        return {
+          data: data
+        };
     });
+
   }
 
   render(){
@@ -85,7 +164,7 @@ class DataAnalyzer extends Component {
       <div className="animated fadeIn">
         <div className="row">
           <div className="col-sm-12">
-            <Charts/>
+            <Charts data={this.state.data}/>
           </div>
         </div>
         <div className="row">
@@ -93,7 +172,7 @@ class DataAnalyzer extends Component {
             <DataFetcher addDataEntry={this.addDataEntry} />
           </div>
           <div className="col-sm-6">
-            <DataTable data={this.state.data.data}/>
+            <DataTable data={this.state.data}/>
           </div>
         </div>
       </div>
@@ -105,17 +184,76 @@ class DataAnalyzer extends Component {
 class Charts extends Component {
   constructor(props){
     super(props);
-
+    this.toggle = this.toggle.bind(this);
+    this.state = {
+      activeTab: '1'
+    };
   }
 
+  toggle(tab) {
+    if (this.state.activeTab !== tab) {
+      this.setState({
+        activeTab: tab
+      });
+    }
+  }
+
+
+
   render(){
+    const line = {
+      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+      datasets: [
+        {
+          label: 'My First dataset',
+          fill: false,
+          lineTension: 0.1,
+          backgroundColor: 'rgba(75,192,192,0.4)',
+          borderColor: 'rgba(75,192,192,1)',
+          borderCapStyle: 'butt',
+          borderDash: [],
+          borderDashOffset: 0.0,
+          borderJoinStyle: 'miter',
+          pointBorderColor: 'rgba(75,192,192,1)',
+          pointBackgroundColor: '#fff',
+          pointBorderWidth: 1,
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+          pointHoverBorderColor: 'rgba(220,220,220,1)',
+          pointHoverBorderWidth: 2,
+          pointRadius: 1,
+          pointHitRadius: 10,
+          data: [65, 59, 80, 81, 56, 55, 40]
+        }
+      ]
+    };
     return (
       <div className="card">
         <div className="card-header">
           <strong>Charts</strong>
         </div>
         <div className="card-block">
-
+          <Nav tabs>
+            <NavItem>
+              <NavLink
+                className={classnames({ active: this.state.activeTab === '1' })}
+                onClick={() => { this.toggle('1'); }}
+              >
+                Home
+              </NavLink>
+            </NavItem>
+          </Nav>
+          <TabContent activeTab={this.state.activeTab}>
+            <TabPane tabId="1">
+              <div className="chart-wrapper">
+                <Line data={line}
+                  options={{
+                    maintainAspectRatio: false
+                  }}
+                />
+              </div>
+            </TabPane>
+          </TabContent>
         </div>
       </div>
     )
@@ -138,86 +276,8 @@ class DataTable extends Component {
     });
   }
 
-  componentWillReceiveProps(){
-
-
-    this.setState(function (prevState, props) {
-      var data = props.data;
-      if(data){
-        if(data.MonthlyCommodityExportData){
-          data = data.MonthlyCommodityExportData;
-          for(var i = 0 ; i < data.length; i++){
-            var total = 0;
-            var count = 0;
-            if(data[i].Commodity){
-              data[i].Category = valueToLabel(CATEGORY_ME,data[i].Commodity);
-            }
-            if(data[i].RegionalData){
-              var reginal = data[i].RegionalData;
-              for(var j = 0 ; j < reginal.length ; j ++){
-                //state and data
-                var reginalTotal = 0;
-                var reginalCount = 0;
-                reginal[j].State = valueToLabel(STATE,reginal[j].State);
-                if(reginal[j].Data){
-                  var dateData = reginal[j].Data;
-                  for(var k = 0; k < dateData.length ; k ++){
-                    total += dateData[k].Value;
-                    reginalTotal += dateData[k].Value;
-                    reginalCount++;
-                  }
-                  reginal[j].average = parseFloat(reginalTotal/reginalCount).toFixed(4);
-                  total += reginalTotal/reginalCount;
-                  count ++ ;
-                }
-              }
-            }
-            data[i].average = parseFloat(total/count).toFixed(4);
-          }
-
-        }else if(data.MonthlyRetailData){
-          data = data.MonthlyRetailData;
-          for( i = 0 ; i < data.length; i++){
-            total = 0;
-            count = 0;
-            if(data[i].RetailIndustry){
-              data[i].Category = valueToLabel(CATEGORY_RT,data[i].RetailIndustry);
-            }
-            if(data[i].RegionalData){
-              reginal = data[i].RegionalData;
-              for( j = 0 ; j < reginal.length ; j ++){
-                //state and data
-                reginalTotal = 0;
-                reginalCount = 0;
-                reginal[j].State = valueToLabel(STATE,reginal[j].State);
-                if(reginal[j].Data){
-                  dateData = reginal[j].Data;
-                  for(k = 0; k < dateData.length ; k ++){
-                    dateData[k].Value = dateData[k].Turnover;
-                    reginalTotal += dateData[k].Value;
-                    reginalCount++;
-                  }
-                }
-                reginal[j].average = parseFloat(reginalTotal/reginalCount).toFixed(4);
-                total += reginalTotal/reginalCount;
-                count ++ ;
-              }
-            }
-            data[i].average = parseFloat(total/count).toFixed(4);
-          }
-        }
-      }
-      console.log(data);
-        return {
-          data: data
-        };
-    })
-  }
-
   render() {
-    var data = this.state.data;
-
-    console.log(data);
+    var data = this.props.data;
     const categoryValue = [{
       header: 'Category',
       accessor: 'Category' // String-based value accessors!

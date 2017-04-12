@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router'
 
-var Scroll = require('react-scroll');
 
 class Sidebar extends Component {
 
@@ -28,6 +27,9 @@ class Sidebar extends Component {
               Australian Statistics
             </li>
             <li className="nav-item">
+              <Link to={'/Home'} className="nav-link" activeClassName="active"><i className="icon-home"></i> Home </Link>
+            </li>
+            <li className="nav-item">
               <Link to={'/release'} className="nav-link" activeClassName="active"><i className="icon-tag"></i> Release </Link>
             </li>
             <li className="nav-item">
@@ -37,7 +39,7 @@ class Sidebar extends Component {
               <a className="nav-link nav-dropdown-toggle" href="#" onClick={this.handleClick.bind(this)}><i className="icon-folder"></i> Documentation</a>
               <ul className="nav-dropdown-items">
                 <li className="nav-item">
-                  <Link to={'/documentation/GettingStarted'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Getting started</Link>
+                  <Link to={'/documentation/DataAnalyzerDoc'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Data Analyzer</Link>
                 </li>
                 <li className={this.activeRoute("/developerAPI")}>
                   <a className="nav-link nav-dropdown-toggle" href="#" onClick={this.handleClick.bind(this)}><i className="icon-folder"></i> Developer API</a>

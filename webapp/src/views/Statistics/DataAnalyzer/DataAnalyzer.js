@@ -330,7 +330,7 @@ class Charts extends Component {
           <strong>Charts</strong>
         </div>
         <div className="card-block">
-          <div className="col-md-6 mb-2">
+          <div className="col-md-12 mb-12">
             <Tabs
               selectedIndex={0}
             >

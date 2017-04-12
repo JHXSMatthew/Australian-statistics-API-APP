@@ -6,9 +6,7 @@ import 'react-table/react-table.css';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Bar, Doughnut, Line, Pie, Polar, Radar } from 'react-chartjs-2';
-import { TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
-import classnames from 'classnames';
-
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 const STATE = [
 { label: 'Australian', value: 'AUS' },
@@ -88,24 +86,24 @@ class DataAnalyzer extends Component {
             data[i].Category = valueToLabel(CATEGORY_ME,data[i].Commodity);
           }
           if(data[i].RegionalData){
-            var reginal = data[i].RegionalData;
-            for(var j = 0 ; j < reginal.length ; j ++){
+            var regional = data[i].RegionalData;
+            for(var j = 0 ; j < regional.length ; j ++){
               //state and data
-              var reginalTotal = 0;
-              var reginalCount = 0;
-              reginal[j].State = valueToLabel(STATE,reginal[j].State);
-              if(reginal[j].Data){
-                var dateData = reginal[j].Data;
+              var regionalTotal = 0;
+              var regionalCount = 0;
+              regional[j].State = valueToLabel(STATE,regional[j].State);
+              if(regional[j].Data){
+                var dateData = regional[j].Data;
                 for(var k = 0; k < dateData.length ; k ++){
                   total += dateData[k].Value;
-                  reginalTotal += dateData[k].Value;
-                  reginalCount++;
+                  regionalTotal += dateData[k].Value;
+                  regionalCount++;
                 }
-                reginal[j].average = parseFloat(reginalTotal/reginalCount).toFixed(4);
-                if(reginal[j].State === "Australia"){
+                regional[j].average = parseFloat(regionalTotal/regionalCount).toFixed(4);
+                if(regional[j].State === "Australia"){
                   //don't add it. logically AU contains all states
                 }else{
-                  total += reginalTotal/reginalCount;
+                  total += regionalTotal/regionalCount;
                   count ++ ;
                 }
 
@@ -124,25 +122,25 @@ class DataAnalyzer extends Component {
             data[i].Category = valueToLabel(CATEGORY_RT,data[i].RetailIndustry);
           }
           if(data[i].RegionalData){
-            reginal = data[i].RegionalData;
-            for( j = 0 ; j < reginal.length ; j ++){
+            regional = data[i].RegionalData;
+            for( j = 0 ; j < regional.length ; j ++){
               //state and data
-              reginalTotal = 0;
-              reginalCount = 0;
-              reginal[j].State = valueToLabel(STATE,reginal[j].State);
-              if(reginal[j].Data){
-                dateData = reginal[j].Data;
+              regionalTotal = 0;
+              regionalCount = 0;
+              regional[j].State = valueToLabel(STATE,regional[j].State);
+              if(regional[j].Data){
+                dateData = regional[j].Data;
                 for(k = 0; k < dateData.length ; k ++){
                   dateData[k].Value = dateData[k].Turnover;
-                  reginalTotal += dateData[k].Value;
-                  reginalCount++;
+                  regionalTotal += dateData[k].Value;
+                  regionalCount++;
                 }
               }
-              reginal[j].average = parseFloat(reginalTotal/reginalCount).toFixed(4);
-              if(reginal[j].State === "Australia"){
+              regional[j].average = parseFloat(regionalTotal/regionalCount).toFixed(4);
+              if(regional[j].State === "Australia"){
                 //don't add it. logically AU contains all states
               }else{
-                total += reginalTotal/reginalCount;
+                total += regionalTotal/regionalCount;
                 count ++ ;
               }
             }
@@ -192,68 +190,132 @@ class Charts extends Component {
 
   toggle(tab) {
     if (this.state.activeTab !== tab) {
+      console.log(tab);
       this.setState({
         activeTab: tab
       });
     }
   }
 
+  componentWillReceiveProps(nextProps){
+    const color=['rgba(75,192,192,1)','rgba(226,67,30,1)','rgba(231,113,27,1)',
+    'rgba(241,202,58)','rgba(111,150,84,1)','rgba(28,145,192,1)',
+    'rgba(67,69,157,1)','rgba(165,59,162,1)','rgba(47,252,150,1)'];
+
+    var data=nextProps.data;
+    if(data){
+      var labels=[];
+      var charts=[];
+      var navs=[];
+
+      for(var i = 0; i < data.length ; i ++){
+        //for each category
+        var dataSet=[];
+        var regional = data[i].RegionalData;
+        if(regional){
+          for(var j = 0; j < regional.length; j++ ){
+            var line = {
+              pointBorderWidth: 1,
+              pointHoverRadius: 5,
+              pointHoverBorderWidth: 2,
+              pointRadius: 1,
+              pointHitRadius: 10,
+              borderDash: [],
+              borderDashOffset: 0.0,
+              pointBackgroundColor: '#fff',
+              borderJoinStyle: 'miter',
+              borderCapStyle: 'butt',
+              fill: false,
+              lineTension: 0.1,
+              pointHoverBorderColor: 'rgba(220,220,220,1)',
+            };
+            line.label = regional[j].State;
+            line.backgroundColor = color[j];
+            line.borderColor = color[j];
+            line.pointBorderColor = color[j];
+            line.pointHoverBackgroundColor = color[j];
+            line.data = [];
+
+            var dateData = regional[j].Data;
+            for(var k=0; k < dateData.length; k++){
+              line.data .push(dateData[k].Value);
+              var contain =false;
+              for(var m=0; m < labels.length; m++){
+                if(labels[m] === dateData[k].Date){
+                  contain = true;
+                  break;
+                }
+              }
+              if(!contain){
+                labels.push( dateData[k].Date);
+              }
+            }
+            dataSet.push(line);
+          }
+        }
+        navs.push(
+          <Tab key={data[i].Category}>
+              {data[i].Category}
+          </Tab>
+        );
+
+        charts.push(
+          <TabPanel key={data[i].Category}>
+            <div className="chart-wrapper">
+              <Line
+                data={{
+                  datasets: dataSet,
+                  labels: labels
+                }}
+                options={{
+                  maintainAspectRatio: false
+                }}
+              />
+            </div>
+          </TabPanel>
+        );
+      }
+
+      this.setState(function (prevState, props) {
+        console.log("prev");
+
+        console.log(prevState);
+        console.log("props");
+        console.log(props);
+
+          return {
+            charts: charts,
+            navs: navs
+          };
+      });
+
+      console.log(this.state);
+    }
+  }
 
 
   render(){
-    const line = {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-      datasets: [
-        {
-          label: 'My First dataset',
-          fill: false,
-          lineTension: 0.1,
-          backgroundColor: 'rgba(75,192,192,0.4)',
-          borderColor: 'rgba(75,192,192,1)',
-          borderCapStyle: 'butt',
-          borderDash: [],
-          borderDashOffset: 0.0,
-          borderJoinStyle: 'miter',
-          pointBorderColor: 'rgba(75,192,192,1)',
-          pointBackgroundColor: '#fff',
-          pointBorderWidth: 1,
-          pointHoverRadius: 5,
-          pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-          pointHoverBorderColor: 'rgba(220,220,220,1)',
-          pointHoverBorderWidth: 2,
-          pointRadius: 1,
-          pointHitRadius: 10,
-          data: [65, 59, 80, 81, 56, 55, 40]
-        }
-      ]
-    };
+
+
     return (
       <div className="card">
         <div className="card-header">
           <strong>Charts</strong>
         </div>
         <div className="card-block">
-          <Nav tabs>
-            <NavItem>
-              <NavLink
-                className={classnames({ active: this.state.activeTab === '1' })}
-                onClick={() => { this.toggle('1'); }}
-              >
-                Home
-              </NavLink>
-            </NavItem>
-          </Nav>
-          <TabContent activeTab={this.state.activeTab}>
-            <TabPane tabId="1">
-              <div className="chart-wrapper">
-                <Line data={line}
-                  options={{
-                    maintainAspectRatio: false
-                  }}
-                />
-              </div>
-            </TabPane>
-          </TabContent>
+          <div className="col-md-6 mb-2">
+            <Tabs
+
+              selectedIndex={0}
+            >
+              <TabList>
+                  {this.state.navs}
+              </TabList>
+
+              {this.state.charts}
+
+          </Tabs>
+          </div>
         </div>
       </div>
     )
@@ -286,7 +348,7 @@ class DataTable extends Component {
       accessor: 'average',
     }]
 
-    const reginalData = [{
+    const regionalData = [{
       header: 'State',
       accessor: 'State' // String-based value accessors!
     }, {
@@ -315,12 +377,12 @@ class DataTable extends Component {
                 columns={categoryValue}
                 defaultPageSize={5}
                 noDataText='Use Data Fetcher to fetch data.'
-                pageSize={(data) ? data.length : 7}
+                pageSize={(data &&  data.length) ? data.length : 7}
                 SubComponent={(row) => {
                   return(
                     <ReactTable
                       data={row.row.RegionalData}
-                      columns={reginalData}
+                      columns={regionalData}
                       defaultPageSize={10}
                       pageSize={row.row.RegionalData.length}
                       showPagination={false}

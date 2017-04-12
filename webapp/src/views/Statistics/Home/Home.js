@@ -20,7 +20,7 @@ class Home extends Component {
                 <br/><br/>
                 Our website also offers an interface to test various calls to our API, for demonstration purposes.
                 <br/><a href="#/dataAnalyzer">Click here to use our Data Analyser Software.</a>
-                <br/><a href="#/about">Click here to view our Data Analyser documentation.</a>
+                <br/><a href="#/documentation/DataAnalyzerDoc">Click here to view our Data Analyser documentation.</a>
               </div>
             </div>
         </div>

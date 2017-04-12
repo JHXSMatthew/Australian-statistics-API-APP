@@ -19,7 +19,7 @@ class Documentation extends Component {
                 results back through a JSON format. <br/><a href="#/documentation/DeveloperAPI">Click here to view our developer API documentation.</a>
                 <br/><br/>
                 Our website also offers an interface to test various calls to our API, for demonstration purposes.
-                <br/><a href="#/documentation/DataAnalyzer">Click here to view our Data Analyser documentation.</a>
+                <br/><a href="#/documentation/DataAnalyzerDoc">Click here to view our Data Analyser documentation.</a>
               </div>
             </div>
         </div>

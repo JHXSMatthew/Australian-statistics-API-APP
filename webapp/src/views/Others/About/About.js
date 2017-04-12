@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 
 class About extends Component {
+
   render() {
      return (
        <div className="animated fadeIn">
          <div className="row">
-         
+
            <div className="col-sm-6 col-md-4">
              <div className="card card-accent-primary">
                <div className="card-header">
@@ -78,8 +79,5 @@ class About extends Component {
      )
    }
 }
-
-
-
 
 export default About;

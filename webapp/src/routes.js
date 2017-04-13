@@ -10,6 +10,7 @@ import Home from './views/Statistics/Home'
 import Release from './views/Statistics/Release/'
 import DataAnalyzer from './views/Statistics/DataAnalyzer'
 import DeveloperAPI from './views/Statistics/Doc/DeveloperAPI'
+  import Usage from './views/Statistics/Doc/DeveloperAPI/Usage'
   import ParameterConstraints from './views/Statistics/Doc/DeveloperAPI/ParameterConstraints'
   import Retail from './views/Statistics/Doc/DeveloperAPI/Retail'
   import MerchandiseExports from './views/Statistics/Doc/DeveloperAPI/MerchandiseExports'
@@ -30,6 +31,7 @@ export default (
         <Route path="gettingStarted" name="GettingStarted" component={Documentation}/>
         <Route path="DataAnalyzerDoc" name="DataAnalyzerDoc" component={DataAnalyzerDoc}/>
         <Route path="developerAPI" name="Developer API" component={DeveloperAPI}/>
+          <Route path="Usage" name="Usage" component={Usage}/>
           <Route path="ParameterConstraints" name="Parameter Constraints" component={ParameterConstraints}/>
           <Route path="Retail" name="Retail" component={Retail}/>
           <Route path="MerchandiseExports" name="Merchanise Exports" component={MerchandiseExports}/>

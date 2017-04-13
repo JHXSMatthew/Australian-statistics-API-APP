@@ -51,13 +51,16 @@ class Sidebar extends Component {
                       <Link to={'/documentation/ParameterConstraints'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Parameter Constraints</Link>
                     </li>
                     <li className="nav-item">
-                      <Link to={'/documentation/MerchandiseExports'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Merchandise Exports</Link>
-                    </li>
-                    <li className="nav-item">
                       <Link to={'/documentation/Retail'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Retail</Link>
                     </li>
                     <li className="nav-item">
+                      <Link to={'/documentation/MerchandiseExports'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Merchandise Exports</Link>
+                    </li>
+                    <li className="nav-item">
                       <Link to={'/documentation/Errors'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Errors</Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link to={'/documentation/Usage'} className="nav-link" activeClassName="active"><i className="icon-folder"></i> Usage</Link>
                     </li>
                   </ul>
                 </li>

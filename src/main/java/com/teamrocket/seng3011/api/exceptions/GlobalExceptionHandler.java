@@ -60,9 +60,11 @@ public class GlobalExceptionHandler {
             if(idMap.containsKey(ex.getClass())){
                 return error(idMap.get(ex.getClass()),ex.getMessage(),((ExceptionWrapper) e).getTraceNumber());
             }else{
+                ex.printStackTrace();
                 return error(-999,ex.getMessage(),((ExceptionWrapper) e).getTraceNumber());
             }
         }else{
+            e.printStackTrace();
             return error(-999,e.getMessage());
         }
     }

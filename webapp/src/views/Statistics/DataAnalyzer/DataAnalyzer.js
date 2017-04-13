@@ -3,10 +3,11 @@ import Select from 'react-select';
 import Picker from 'react-month-picker';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { PopoverTitle, PopoverContent,Popover,Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Bar, Doughnut, Line, Pie, Polar, Radar } from 'react-chartjs-2';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+
 
 const STATE = [
 { label: 'Australian', value: 'AUS' },
@@ -163,17 +164,14 @@ class DataAnalyzer extends Component {
   }
 
   render(){
-
       return (
         <div className="animated fadeIn">
           <div className="row">
-            <div className="col-sm-12 col-md-8">
+            <div className="col-sm-6 col-md-8">
               {this.state.dataType &&
-                <div className="col-sm-12">
-                  <Charts data={this.state.data} dataType={this.state.dataType}/>
-                </div>
+                <Charts data={this.state.data} dataType={this.state.dataType}/>
               }
-            </div>
+          </div>
           </div>
           <div className="row">
             <div className="col-sm-6">
@@ -364,8 +362,10 @@ class DataTable extends Component {
   constructor(props){
     super(props);
     this.toggle = this.toggle.bind(this);
+    this.toggle2 = this.toggle2.bind(this);
     this.state ={
       rawShowing: false,
+      popoverOpen: false
     }
   }
 
@@ -374,6 +374,12 @@ class DataTable extends Component {
       rawShowing: !this.state.rawShowing
     });
   }
+
+  toggle2() {
+  this.setState({
+    popoverOpen: !this.state.popoverOpen
+  });
+}
 
   render() {
     var data = this.props.data;
@@ -410,8 +416,12 @@ class DataTable extends Component {
     return(
       <div className="card">
         <div className="card-header">
-          <strong>Data Set {unit}</strong>
+          <strong>Data Set {unit} <span className="float-right"><i className="icon-question" id="Popover2" onClick={this.toggle2}></i></span></strong>
         </div>
+        <Popover placement="left" isOpen={this.state.popoverOpen} target="Popover2" toggle={this.toggle2}>
+         <PopoverTitle>Data Set</PopoverTitle>
+         <PopoverContent>This table will initially list categories and display their corresponding average values fetched by the data fetcher. The table can expand the data set with the arrow on the left of the rows to show the averages of the value per state requested. it can further expand to display individual values for the months requested. </PopoverContent>
+       </Popover>
         <div className="card-block">
           <div className="row">
             <div className="col-sm-12 col-md-12">
@@ -524,14 +534,22 @@ class DataFetcher extends Component {
       category: [],
       mrange: {from: {year: 2016, month: 7}, to: {year: 2017, month: 2}},
       count: 0,
+      popoverOpen: false
     }
     this.setArea = this.setArea.bind(this);
     this.setCategory = this.setCategory.bind(this);
+    this.toggle = this.toggle.bind(this);
     this.setRegion = this.setRegion.bind(this);
     this.fetch = this.fetch.bind(this);
     this.handleClickRangeBox = this.handleClickRangeBox.bind(this);
     this.handleRangeDissmis = this.handleRangeDissmis.bind(this);
   }
+
+  toggle() {
+      this.setState({
+        popoverOpen: !this.state.popoverOpen
+      });
+    }
 
   setArea(a){
     this.setState({
@@ -597,7 +615,12 @@ class DataFetcher extends Component {
         <div className="card">
           <div className="card-header">
             <strong>Data fetcher</strong>
+            <span className="float-right"><i className="icon-question" id="Popover1" onClick={this.toggle}></i></span>
           </div>
+          <Popover placement="bottom" isOpen={this.state.popoverOpen} target="Popover1" toggle={this.toggle}>
+             <PopoverTitle>Data Fetcher</PopoverTitle>
+             <PopoverContent>Fill all forms and click fetch to fetch data. All fetched data will be shown in Data Set and charts will be shown.</PopoverContent>
+           </Popover>
           <div className="card-block">
             <div className="row">
               <div className="col-sm-12 col-md-12">

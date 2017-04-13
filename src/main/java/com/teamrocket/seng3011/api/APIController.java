@@ -54,7 +54,6 @@ public class APIController {
         try {
             container = mapper.readValue(requestEntity.getBody(), ClientRequestContainer.class);
         }catch (Exception e){
-            e.printStackTrace();
             container = new ClientRequestContainer();
             String[] parameters = requestEntity.getBody().split("&");
             if(parameters.length > 1){

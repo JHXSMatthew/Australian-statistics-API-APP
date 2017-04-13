@@ -163,23 +163,29 @@ class DataAnalyzer extends Component {
   }
 
   render(){
-    return (
-      <div className="animated fadeIn">
-        <div className="row">
-          <div className="col-sm-12">
-            <Charts data={this.state.data} dataType={this.state.dataType}/>
+
+      return (
+        <div className="animated fadeIn">
+          <div className="row">
+            <div className="col-sm-12 col-md-8">
+              {this.state.dataType &&
+                <div className="col-sm-12">
+                  <Charts data={this.state.data} dataType={this.state.dataType}/>
+                </div>
+              }
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-sm-6">
+              <DataFetcher addDataEntry={this.addDataEntry} />
+            </div>
+            <div className="col-sm-6">
+              <DataTable data={this.state.data} dataType={this.state.dataType}/>
+            </div>
           </div>
         </div>
-        <div className="row">
-          <div className="col-sm-6">
-            <DataFetcher addDataEntry={this.addDataEntry} />
-          </div>
-          <div className="col-sm-6">
-            <DataTable data={this.state.data} dataType={this.state.dataType}/>
-          </div>
-        </div>
-      </div>
-    )
+      )
+
   }
 }
 
@@ -202,9 +208,14 @@ class Charts extends Component {
     }
   }
 
+
+  componentWillMount(){
+    this.componentWillReceiveProps(this.props);
+  }
+
   componentWillReceiveProps(nextProps){
     const color=['rgba(75,192,192,1)','rgba(226,67,30,1)','rgba(231,113,27,1)',
-    'rgba(241,202,58)','rgba(111,150,84,1)','rgba(28,145,192,1)',
+    'rgba(15,255,58,1)','rgba(111,150,84,1)','rgba(28,145,192,1)',
     'rgba(67,69,157,1)','rgba(165,59,162,1)','rgba(47,252,150,1)'];
 
     var data=nextProps.data;
@@ -437,12 +448,12 @@ class DataTable extends Component {
           </div>
         </div>
         <div className="card-footer">
-          <button className="btn btn-sm btn-primary" onClick={this.toggle} disabled={!data} ><i className="fa fa-dot-circle-o" ></i> Raw</button>
+          <button className="btn btn-sm btn-primary" onClick={this.toggle} disabled={(this.props.dataType) == null? true : false} ><i className="fa fa-dot-circle-o" ></i> Raw</button>
         </div>
         <Modal isOpen={this.state.rawShowing} toggle={this.toggle} className={'modal-lg '+ this.props.className}>
           <ModalHeader toggle={this.toggle}>JSON</ModalHeader>
           <ModalBody>
-            {JSON.stringify(this.props.data,null,2)}
+            Click Copy to copy raw JSON into your clipboard. Only support IE6 and modern browser.
           </ModalBody>
           <ModalFooter>
             <CopyToClipboard text={(this.props.data)?JSON.stringify(this.props.data,null,2):""}>
@@ -568,7 +579,8 @@ class DataFetcher extends Component {
     })
     .then(function(response) {
       if (response.status >= 400) {
-        throw new Error("Bad response from server");
+        alert("Our data source is down, please wait for a while and we'll fix it asap.")
+        return;
       }
       return response.json().then(function (json) {
         //TODO: deal with empty data

@@ -147,7 +147,8 @@ public class APIController {
                             .setDate(startDate, endDate)
                             .fetch().parse(), entryType
             );
-            String trace = LogManager.getInstance().log(parameters, log_starting, Calendar.getInstance().getTime(),current-System.currentTimeMillis());
+            String trace = LogManager.getInstance().log(parameters, log_starting, Calendar.getInstance().getTime(),
+                    System.currentTimeMillis() - current);
             ResultContainer container = new ResultContainer(new Header(Status.success,trace), (ResultObject) obj);
             ObjectMapper mapper = new ObjectMapper();
             if (pretty)

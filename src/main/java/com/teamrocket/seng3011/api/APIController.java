@@ -1,5 +1,6 @@
 package com.teamrocket.seng3011.api;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.teamrocket.seng3011.api.absApi.APIRequest;
@@ -20,6 +21,8 @@ import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -45,9 +48,33 @@ public class APIController {
 
 
     @RequestMapping(value = "",method = RequestMethod.POST, produces = "application/json")
-    public String statisticsPOST(HttpServletResponse response,WebRequest r,HttpEntity<String> requestEntity) throws IOException, ParseException, KnownException, ExceptionWrapper {
+    public String statisticsPOST(HttpServletResponse response,WebRequest r,HttpEntity<String> requestEntity) throws IOException, ParseException, KnownException, ExceptionWrapper, IllegalAccessException {
         ObjectMapper mapper = new ObjectMapper();
-        ClientRequestContainer container = mapper.readValue(requestEntity.getBody(),ClientRequestContainer.class);
+        ClientRequestContainer container = null;
+        try {
+            container = mapper.readValue(requestEntity.getBody(), ClientRequestContainer.class);
+        }catch (Exception e){
+            container = new ClientRequestContainer();
+            String[] parameters = requestEntity.getBody().split("&");
+            if(parameters.length > 1){
+               for(String parameter : parameters){
+                   String[] keyValue = parameter.split("=");
+                   if(keyValue.length != 2)
+                       continue;
+                   for(Field field : ClientRequestContainer.class.getDeclaredFields()){
+                       Class type = field.getType();
+                       String name = field.getName();
+                       Annotation[] annotations = field.getDeclaredAnnotations();
+                       for(Annotation a : annotations){
+                           if(a instanceof JsonProperty &&  ((JsonProperty) a).value().equals(keyValue[0])){
+                               field.setAccessible(true);
+                               field.set(container,keyValue[1]);
+                           }
+                       }
+                   }
+               }
+            }
+        }
         return statistics(response,r,
                 container.isPretty(),
                 container.getArea(),

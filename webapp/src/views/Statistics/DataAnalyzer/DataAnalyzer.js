@@ -3,10 +3,11 @@ import Select from 'react-select';
 import Picker from 'react-month-picker';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { PopoverTitle, PopoverContent,Popover,Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Bar, Doughnut, Line, Pie, Polar, Radar } from 'react-chartjs-2';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+
 
 const STATE = [
 { label: 'Australian', value: 'AUS' },
@@ -33,9 +34,9 @@ const CATEGORY_ME = [
   { label: 'Mineral Fuel Lubricent And related material', value: 'MineralFuelLubricentAndRelatedMaterial' },
   { label: 'Animal and vegitable oil fat and waxes', value: 'AnimalAndVegitableOilFatAndWaxes' },
   { label: 'Chemicals And Related Products', value: 'ChemicalsAndRelatedProducts' },
-  { label: 'Manufacuted Goods', value: 'ManufacturedGoods' },
+  { label: 'Manufacture Goods', value: 'ManufacturedGoods' },
   { label: 'Machinery And Transport Equipments', value: 'MachineryAndTransportEquipments' },
-  { label: 'Other Manucactured Articles', value: 'OtherManufacturedArticles' },
+  { label: 'Other Manufactured Articles', value: 'OtherManufacturedArticles' },
   { label: 'Unclassified', value: 'Unclassified' },
 ];
 
@@ -45,7 +46,7 @@ const CATEGORY_RT = [
 { label: 'HouseholdGood category', value: 'HouseholdGood' },
 { label: 'Clothing Footware And Personal Accessory category', value: 'ClothingFootwareAndPersonalAccessory' },
 { label: 'Stores', value: 'DepartmentStores' },
-{ label: 'Resturants', value: 'CafesResturantsAndTakeawayFood' },
+{ label: 'Restaurants', value: 'CafesResturantsAndTakeawayFood' },
 { label: 'others', value: 'Other' },
 ];
 
@@ -70,6 +71,7 @@ class DataAnalyzer extends Component {
     super(props);
     this.state = {
         data: [],
+        dataType: null
     }
     this.addDataEntry = this.addDataEntry.bind(this);
   }
@@ -77,7 +79,9 @@ class DataAnalyzer extends Component {
   addDataEntry(e){
     var data = e.data;
     if(data){
+      var dataType = null;
       if(data.MonthlyCommodityExportData){
+        dataType = "Export";
         data = data.MonthlyCommodityExportData;
         for(var i = 0 ; i < data.length; i++){
           var total = 0;
@@ -114,6 +118,7 @@ class DataAnalyzer extends Component {
         }
 
       }else if(data.MonthlyRetailData){
+        dataType = "Retail";
         data = data.MonthlyRetailData;
         for( i = 0 ; i < data.length; i++){
           total = 0;
@@ -151,30 +156,34 @@ class DataAnalyzer extends Component {
     }
     this.setState(function (prevState, props) {
         return {
-          data: data
+          data: data,
+          dataType: dataType
         };
     });
 
   }
 
   render(){
-    return (
-      <div className="animated fadeIn">
-        <div className="row">
-          <div className="col-sm-12">
-            <Charts data={this.state.data}/>
+      return (
+        <div className="animated fadeIn">
+          <div className="row">
+            <div className="col-sm-6 col-md-8">
+              {this.state.dataType &&
+                <Charts data={this.state.data} dataType={this.state.dataType}/>
+              }
+          </div>
+          </div>
+          <div className="row">
+            <div className="col-sm-6">
+              <DataFetcher addDataEntry={this.addDataEntry} />
+            </div>
+            <div className="col-sm-6">
+              <DataTable data={this.state.data} dataType={this.state.dataType}/>
+            </div>
           </div>
         </div>
-        <div className="row">
-          <div className="col-sm-6">
-            <DataFetcher addDataEntry={this.addDataEntry} />
-          </div>
-          <div className="col-sm-6">
-            <DataTable data={this.state.data}/>
-          </div>
-        </div>
-      </div>
-    )
+      )
+
   }
 }
 
@@ -197,9 +206,14 @@ class Charts extends Component {
     }
   }
 
+
+  componentWillMount(){
+    this.componentWillReceiveProps(this.props);
+  }
+
   componentWillReceiveProps(nextProps){
     const color=['rgba(75,192,192,1)','rgba(226,67,30,1)','rgba(231,113,27,1)',
-    'rgba(241,202,58)','rgba(111,150,84,1)','rgba(28,145,192,1)',
+    'rgba(15,255,58,1)','rgba(111,150,84,1)','rgba(28,145,192,1)',
     'rgba(67,69,157,1)','rgba(165,59,162,1)','rgba(47,252,150,1)'];
 
     var data=nextProps.data;
@@ -207,7 +221,12 @@ class Charts extends Component {
       var labels=[];
       var charts=[];
       var navs=[];
-
+      var ylabel = null;
+      if(nextProps.dataType === "Export"){
+        ylabel = "Value ($ thousands)"
+      }else if(nextProps.dataType === "Retail"){
+        ylabel = "Value ($ millions)";
+      }
       for(var i = 0; i < data.length ; i ++){
         //for each category
         var dataSet=[];
@@ -268,7 +287,24 @@ class Charts extends Component {
                   labels: labels
                 }}
                 options={{
-                  maintainAspectRatio: false
+                  maintainAspectRatio: true,
+                  responsive: true,
+                  scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Date'
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: ylabel
+                        }
+                    }]
+                }
                 }}
               />
             </div>
@@ -303,9 +339,8 @@ class Charts extends Component {
           <strong>Charts</strong>
         </div>
         <div className="card-block">
-          <div className="col-md-6 mb-2">
+          <div className="col-md-12 mb-12">
             <Tabs
-
               selectedIndex={0}
             >
               <TabList>
@@ -327,8 +362,10 @@ class DataTable extends Component {
   constructor(props){
     super(props);
     this.toggle = this.toggle.bind(this);
+    this.toggle2 = this.toggle2.bind(this);
     this.state ={
       rawShowing: false,
+      popoverOpen: false
     }
   }
 
@@ -337,6 +374,12 @@ class DataTable extends Component {
       rawShowing: !this.state.rawShowing
     });
   }
+
+  toggle2() {
+  this.setState({
+    popoverOpen: !this.state.popoverOpen
+  });
+}
 
   render() {
     var data = this.props.data;
@@ -363,12 +406,22 @@ class DataTable extends Component {
       header: 'Value',
       accessor: 'Value',
     }]
+    var unit = null;
+    if(this.props.dataType === "Export"){
+      unit = "($ thousands)"
+    }else if(this.props.dataType === "Retail"){
+      unit = "($ millions)";
+    }
 
     return(
       <div className="card">
         <div className="card-header">
-          <strong>Data Set</strong>
+          <strong>Data Set {unit} <span className="float-right"><i className="icon-question" id="Popover2" onClick={this.toggle2}></i></span></strong>
         </div>
+        <Popover placement="left" isOpen={this.state.popoverOpen} target="Popover2" toggle={this.toggle2}>
+         <PopoverTitle>Data Set</PopoverTitle>
+         <PopoverContent>This table will initially list categories and display their corresponding average values fetched by the data fetcher. The table can expand the data set with the arrow on the left of the rows to show the averages of the value per state requested. it can further expand to display individual values for the months requested. </PopoverContent>
+       </Popover>
         <div className="card-block">
           <div className="row">
             <div className="col-sm-12 col-md-12">
@@ -405,12 +458,12 @@ class DataTable extends Component {
           </div>
         </div>
         <div className="card-footer">
-          <button className="btn btn-sm btn-primary" onClick={this.toggle} disabled={!data} ><i className="fa fa-dot-circle-o" ></i> Raw</button>
+          <button className="btn btn-sm btn-primary" onClick={this.toggle} disabled={(this.props.dataType) == null? true : false} ><i className="fa fa-dot-circle-o" ></i> Raw</button>
         </div>
         <Modal isOpen={this.state.rawShowing} toggle={this.toggle} className={'modal-lg '+ this.props.className}>
           <ModalHeader toggle={this.toggle}>JSON</ModalHeader>
           <ModalBody>
-            {JSON.stringify(this.props.data,null,2)}
+            Click Copy to copy raw JSON into your clipboard. Only support IE6 and modern browser.
           </ModalBody>
           <ModalFooter>
             <CopyToClipboard text={(this.props.data)?JSON.stringify(this.props.data,null,2):""}>
@@ -481,14 +534,22 @@ class DataFetcher extends Component {
       category: [],
       mrange: {from: {year: 2016, month: 7}, to: {year: 2017, month: 2}},
       count: 0,
+      popoverOpen: false
     }
     this.setArea = this.setArea.bind(this);
     this.setCategory = this.setCategory.bind(this);
+    this.toggle = this.toggle.bind(this);
     this.setRegion = this.setRegion.bind(this);
     this.fetch = this.fetch.bind(this);
     this.handleClickRangeBox = this.handleClickRangeBox.bind(this);
     this.handleRangeDissmis = this.handleRangeDissmis.bind(this);
   }
+
+  toggle() {
+      this.setState({
+        popoverOpen: !this.state.popoverOpen
+      });
+    }
 
   setArea(a){
     this.setState({
@@ -536,7 +597,8 @@ class DataFetcher extends Component {
     })
     .then(function(response) {
       if (response.status >= 400) {
-        throw new Error("Bad response from server");
+        alert("Our data source is down, please wait for a while and we'll fix it asap.")
+        return;
       }
       return response.json().then(function (json) {
         //TODO: deal with empty data
@@ -553,7 +615,12 @@ class DataFetcher extends Component {
         <div className="card">
           <div className="card-header">
             <strong>Data fetcher</strong>
+            <span className="float-right"><i className="icon-question" id="Popover1" onClick={this.toggle}></i></span>
           </div>
+          <Popover placement="bottom" isOpen={this.state.popoverOpen} target="Popover1" toggle={this.toggle}>
+             <PopoverTitle>Data Fetcher</PopoverTitle>
+             <PopoverContent>Fill all forms and click fetch to fetch data. All fetched data will be shown in Data Set and charts will be shown.</PopoverContent>
+           </Popover>
           <div className="card-block">
             <div className="row">
               <div className="col-sm-12 col-md-12">

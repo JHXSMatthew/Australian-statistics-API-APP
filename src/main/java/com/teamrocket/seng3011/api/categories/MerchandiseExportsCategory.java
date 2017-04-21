@@ -47,6 +47,7 @@ public enum MerchandiseExportsCategory implements HaveID {
                 return s;
             }
         }
+
         throw new CannotParseCategoryException("state id unknown :" + id);
     }
 

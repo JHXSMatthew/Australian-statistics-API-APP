@@ -66,7 +66,7 @@ class Retail extends Component {
                               <td>null</td>
                               <td>Date</td>
                               <td>The ending search date</td>
-                            </tr>                                                                              
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -90,7 +90,7 @@ class Retail extends Component {
                               <td>pretty</td>
                               <td>null</td>
                               <td>Returns a result JSON file that is much more human-readable</td>
-                            </tr>                                                                           
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -109,42 +109,33 @@ class Retail extends Component {
                   For the following sample request:
                   <SyntaxHighlighter language='javascript' style={docco}>
                   {
-                  "http://45.76.114.158/api\n" +
-                  "   ?StatisticsArea=Retail\n" +
-                  "   &State=NSW&Category=DepartmentStores\n" +
-                  "   &startDate=2013-12-01\n" +
-                  "   &endDate=2014-01-01\n" 
+                    "http://45.76.114.158/api/?StatisticsArea=Retail&State=NSW&Category=DepartmentStores&startDate=2013-12-01&endDate=2014-01-01&pretty=true"
                   }
                   </SyntaxHighlighter>
                   Our API will return the following JSON response: <br/>
                   <SyntaxHighlighter language='javascript' style={docco}>
                   {
-                  "{\n" + 
-                  "   \"header\":{\n" +
-                  "     \"status\":\"success\"\n" +
-                  "   },\n" +
-                  "   \"data\":{\n" +
-                  "     \"MonthlyRetailData\":[\n" +
-                  "       {\n" +
-                  "         \"RegionalData\":[\n" +
-                  "           {\n" +
-                  "             \"State\":\"NSW\",\n" +
-                  "             \"Data\":[\n" +
-                  "               {\n" +
-                  "                 \"Date\":\"2013-12-31\",\n" +
-                  "                 \"Turnover\":\"883.5\"\n" +
-                  "               },\n" +
-                  "               {\n" +
-                  "                 \"Date\":\"2014-01-31\",\n" +
-                  "                 \"Turnover\":\"473.5\"\n" +
-                  "               }\n" +
-                  "             ]\n" +
-                  "           }\n" +
-                  "         ],\n" +
-                  "         \"RetailIndustry:\"\"DepartmentStores\"\n" +
-                  "       }\n" +
-                  "   },\n" +
-                  "}\n" 
+                                "{\n" +
+                      "  \"header\" : {\n" +
+                      "    \"status\" : \"success\",\n" +
+                      "    \"requestNumber\" : \"201704122331449\"\n" +
+                      "  },\n" +
+                      "  \"data\" : {\n" +
+                      "    \"MonthlyRetailData\" : [ {\n" +
+                      "      \"RegionalData\" : [ {\n" +
+                      "        \"State\" : \"NSW\",\n" +
+                      "        \"Data\" : [ {\n" +
+                      "          \"Date\" : \"2013-12-31\",\n" +
+                      "          \"Turnover\" : 883.5\n" +
+                      "        }, {\n" +
+                      "          \"Date\" : \"2014-01-31\",\n" +
+                      "          \"Turnover\" : 473.5\n" +
+                      "        } ]\n" +
+                      "      } ],\n" +
+                      "      \"RetailIndustry\" : \"DepartmentStores\"\n" +
+                      "    } ]\n" +
+                      "  }\n" +
+                      "}"
                   }
                   </SyntaxHighlighter>
                   </p>
@@ -181,7 +172,7 @@ class Retail extends Component {
                               <td>String</td>
                               <td>Success, Error</td>
                               <td>Returns success if the API call has been successful, else will return error to indicate the call has failed</td>
-                            </tr>                                                                           
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -209,7 +200,7 @@ class Retail extends Component {
                               <td>Array</td>
                               <td>RegionalData[...] & RetailIndustry</td>
                               <td>An array of retail categories and actual Data by regions</td>
-                            </tr>                                                                           
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -235,13 +226,13 @@ class Retail extends Component {
                               <td>Array</td>
                               <td>State & Data[...]</td>
                               <td>An array of regional data</td>
-                            </tr>  
+                            </tr>
                             <tr>
                               <td>RetailIndustry</td>
                               <td>Category</td>
                               <td>Category</td>
                               <td>Returns one category in the area</td>
-                            </tr>                                                                         
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -267,13 +258,13 @@ class Retail extends Component {
                               <td>Array</td>
                               <td>Date & Turnover</td>
                               <td>An array which includes the date and turnover data</td>
-                            </tr>  
+                            </tr>
                             <tr>
                               <td>State</td>
                               <td>State</td>
                               <td>State</td>
                               <td>An array which contains the regional information</td>
-                            </tr>                                                                         
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -293,42 +284,33 @@ class Retail extends Component {
                   For the following sample request:
                   <SyntaxHighlighter language='javascript' style={docco}>
                   {
-                  "http://45.76.114.158/api\n" +
-                  "   ?StatisticsArea=Retail\n" +
-                  "   &State=NSW&Category=DepartmentStores\n" +
-                  "   &startDate=2013-12-01\n" +
-                  "   &endDate=2014-01-01\n" 
+                    "http://45.76.114.158/api/?StatisticsArea=Retail&State=NSW&Category=DepartmentStores&startDate=2013-12-01&endDate=2014-01-01&pretty=true"
                   }
                   </SyntaxHighlighter>
                   Our API will return the following JSON response: <br/>
                   <SyntaxHighlighter language='javascript' style={docco}>
                   {
-                  "{\n" + 
-                  "   \"header\":{\n" +
-                  "     \"status\":\"success\"\n" +
-                  "   },\n" +
-                  "   \"data\":{\n" +
-                  "     \"MonthlyRetailData\":[\n" +
-                  "       {\n" +
-                  "         \"RegionalData\":[\n" +
-                  "           {\n" +
-                  "             \"State\":\"NSW\",\n" +
-                  "             \"Data\":[\n" +
-                  "               {\n" +
-                  "                 \"Date\":\"2013-12-31\",\n" +
-                  "                 \"Turnover\":\"883.5\"\n" +
-                  "               },\n" +
-                  "               {\n" +
-                  "                 \"Date\":\"2014-01-31\",\n" +
-                  "                 \"Turnover\":\"473.5\"\n" +
-                  "               }\n" +
-                  "             ]\n" +
-                  "           }\n" +
-                  "         ],\n" +
-                  "         \"RetailIndustry:\"\"DepartmentStores\"\n" +
-                  "       }\n" +
-                  "   },\n" +
-                  "}\n" 
+                          "{\n" +
+                    "  \"header\" : {\n" +
+                    "    \"status\" : \"success\",\n" +
+                    "    \"requestNumber\" : \"20170412234231\"\n" +
+                    "  },\n" +
+                    "  \"data\" : {\n" +
+                    "    \"MonthlyRetailData\" : [ {\n" +
+                    "      \"RegionalData\" : [ {\n" +
+                    "        \"State\" : \"NSW\",\n" +
+                    "        \"Data\" : [ {\n" +
+                    "          \"Date\" : \"2013-12-31\",\n" +
+                    "          \"Turnover\" : 883.5\n" +
+                    "        }, {\n" +
+                    "          \"Date\" : \"2014-01-31\",\n" +
+                    "          \"Turnover\" : 473.5\n" +
+                    "        } ]\n" +
+                    "      } ],\n" +
+                    "      \"RetailIndustry\" : \"DepartmentStores\"\n" +
+                    "    } ]\n" +
+                    "  }\n" +
+                    "}"
                   }
                   </SyntaxHighlighter>
                   </p>

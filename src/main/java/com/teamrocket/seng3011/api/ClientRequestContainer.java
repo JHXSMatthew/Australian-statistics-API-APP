@@ -1,8 +1,8 @@
 package com.teamrocket.seng3011.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.RequestParam;
+import com.teamrocket.seng3011.api.exceptions.KnownException;
+import com.teamrocket.seng3011.utils.DateUtils;
 
 import java.util.Date;
 
@@ -11,7 +11,7 @@ import java.util.Date;
  */
 public class ClientRequestContainer {
     @JsonProperty("pretty")
-    private boolean pretty;
+    private String pretty;
     @JsonProperty("StatisticsArea")
     private String area;
     @JsonProperty("State")
@@ -19,18 +19,22 @@ public class ClientRequestContainer {
     @JsonProperty("Category")
     private String category;
     @JsonProperty("startDate")
-    private Date startDate;
+    private String startDate;
     @JsonProperty("endDate")
-    private Date endDate;
+    private String endDate;
 
 
 
 
     public boolean isPretty() {
-        return pretty;
+        try {
+            return Boolean.parseBoolean(pretty);
+        }catch (Exception e){
+            return false;
+        }
     }
 
-    public void setPretty(boolean pretty) {
+    public void setPretty(String pretty) {
         this.pretty = pretty;
     }
 
@@ -58,19 +62,19 @@ public class ClientRequestContainer {
         this.category = category;
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public Date getStartDate() throws KnownException {
+        return DateUtils.stringToDateYMD(startDate);
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
-        return endDate;
+    public Date getEndDate() throws KnownException {
+        return DateUtils.stringToDateYMD(endDate);
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 }

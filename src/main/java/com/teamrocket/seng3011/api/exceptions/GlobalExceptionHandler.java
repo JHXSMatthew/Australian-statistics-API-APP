@@ -49,6 +49,8 @@ public class GlobalExceptionHandler {
         idMap.put(ConversionFailedException.class,9);
         idMap.put(NoDataAvailableException.class,10);
         idMap.put(DateInvalidException.class,11);
+        idMap.put(NoLogFileException.class,12);
+
     }
 
     @ExceptionHandler

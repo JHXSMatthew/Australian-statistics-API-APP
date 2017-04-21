@@ -4,7 +4,6 @@ import com.teamrocket.seng3011.api.results.Header;
 import com.teamrocket.seng3011.api.results.ResultContainer;
 import com.teamrocket.seng3011.api.results.Status;
 import org.springframework.core.convert.ConversionFailedException;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -63,11 +62,15 @@ public class GlobalExceptionHandler {
                 return error(idMap.get(ex.getClass()),ex.getMessage(),((ExceptionWrapper) e).getTraceNumber());
             }else{
                 ex.printStackTrace();
-                return error(-999,ex.getMessage(),((ExceptionWrapper) e).getTraceNumber());
+                return error(-9999,ex.getMessage(),((ExceptionWrapper) e).getTraceNumber());
             }
         }else{
+            if(e instanceof KnownException && idMap.containsKey(e.getClass())) {
+                return error(idMap.get(e.getClass()), e.getMessage());
+            }
             e.printStackTrace();
-            return error(-999,e.getMessage());
+            return error(-999, e.getMessage());
+
         }
     }
 

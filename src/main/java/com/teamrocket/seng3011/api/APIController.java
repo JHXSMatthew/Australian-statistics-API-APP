@@ -77,7 +77,7 @@ public class APIController {
         return logGET(number);
     }
 
-    @RequestMapping(value = "", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "log", method = RequestMethod.GET, produces = "application/json")
     public String logGET(@RequestParam(value = "number") String tract) throws NoLogFileException {
         return LogManager.getInstance().getLog(tract);
     }

@@ -112,7 +112,7 @@ public class APIRequest {
 
         } catch (Exception e) {
             e.printStackTrace();
-            throw new CannotFetchDataException("cannot fetch data HTTP error, API down?");
+            throw new CannotFetchDataException("cannot fetch data HTTP error, API down? or too many requests!");
         }
     }
 

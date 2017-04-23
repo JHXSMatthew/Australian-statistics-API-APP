@@ -39,6 +39,8 @@ public abstract class MonthlyDataEntry implements Validation{
         return entries;
     }
 
+    public abstract int getId();
+
     public void setEntries(RegionalDataEntry[] entries) {
         this.entries = entries;
     }

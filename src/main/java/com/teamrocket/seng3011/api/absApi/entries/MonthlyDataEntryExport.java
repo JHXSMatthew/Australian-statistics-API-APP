@@ -23,4 +23,9 @@ public class MonthlyDataEntryExport extends MonthlyDataEntry {
     public MerchandiseExportsCategory getCommodity() {
         return commodity;
     }
+
+    @Override
+    public int getId() {
+        return commodity.getId();
+    }
 }

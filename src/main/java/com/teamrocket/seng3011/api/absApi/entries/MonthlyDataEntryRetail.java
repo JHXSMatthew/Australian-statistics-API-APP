@@ -24,4 +24,9 @@ public class MonthlyDataEntryRetail extends MonthlyDataEntry {
     public RetailCategory getIndustry() {
         return industry;
     }
+
+    @Override
+    public int getId() {
+        return industry.getId();
+    }
 }

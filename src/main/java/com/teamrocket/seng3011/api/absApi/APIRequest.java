@@ -1,20 +1,26 @@
 package com.teamrocket.seng3011.api.absApi;
 
+import com.teamrocket.seng3011.api.APIConfiguration;
 import com.teamrocket.seng3011.api.APIController;
 import com.teamrocket.seng3011.api.HaveID;
 import com.teamrocket.seng3011.api.State;
+import com.teamrocket.seng3011.api.absApi.entries.DateDataEntry;
 import com.teamrocket.seng3011.api.absApi.entries.EntryType;
+import com.teamrocket.seng3011.api.absApi.entries.MonthlyDataEntry;
+import com.teamrocket.seng3011.api.absApi.entries.RegionalDataEntry;
 import com.teamrocket.seng3011.api.exceptions.CannotFetchDataException;
 import com.teamrocket.seng3011.api.exceptions.CannotParseStatsTypeException;
 import com.teamrocket.seng3011.api.exceptions.KnownException;
 import com.teamrocket.seng3011.utils.DateUtils;
 import com.teamrocket.seng3011.utils.StringUtils;
+import com.teamrocket.seng3011.utils.ThreadUtils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -59,10 +65,46 @@ public class APIRequest {
         return this;
     }
 
-    public Object parse() throws KnownException {
-        DataParser container = new DataParser(fetchedCache);
-        return container.parse().getParsedEntries(type);
+    private void cache(MonthlyDataEntry[] entries){
+        final MonthlyDataEntry[] copy = Arrays.copyOf(entries,entries.length);
+        ThreadUtils.runTask(new Runnable() {
+            @Override
+            public void run() {
+                for(MonthlyDataEntry month : copy){
+                    for(RegionalDataEntry region : month.getEntries()){
+                        for(DateDataEntry entry : region.getEntry()){
+                            CacheManager.getManager().cache(type.getCacheKey(),
+                                    month.getId(),
+                                    region.getState().getId(),
+                                    entry.getDate(),
+                                    entry.getData());
+                        }
+                    }
+                }
+            }
+        });
+
     }
+
+    private boolean isCached(){
+        return false; //TODO: cache in redis
+    }
+
+    public Object parse() throws KnownException {
+        if(isCached()){
+            return null; //TODO: the cache
+
+        }else {
+            DataParser container = new DataParser(fetchedCache);
+            MonthlyDataEntry[] result=  container.parse().getParsedEntries(type);
+            if(APIConfiguration.cache)
+                cache(result);
+            return result;
+        }
+    }
+
+
+
 
     private String getURL() {
         String url = null;

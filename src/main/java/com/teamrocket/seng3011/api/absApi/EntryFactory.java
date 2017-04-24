@@ -51,8 +51,8 @@ public class EntryFactory {
         return new RegionalDataEntry(state);
     }
 
-    public MonthlyDataEntry getMonthlyDataEntry(String name, RegionalDataEntry[] entries, EntryType type) throws CannotParseCategoryException {
-        MonthlyDataEntry entry = getMonthlyDataEntry(name, type);
+    public MonthlyDataEntry getMonthlyDataEntry(String id, RegionalDataEntry[] entries, EntryType type) throws CannotParseCategoryException {
+        MonthlyDataEntry entry = getMonthlyDataEntry(id, type);
         for (RegionalDataEntry i : entries) {
             entry.addRegionalDataEntry(i);
         }
@@ -60,13 +60,13 @@ public class EntryFactory {
         return entry;
     }
 
-    public MonthlyDataEntry getMonthlyDataEntry(String name, List<RegionalDataEntry> entries, EntryType type) throws CannotParseCategoryException {
-        MonthlyDataEntry entry = getMonthlyDataEntry(name, type);
+    public MonthlyDataEntry getMonthlyDataEntry(String id, List<RegionalDataEntry> entries, EntryType type) throws CannotParseCategoryException {
+        MonthlyDataEntry entry = getMonthlyDataEntry(id, type);
         for (RegionalDataEntry i : entries) {
             entry.addRegionalDataEntry(i);
         }
         entry.pack();
-        return null;
+        return entry;
     }
 
     /**

@@ -32,6 +32,7 @@ public class APIRequest {
     private Date starting;
     private Date ending;
     private String fetchedCache = null;
+    private boolean cacheFlag = false;
 
     public APIRequest(EntryType area) throws CannotParseStatsTypeException {
         type = area;
@@ -54,13 +55,17 @@ public class APIRequest {
     }
 
     public APIRequest fetch() throws CannotFetchDataException, ParseException {
-        String jsonResponse = (String) sendHTTPGet(getURL());
-        fetchedCache = jsonResponse;
+        if(!isCached()) {
+            String jsonResponse = (String) sendHTTPGet(getURL());
+            fetchedCache = jsonResponse;
+        }
         return this;
     }
 
     private void cache(MonthlyDataEntry[] entries){
         final MonthlyDataEntry[] copy = Arrays.copyOf(entries,entries.length);
+        APIController.debugPrint("[+] cache new data.");
+
         ThreadUtils.runTask(new Runnable() {
             @Override
             public void run() {
@@ -74,6 +79,19 @@ public class APIRequest {
                                     entry.getData());
                         }
                     }
+                    try {
+                        for (HaveID c : categories) {
+                            for (State s : states) {
+                                CacheManager.getManager().cache(type.getCacheKey(),
+                                        c.getId(),
+                                        s.getId(),
+                                        starting,
+                                        ending);
+                            }
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -81,7 +99,10 @@ public class APIRequest {
     }
 
     private boolean isCached(){
-        if( APIConfiguration.cache){
+        if(APIConfiguration.cache){
+            if(this.cacheFlag){ //fast exit
+                return true;
+            }
             boolean b = true;
             for(HaveID c : categories){
                 for(State s : states){
@@ -92,6 +113,7 @@ public class APIRequest {
                     }
                 }
             }
+            cacheFlag = b;
             return b;
         }else{
             return false;
@@ -100,11 +122,12 @@ public class APIRequest {
 
     public Object parse() throws KnownException {
         if(isCached()){
-            List<MonthlyDataEntry> entries =new  ArrayList<>();
+            APIController.debugPrint("Cached request, read from cache.");
+            List<MonthlyDataEntry> entries = new ArrayList<>();
+
             for(HaveID c : categories){
                 List<RegionalDataEntry> regions = new ArrayList<>();
                 for(State s : states){
-
                     DateDataEntry[] dateData = CacheManager.getManager().getCache(type.getCacheKey(),
                             c.getId(),
                             s.getId(),
@@ -115,11 +138,18 @@ public class APIRequest {
                 }
                 entries.add(EntryFactory.getFactory().getMonthlyDataEntry(String.valueOf(c.getId()),regions,type));
             }
-            return entries.toArray(new MonthlyDataEntry[entries.size()]);
+            switch (type){
+                case EXPORT:
+                    return entries.toArray( new MonthlyDataEntryExport[entries.size()]);
+                case RETAIL:
+                    return entries.toArray( new MonthlyDataEntryRetail[entries.size()]);
+                default:
+                    throw new CannotParseStatsTypeException("unknown stats in cache exception.");
+            }
 
         }else {
             DataParser container = new DataParser(fetchedCache);
-            MonthlyDataEntry[] result=  container.parse().getParsedEntries(type);
+            MonthlyDataEntry[] result = container.parse().getParsedEntries(type);
             if(APIConfiguration.cache)
                 cache(result);
             return result;

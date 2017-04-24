@@ -44,15 +44,30 @@ public class DateRange {
 
 
     public boolean isInRange(Calendar morph){
-        return morph.get(Calendar.MONTH) >= starting.get(Calendar.MONTH)
-                && morph.get(Calendar.MONTH) <= ending.get(Calendar.MONTH);
+        return morph.get(Calendar.YEAR) >= starting.get(Calendar.YEAR)
+                && morph.get(Calendar.YEAR) <= ending.get(Calendar.YEAR)
+                &&
+                ( morph.get(Calendar.YEAR) == starting.get(Calendar.YEAR)    //same year as starting, month should >= than starting month
+                            && morph.get(Calendar.MONTH) >= starting.get(Calendar.MONTH)
+                        || morph.get(Calendar.YEAR) == ending.get(Calendar.YEAR)  //same year as ending , month should <= than ending month
+                            && morph.get(Calendar.MONTH) <= ending.get(Calendar.MONTH)
+                        || morph.get(Calendar.YEAR) != starting.get(Calendar.YEAR)
+                            && morph.get(Calendar.YEAR) != ending.get(Calendar.YEAR));
     }
 
     public boolean isInRange(Date morph){
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(morph);
-        return calendar.get(Calendar.MONTH) >= starting.get(Calendar.MONTH)
-                && calendar.get(Calendar.MONTH) <= ending.get(Calendar.MONTH);
+
+        return calendar.get(Calendar.YEAR) >= starting.get(Calendar.YEAR)
+                && calendar.get(Calendar.YEAR) <= ending.get(Calendar.YEAR)
+                &&
+                (calendar.get(Calendar.YEAR) == starting.get(Calendar.YEAR)   //same year as starting, month should >= than starting month
+                        && calendar.get(Calendar.MONTH) >= starting.get(Calendar.MONTH)
+                    || calendar.get(Calendar.YEAR) == ending.get(Calendar.YEAR)  //same year as ending , month should <= than ending month
+                        &&calendar.get(Calendar.MONTH) <= ending.get(Calendar.MONTH)
+                    || calendar.get(Calendar.YEAR) != starting.get(Calendar.YEAR)
+                        && calendar.get(Calendar.YEAR) != ending.get(Calendar.YEAR)) ;
     }
 
     /**
@@ -62,7 +77,17 @@ public class DateRange {
      * @return true if a and b are two continuous date
      */
     public boolean continuous(Calendar a, Calendar b){
-        return Math.abs(a.get(Calendar.MONTH) - b.get(Calendar.MONTH)) == 1;
+        return Math.abs(a.get(Calendar.YEAR) - b.get(Calendar.YEAR)) == 0
+                && Math.abs(a.get(Calendar.MONTH) - b.get(Calendar.MONTH)) == 1;
+    }
+
+    public boolean before(DateRange range){
+        return !after(range);
+    }
+    public boolean after(DateRange range){
+        return starting.get(Calendar.YEAR) > range.getStarting().get(Calendar.YEAR)  ||
+                starting.get(Calendar.YEAR) == range.getStarting().get(Calendar.YEAR) &&
+                        starting.get(Calendar.MONTH) > range.getStarting().get(Calendar.MONTH);
     }
 
     public DateRange merge(DateRange range) throws Exception {
@@ -98,5 +123,9 @@ public class DateRange {
 
     public void setEnding(Calendar ending) {
         this.ending = ending;
+    }
+
+    public String toString(){
+        return DateUtils.dateToStringYMD(starting.getTime()) + " ~ " + DateUtils.dateToStringYMD(ending.getTime());
     }
 }

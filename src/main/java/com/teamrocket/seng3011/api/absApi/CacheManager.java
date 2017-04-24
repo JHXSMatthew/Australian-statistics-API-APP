@@ -1,10 +1,12 @@
 package com.teamrocket.seng3011.api.absApi;
 
 import com.teamrocket.seng3011.api.APIConfiguration;
+import com.teamrocket.seng3011.api.APIController;
 import com.teamrocket.seng3011.api.absApi.entries.DateDataEntry;
 import com.teamrocket.seng3011.api.absApi.entries.EntryType;
 import com.teamrocket.seng3011.api.exceptions.CannotParseStatsTypeException;
 import com.teamrocket.seng3011.utils.DateRange;
+import com.teamrocket.seng3011.utils.DateRangeComparator;
 import com.teamrocket.seng3011.utils.DateUtils;
 import redis.clients.jedis.*;
 
@@ -15,9 +17,15 @@ import java.util.*;
  */
 public class CacheManager {
 
+    static {
+        getManager();
+    }
+
     private static CacheManager manager = null;
 
     private JedisPool pool;
+
+
 
     public CacheManager(){
         manager = this;
@@ -27,10 +35,14 @@ public class CacheManager {
         try{
             pool = new JedisPool(config,"localhost",6379);
             APIConfiguration.cache = true;
+            APIController.debugPrint("Cache enabled.");
+
         }catch (Exception e){
             e.printStackTrace();
             manager = null;
             APIConfiguration.cache = false;
+            APIController.debugPrint("Redis connection failed, drop cache functionality..");
+
         }
     }
 
@@ -39,20 +51,32 @@ public class CacheManager {
         return area+":"+category+":"+region;
     }
 
+    private void dump(int area,int category,int region, String msg, Date ... date){
+        APIController.debugPrint("[d] " + msg + " " + getKey(area,category,region)  );
+
+        Arrays.stream(date).forEach(d->{
+            APIController.debugPrint(DateUtils.dateToStringYMD(d));
+        });
+    }
 
     public boolean isCached(int area, int category, int region, Date start, Date end){
         String key = getKey(area,category,region);
         Jedis jedis = pool.getResource();
         String range = jedis.hget(key,"range");
         if(range == null){
+            dump(area,category,region,"range null",start,end);
             return false;
         }
         List<DateRange> ranges = DateUtils.stringToDataRange(range);
         for(DateRange r : ranges){
-            if(r.isInRange(start) && r.isInRange(end)){
+            if(r.isInRange(start) && r.isInRange(end)) {
                 return true;
             }
+            APIController.debugPrint(" Range: "+ r.toString());
+            APIController.debugPrint(" " + DateUtils.dateToStringYMD(start) + " " + r.isInRange(start));
+            APIController.debugPrint(" " + DateUtils.dateToStringYMD(end) + " " + r.isInRange(end));
         }
+        dump(area,category,region,"Cached false",start,end);
         return false;
     }
 
@@ -89,6 +113,7 @@ public class CacheManager {
             ranges = DateUtils.stringToDataRange(raw);
         }
         ranges.add(new DateRange(starting,end));
+        Collections.sort(ranges,new DateRangeComparator());
 
         List<DateRange> merged = merge(ranges);
 
@@ -96,30 +121,29 @@ public class CacheManager {
         jedis.hset(key,"range",DateUtils.dateRangeToString(merged));
     }
 
-    //TODO: speed this up by sorting the array and so on
-    private List<DateRange> merge(Collection<DateRange> ranges){
-        Set<DateRange> merged  =new HashSet<>();
-        boolean m = false;
-        for(DateRange d : ranges){
-            for(DateRange r : ranges){
-                try{
-                    merged.add(d.merge(r));
-                    m = true;
-                }catch (Exception e){
-                    if (!e.getMessage().contains("Cannot merge date range")) {
-                        e.printStackTrace();
-                    }
-                    merged.add(r);
-                    merged.add(d);
+    private List<DateRange> merge(List<DateRange> ranges){
+        if(ranges.size() == 1 || ranges.isEmpty())
+            return ranges;
+        boolean merged = false;
+        List<DateRange> next = new ArrayList<>();
+        for(int i = 1 ; i < ranges.size() ; i ++){
+            try {
+                next.add(ranges.get(i).merge(ranges.get(i-1)));
+                ranges.remove(i);
+                ranges.remove(i-1);
+                merged = true;
+                break;
+            } catch (Exception e) {
+                if(!e.getMessage().contains("Cannot merge date range")) {
+                    e.printStackTrace();
                 }
             }
         }
-        if(m) {
-            return merge(merged);
+        next.addAll(ranges);
+        if(merged){
+            return merge(next);
         }else{
-            List<DateRange> result = new ArrayList<>();
-            result.addAll(merged);
-            return result;
+            return next;
         }
     }
 

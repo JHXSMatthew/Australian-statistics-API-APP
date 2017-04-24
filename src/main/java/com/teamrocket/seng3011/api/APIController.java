@@ -158,7 +158,9 @@ public class APIController {
             debugPrint("---- Request done! ----");
             debugPrint("  ");
         } catch (Exception e) {
-            String trace = LogManager.getInstance().log(parameters, e.getMessage(), e.getStackTrace()[0].toString());
+
+            String trace = LogManager.getInstance().log(parameters, e.getMessage(),
+                    e.getStackTrace().length >= 1 ?e.getStackTrace()[0].toString(): "internal error!");
             ExceptionWrapper wrapper = new ExceptionWrapper(e,trace,pretty);
 
             throw wrapper;

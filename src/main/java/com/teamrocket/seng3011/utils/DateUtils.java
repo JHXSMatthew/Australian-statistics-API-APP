@@ -6,7 +6,9 @@ import com.teamrocket.seng3011.api.exceptions.KnownException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by JHXSMatthew on 17/3/17.
@@ -37,6 +39,27 @@ public class DateUtils {
         } catch (ParseException e) {
             throw new DateInvalidException(date);
         }
+    }
+
+    public static List<DateRange> stringToDataRange(String s){
+        List<DateRange> rangeList = new ArrayList<>();
+        String[] entries = s.split(";");
+        for(String entry : entries){
+            String[] range = entry.split(",");
+            rangeList.add(new DateRange(range[0],range[1]));
+        }
+        return rangeList;
+    }
+
+    public static String dateRangeToString(List<DateRange> ranges){
+        StringBuilder builder = new StringBuilder();
+        for(DateRange r : ranges){
+            builder.append(dateToStringYMD(r.getStarting().getTime()))
+                    .append(",")
+                    .append(dateToStringYMD(r.getEnding().getTime()))
+                    .append(";");
+        }
+        return builder.substring(0,builder.length() -1);
     }
 
 

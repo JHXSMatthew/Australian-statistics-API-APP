@@ -11,10 +11,17 @@ public class Header {
     private Status status = null;
     @JsonProperty("requestNumber")
     private String requestNumber = null;
+    @JsonProperty("execution_Time")
+    private long execution = -1;
 
     public Header(Status status,String requestNumber) {
         this.status = status;
         this.requestNumber = requestNumber;
+    }
+
+    public Header setExecution(long execution){
+        this.execution = execution;
+        return this;
     }
 
 

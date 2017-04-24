@@ -25,4 +25,9 @@ public class DateDataEntryExport extends DateDataEntry {
     public void setValue(float value) {
         this.value = value;
     }
+
+    @Override
+    public String getData() {
+        return String.valueOf(value);
+    }
 }

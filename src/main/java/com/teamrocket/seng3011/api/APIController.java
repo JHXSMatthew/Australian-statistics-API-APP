@@ -147,8 +147,10 @@ public class APIController {
                             .setDate(startDate, endDate)
                             .fetch().parse(), entryType
             );
-            String trace = LogManager.getInstance().log(parameters, log_starting, Calendar.getInstance().getTime(),current-System.currentTimeMillis());
-            ResultContainer container = new ResultContainer(new Header(Status.success,trace), (ResultObject) obj);
+            long execution = System.currentTimeMillis() - current;
+            String trace = LogManager.getInstance().log(parameters, log_starting, Calendar.getInstance().getTime(),
+                    execution);
+            ResultContainer container = new ResultContainer(new Header(Status.success,trace).setExecution(execution), (ResultObject) obj);
             ObjectMapper mapper = new ObjectMapper();
             if (pretty)
                 mapper.enable(SerializationFeature.INDENT_OUTPUT);

@@ -1,23 +1,23 @@
 package com.teamrocket.seng3011.api.absApi;
 
+import com.teamrocket.seng3011.api.APIConfiguration;
 import com.teamrocket.seng3011.api.APIController;
 import com.teamrocket.seng3011.api.HaveID;
 import com.teamrocket.seng3011.api.State;
-import com.teamrocket.seng3011.api.absApi.entries.EntryType;
+import com.teamrocket.seng3011.api.absApi.entries.*;
 import com.teamrocket.seng3011.api.exceptions.CannotFetchDataException;
 import com.teamrocket.seng3011.api.exceptions.CannotParseStatsTypeException;
 import com.teamrocket.seng3011.api.exceptions.KnownException;
 import com.teamrocket.seng3011.utils.DateUtils;
 import com.teamrocket.seng3011.utils.StringUtils;
+import com.teamrocket.seng3011.utils.ThreadUtils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.ParseException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by JHXSMatthew on 19/03/2017.
@@ -32,6 +32,7 @@ public class APIRequest {
     private Date starting;
     private Date ending;
     private String fetchedCache = null;
+    private boolean cacheFlag = false;
 
     public APIRequest(EntryType area) throws CannotParseStatsTypeException {
         type = area;
@@ -54,15 +55,109 @@ public class APIRequest {
     }
 
     public APIRequest fetch() throws CannotFetchDataException, ParseException {
-        String jsonResponse = (String) sendHTTPGet(getURL());
-        fetchedCache = jsonResponse;
+        if(!isCached()) {
+            String jsonResponse = (String) sendHTTPGet(getURL());
+            fetchedCache = jsonResponse;
+        }
         return this;
     }
 
-    public Object parse() throws KnownException {
-        DataParser container = new DataParser(fetchedCache);
-        return container.parse().getParsedEntries(type);
+    private void cache(MonthlyDataEntry[] entries){
+        final MonthlyDataEntry[] copy = Arrays.copyOf(entries,entries.length);
+        APIController.debugPrint("[+] cache new data.");
+
+        ThreadUtils.runTask(new Runnable() {
+            @Override
+            public void run() {
+                for(MonthlyDataEntry month : copy){
+                    for(RegionalDataEntry region : month.getEntries()){
+                        for(DateDataEntry entry : region.getEntry()){
+                            CacheManager.getManager().cache(type.getCacheKey(),
+                                    month.getId(),
+                                    region.getState().getId(),
+                                    entry.getDate(),
+                                    entry.getData());
+                        }
+                    }
+                    try {
+                        for (HaveID c : categories) {
+                            for (State s : states) {
+                                CacheManager.getManager().cache(type.getCacheKey(),
+                                        c.getId(),
+                                        s.getId(),
+                                        starting,
+                                        ending);
+                            }
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
     }
+
+    private boolean isCached(){
+        if(APIConfiguration.cache){
+            if(this.cacheFlag){ //fast exit
+                return true;
+            }
+            boolean b = true;
+            for(HaveID c : categories){
+                for(State s : states){
+                    b = CacheManager.getManager().isCached(type.getCacheKey(),
+                            c.getId(),s.getId(),starting,ending) && b;
+                    if(!b){
+                        return false;
+                    }
+                }
+            }
+            cacheFlag = b;
+            return b;
+        }else{
+            return false;
+        }
+    }
+
+    public Object parse() throws KnownException {
+        if(isCached()){
+            APIController.debugPrint("Cached request, read from cache.");
+            List<MonthlyDataEntry> entries = new ArrayList<>();
+
+            for(HaveID c : categories){
+                List<RegionalDataEntry> regions = new ArrayList<>();
+                for(State s : states){
+                    DateDataEntry[] dateData = CacheManager.getManager().getCache(type.getCacheKey(),
+                            c.getId(),
+                            s.getId(),
+                            starting,
+                            ending);
+                    RegionalDataEntry region = EntryFactory.getFactory().getRegionalDataEntry(s,dateData);
+                    regions.add(region);
+                }
+                entries.add(EntryFactory.getFactory().getMonthlyDataEntry(String.valueOf(c.getId()),regions,type));
+            }
+            switch (type){
+                case EXPORT:
+                    return entries.toArray( new MonthlyDataEntryExport[entries.size()]);
+                case RETAIL:
+                    return entries.toArray( new MonthlyDataEntryRetail[entries.size()]);
+                default:
+                    throw new CannotParseStatsTypeException("unknown stats in cache exception.");
+            }
+
+        }else {
+            DataParser container = new DataParser(fetchedCache);
+            MonthlyDataEntry[] result = container.parse().getParsedEntries(type);
+            if(APIConfiguration.cache)
+                cache(result);
+            return result;
+        }
+    }
+
+
+
 
     private String getURL() {
         String url = null;

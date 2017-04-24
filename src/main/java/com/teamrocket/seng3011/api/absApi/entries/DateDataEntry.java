@@ -28,4 +28,6 @@ public abstract class DateDataEntry {
     public void setDate(String date) {
         this.date = date;
     }
+
+    public abstract String getData();
 }

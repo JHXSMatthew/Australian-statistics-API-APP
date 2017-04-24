@@ -24,4 +24,9 @@ public class DateDataEntryRetail extends DateDataEntry {
     public void setTurnover(float turnover) {
         this.turnover = turnover;
     }
+
+    @Override
+    public String getData() {
+        return String.valueOf(turnover);
+    }
 }

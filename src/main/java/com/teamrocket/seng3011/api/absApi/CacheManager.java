@@ -177,11 +177,20 @@ public class CacheManager {
             for (int i = 0; i < loopMax; i++) {
                 s.add(Calendar.MONTH, 1);
                 s.add(Calendar.DATE, -1);
-                returnValue.add(EntryFactory.getFactory().getDateDataEntry(
-                        s.getTime(),
-                        Double.parseDouble(jedis.hget(key, DateUtils.dateToStringYMD(s.getTime()))),
-                        EntryType.parseType(area)
-                ));
+                double value = -1.0;
+                try {
+                    value = Double.parseDouble(jedis.hget(key, DateUtils.dateToStringYMD(s.getTime())));
+                }catch (Exception ee){
+
+                }
+                if(value != -1.0) {
+                    returnValue.add(EntryFactory.getFactory().getDateDataEntry(
+                            s.getTime(),
+                            value,
+                            EntryType.parseType(area)
+                    ));
+                }
+
                 s.set(Calendar.DAY_OF_MONTH, 1);
                 s.add(Calendar.MONTH, 1);
             }

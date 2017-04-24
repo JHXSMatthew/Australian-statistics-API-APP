@@ -23,6 +23,14 @@ public enum EntryType {
         throw new CannotParseStatsTypeException(arg);
     }
 
+    public static EntryType parseType(int arg) throws CannotParseStatsTypeException {
+        for (EntryType type : values()) {
+            if (type.cache == arg)
+                return type;
+        }
+        throw new CannotParseStatsTypeException(String.valueOf(arg));
+    }
+
     public int getCacheKey(){
         return cache;
     }

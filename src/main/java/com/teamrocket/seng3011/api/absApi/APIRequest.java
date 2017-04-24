@@ -4,10 +4,7 @@ import com.teamrocket.seng3011.api.APIConfiguration;
 import com.teamrocket.seng3011.api.APIController;
 import com.teamrocket.seng3011.api.HaveID;
 import com.teamrocket.seng3011.api.State;
-import com.teamrocket.seng3011.api.absApi.entries.DateDataEntry;
-import com.teamrocket.seng3011.api.absApi.entries.EntryType;
-import com.teamrocket.seng3011.api.absApi.entries.MonthlyDataEntry;
-import com.teamrocket.seng3011.api.absApi.entries.RegionalDataEntry;
+import com.teamrocket.seng3011.api.absApi.entries.*;
 import com.teamrocket.seng3011.api.exceptions.CannotFetchDataException;
 import com.teamrocket.seng3011.api.exceptions.CannotParseStatsTypeException;
 import com.teamrocket.seng3011.api.exceptions.KnownException;
@@ -20,10 +17,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.ParseException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by JHXSMatthew on 19/03/2017.
@@ -87,12 +81,41 @@ public class APIRequest {
     }
 
     private boolean isCached(){
-        return false; //TODO: cache in redis
+        if( APIConfiguration.cache){
+            boolean b = true;
+            for(HaveID c : categories){
+                for(State s : states){
+                    b = CacheManager.getManager().isCached(type.getCacheKey(),
+                            c.getId(),s.getId(),starting,ending) && b;
+                    if(!b){
+                        return false;
+                    }
+                }
+            }
+            return b;
+        }else{
+            return false;
+        }
     }
 
     public Object parse() throws KnownException {
         if(isCached()){
-            return null; //TODO: the cache
+            List<MonthlyDataEntry> entries =new  ArrayList<>();
+            for(HaveID c : categories){
+                List<RegionalDataEntry> regions = new ArrayList<>();
+                for(State s : states){
+
+                    DateDataEntry[] dateData = CacheManager.getManager().getCache(type.getCacheKey(),
+                            c.getId(),
+                            s.getId(),
+                            starting,
+                            ending);
+                    RegionalDataEntry region = EntryFactory.getFactory().getRegionalDataEntry(s,dateData);
+                    regions.add(region);
+                }
+                entries.add(EntryFactory.getFactory().getMonthlyDataEntry(String.valueOf(c.getId()),regions,type));
+            }
+            return entries.toArray(new MonthlyDataEntry[entries.size()]);
 
         }else {
             DataParser container = new DataParser(fetchedCache);

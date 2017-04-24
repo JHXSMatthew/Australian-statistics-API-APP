@@ -1,5 +1,6 @@
 package com.teamrocket.seng3011.api.absApi.entries;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.teamrocket.seng3011.api.categories.RetailCategory;
 
@@ -26,6 +27,7 @@ public class MonthlyDataEntryRetail extends MonthlyDataEntry {
     }
 
     @Override
+    @JsonIgnore
     public int getId() {
         return industry.getId();
     }

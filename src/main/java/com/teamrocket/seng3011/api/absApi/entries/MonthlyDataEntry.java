@@ -39,6 +39,7 @@ public abstract class MonthlyDataEntry implements Validation{
         return entries;
     }
 
+    @JsonIgnore
     public abstract int getId();
 
     public void setEntries(RegionalDataEntry[] entries) {

@@ -59,6 +59,7 @@ public class GlobalExceptionHandler {
         if(e instanceof ExceptionWrapper){
             Exception ex = ((ExceptionWrapper) e).getE();
             if(idMap.containsKey(ex.getClass())){
+                ex.printStackTrace(); //TODO: REMOVE THIS
                 return error(idMap.get(ex.getClass()),ex.getMessage(),((ExceptionWrapper) e).getTraceNumber());
             }else{
                 ex.printStackTrace();
@@ -66,6 +67,7 @@ public class GlobalExceptionHandler {
             }
         }else{
             if(e instanceof KnownException && idMap.containsKey(e.getClass())) {
+                e.printStackTrace(); //TODO: REMOVE THIS
                 return error(idMap.get(e.getClass()), e.getMessage());
             }
             e.printStackTrace();

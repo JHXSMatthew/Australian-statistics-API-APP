@@ -31,6 +31,10 @@ public enum EntryType {
         throw new CannotParseStatsTypeException(String.valueOf(arg));
     }
 
+    public String getTypeString(){
+        return typeString;
+    }
+
     public int getCacheKey(){
         return cache;
     }

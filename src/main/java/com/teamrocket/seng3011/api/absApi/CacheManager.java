@@ -150,6 +150,7 @@ public class CacheManager {
                 if(!e.getMessage().contains("Cannot merge date range")) {
                     e.printStackTrace();
                 }
+
             }
         }
         next.addAll(ranges);
@@ -181,7 +182,7 @@ public class CacheManager {
                 try {
                     value = Double.parseDouble(jedis.hget(key, DateUtils.dateToStringYMD(s.getTime())));
                 }catch (Exception ee){
-
+                    //TODO: ignore this ?
                 }
                 if(value != -1.0) {
                     returnValue.add(EntryFactory.getFactory().getDateDataEntry(

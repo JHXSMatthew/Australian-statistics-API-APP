@@ -2,8 +2,12 @@ package com.teamrocket.seng3011.api.absApi;
 
 import com.teamrocket.seng3011.api.APIConfiguration;
 import com.teamrocket.seng3011.api.APIController;
+import com.teamrocket.seng3011.api.HaveID;
+import com.teamrocket.seng3011.api.State;
 import com.teamrocket.seng3011.api.absApi.entries.DateDataEntry;
 import com.teamrocket.seng3011.api.absApi.entries.EntryType;
+import com.teamrocket.seng3011.api.absApi.entries.MonthlyDataEntry;
+import com.teamrocket.seng3011.api.absApi.entries.RegionalDataEntry;
 import com.teamrocket.seng3011.api.exceptions.CannotParseStatsTypeException;
 import com.teamrocket.seng3011.utils.DateRange;
 import com.teamrocket.seng3011.utils.DateRangeComparator;
@@ -84,6 +88,44 @@ public class CacheManager {
         }
     }
 
+    public boolean isCached(int area, HaveID[] category, HaveID[] region, Date start, Date end){
+        Jedis jedis = pool.getResource();
+        Pipeline pipeline = jedis.pipelined();
+        List<Response<String>> resultList = new ArrayList<>();
+        try {
+            for(HaveID c : category){
+                for(HaveID s : region){
+                    String key = getKey(area,c.getId(),s.getId());
+                    resultList.add(pipeline.hget(key, "range"));
+                }
+            }
+            pipeline.sync();
+
+            for(Response<String> response : resultList){
+                String responseString = response.get();
+                if(responseString == null)
+                    return false;
+
+                List<DateRange> ranges = DateUtils.stringToDataRange(response.get());
+                boolean b = false;
+                for (DateRange r : ranges) {
+                    if (r.isInRange(start) && r.isInRange(end)) {
+                        b = true;
+                        break;
+                    }
+                }
+                if(!b)
+                    return false;
+
+            }
+        }finally {
+            jedis.close();
+        }
+        return true;
+    }
+
+
+
 
     /**
      *  cache the actual data
@@ -101,6 +143,29 @@ public class CacheManager {
             jedis.close();
 
         }
+    }
+
+    /**
+     * using Jedis pipeline (transaction related)
+     * @param type
+     * @param entries
+     */
+    public void cache(int type, MonthlyDataEntry[] entries){
+        Jedis jedis = pool.getResource();
+        try {
+            Pipeline pipeline = jedis.pipelined();
+            for (MonthlyDataEntry month : entries) {
+                for (RegionalDataEntry region : month.getEntries()) {
+                    for (DateDataEntry entry : region.getEntry()) {
+                        pipeline.hsetnx(getKey(type, month.getId(), region.getState().getId()), entry.getDate(), entry.getData());
+                    }
+                }
+            }
+            pipeline.sync();
+        }finally {
+            jedis.close();
+        }
+
     }
 
     /**

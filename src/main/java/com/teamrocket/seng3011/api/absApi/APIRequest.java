@@ -98,6 +98,9 @@ public class APIRequest {
             if(this.cacheFlag){ //fast exit
                 return true;
             }
+            if(CacheManager.getManager() == null)
+                return false;
+
             cacheFlag = CacheManager.getManager().isCached(type.getCacheKey(),categories,states,starting,ending);
             return cacheFlag;
         }else{
@@ -109,8 +112,19 @@ public class APIRequest {
         if(isCached()){
             APIController.debugPrint("Cached request, read from cache.");
             List<MonthlyDataEntry> entries = new ArrayList<>();
-
-
+            for(HaveID c : categories){
+               List<RegionalDataEntry> regions = new ArrayList<>();
+               for(State s : states){
+                    DateDataEntry[] dateData = CacheManager.getManager().getCache(type.getCacheKey(),
+                                    c.getId(),
+                                    s.getId(),
+                                    starting,
+                                    ending);
+                    RegionalDataEntry region = EntryFactory.getFactory().getRegionalDataEntry(s,dateData);
+                    regions.add(region);
+                }
+               entries.add(EntryFactory.getFactory().getMonthlyDataEntry(String.valueOf(c.getId()),regions,type));
+            }
             switch (type){
                 case EXPORT:
                     return entries.toArray( new MonthlyDataEntryExport[entries.size()]);
@@ -121,6 +135,7 @@ public class APIRequest {
             }
 
         }else {
+
             DataParser container = new DataParser(fetchedCache);
             MonthlyDataEntry[] result = container.parse().getParsedEntries(type);
             if(APIConfiguration.cache)

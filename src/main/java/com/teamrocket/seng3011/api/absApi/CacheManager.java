@@ -31,7 +31,7 @@ public class CacheManager {
 
 
 
-    public CacheManager(){
+    public CacheManager() throws Exception {
         manager = this;
         JedisPoolConfig config = new JedisPoolConfig();
         config.setMaxTotal(1000); //TODO: change this while production
@@ -39,14 +39,10 @@ public class CacheManager {
         try{
             pool = new JedisPool(config,"localhost",6379);
             APIConfiguration.cache = true;
+            pool.getResource().close();
             APIController.debugPrint("Cache enabled.");
-
         }catch (Exception e){
-            e.printStackTrace();
-            manager = null;
-            APIConfiguration.cache = false;
-            APIController.debugPrint("Redis connection failed, drop cache functionality..");
-
+           throw new Exception("cache cannot enable!");
         }
     }
 
@@ -268,7 +264,14 @@ public class CacheManager {
 
     public static CacheManager getManager(){
         if(manager == null){
-            manager = new CacheManager();
+            try {
+                manager = new CacheManager();
+            }catch (Exception e){
+                manager = null;
+                APIConfiguration.cache = false;
+                APIController.debugPrint("Redis connection failed, drop cache functionality..");
+                return null;
+            }
         }
         return manager;
     }

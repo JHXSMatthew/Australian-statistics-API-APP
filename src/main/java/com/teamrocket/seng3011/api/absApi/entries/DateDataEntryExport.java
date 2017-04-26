@@ -1,5 +1,6 @@
 package com.teamrocket.seng3011.api.absApi.entries;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
@@ -27,6 +28,7 @@ public class DateDataEntryExport extends DateDataEntry {
     }
 
     @Override
+    @JsonIgnore
     public String getData() {
         return String.valueOf(value);
     }

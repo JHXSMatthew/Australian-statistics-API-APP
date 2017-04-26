@@ -6,6 +6,7 @@ import com.teamrocket.seng3011.api.exceptions.CannotParseCategoryException;
 /**
  * Created by JHXSMatthew on 17/3/17.
  * <p>
+ *
  * <p>
  */
 public enum RetailCategory implements HaveID {

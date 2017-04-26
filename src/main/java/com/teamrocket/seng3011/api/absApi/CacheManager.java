@@ -62,22 +62,26 @@ public class CacheManager {
     public boolean isCached(int area, int category, int region, Date start, Date end){
         String key = getKey(area,category,region);
         Jedis jedis = pool.getResource();
-        String range = jedis.hget(key,"range");
-        if(range == null){
-            dump(area,category,region,"range null",start,end);
-            return false;
-        }
-        List<DateRange> ranges = DateUtils.stringToDataRange(range);
-        for(DateRange r : ranges){
-            if(r.isInRange(start) && r.isInRange(end)) {
-                return true;
+        try {
+            String range = jedis.hget(key, "range");
+            if (range == null) {
+                dump(area, category, region, "range null", start, end);
+                return false;
             }
-            APIController.debugPrint(" Range: "+ r.toString());
-            APIController.debugPrint(" " + DateUtils.dateToStringYMD(start) + " " + r.isInRange(start));
-            APIController.debugPrint(" " + DateUtils.dateToStringYMD(end) + " " + r.isInRange(end));
+            List<DateRange> ranges = DateUtils.stringToDataRange(range);
+            for (DateRange r : ranges) {
+                if (r.isInRange(start) && r.isInRange(end)) {
+                    return true;
+                }
+                APIController.debugPrint(" Range: " + r.toString());
+                APIController.debugPrint(" " + DateUtils.dateToStringYMD(start) + " " + r.isInRange(start));
+                APIController.debugPrint(" " + DateUtils.dateToStringYMD(end) + " " + r.isInRange(end));
+            }
+            dump(area, category, region, "Cached false", start, end);
+            return false;
+        }finally {
+            jedis.close();
         }
-        dump(area,category,region,"Cached false",start,end);
-        return false;
     }
 
 
@@ -91,7 +95,12 @@ public class CacheManager {
      */
     public void cache(int area, int category, int region, String date,String data){
         Jedis jedis = pool.getResource();
-        jedis.hsetnx(getKey(area,category,region),date,data);
+        try {
+            jedis.hsetnx(getKey(area, category, region), date, data);
+        }finally {
+            jedis.close();
+
+        }
     }
 
     /**
@@ -106,19 +115,23 @@ public class CacheManager {
         Jedis jedis = pool.getResource();
         String key = getKey(area,category,region);
         String raw = jedis.hget(key,"range");
-        List<DateRange> ranges;
-        if(raw == null || raw.equals("")){
-            ranges = new ArrayList<>();
-        }else{
-            ranges = DateUtils.stringToDataRange(raw);
+        try {
+            List<DateRange> ranges;
+            if (raw == null || raw.equals("")) {
+                ranges = new ArrayList<>();
+            } else {
+                ranges = DateUtils.stringToDataRange(raw);
+            }
+            ranges.add(new DateRange(starting, end));
+            Collections.sort(ranges, new DateRangeComparator());
+
+            List<DateRange> merged = merge(ranges);
+
+            //TODO; check concurrent modification of redis cache, don't know if it is ok without transaction.
+            jedis.hset(key, "range", DateUtils.dateRangeToString(merged));
+        }finally {
+            jedis.close();
         }
-        ranges.add(new DateRange(starting,end));
-        Collections.sort(ranges,new DateRangeComparator());
-
-        List<DateRange> merged = merge(ranges);
-
-        //TODO; check concurrent modification of redis cache, don't know if it is ok without transaction.
-        jedis.hset(key,"range",DateUtils.dateRangeToString(merged));
     }
 
     private List<DateRange> merge(List<DateRange> ranges){
@@ -137,6 +150,7 @@ public class CacheManager {
                 if(!e.getMessage().contains("Cannot merge date range")) {
                     e.printStackTrace();
                 }
+
             }
         }
         next.addAll(ranges);
@@ -153,25 +167,38 @@ public class CacheManager {
         List<DateDataEntry> returnValue = new ArrayList<>();
         String key = getKey(area,category,region);
         Jedis jedis = pool.getResource();
-        Calendar s = Calendar.getInstance();
-        Calendar e = Calendar.getInstance();
-        s.set(Calendar.DAY_OF_MONTH,1);
-        e.set(Calendar.DAY_OF_MONTH,1);
-        s.setTime(start);
-        e.setTime(end);
-        int loopMax =  (e.get(Calendar.YEAR) - s.get(Calendar.YEAR))* 12 + (e.get(Calendar.MONTH) - s.get(Calendar.MONTH)) + 1;
-        for(int i = 0 ; i < loopMax ; i ++){
-            s.add(Calendar.MONTH, 1);
-            s.add(Calendar.DATE, -1);
-            returnValue.add(EntryFactory.getFactory().getDateDataEntry(
-                    s.getTime(),
-                    Double.parseDouble(jedis.hget(key,DateUtils.dateToStringYMD(s.getTime()))),
-                    EntryType.parseType(area)
-            ));
-            s.set(Calendar.DAY_OF_MONTH,1);
-            s.add(Calendar.MONTH, 1);
+        try {
+            Calendar s = Calendar.getInstance();
+            Calendar e = Calendar.getInstance();
+            s.set(Calendar.DAY_OF_MONTH, 1);
+            e.set(Calendar.DAY_OF_MONTH, 1);
+            s.setTime(start);
+            e.setTime(end);
+            int loopMax = (e.get(Calendar.YEAR) - s.get(Calendar.YEAR)) * 12 + (e.get(Calendar.MONTH) - s.get(Calendar.MONTH)) + 1;
+            for (int i = 0; i < loopMax; i++) {
+                s.add(Calendar.MONTH, 1);
+                s.add(Calendar.DATE, -1);
+                double value = -1.0;
+                try {
+                    value = Double.parseDouble(jedis.hget(key, DateUtils.dateToStringYMD(s.getTime())));
+                }catch (Exception ee){
+                    //TODO: ignore this ?
+                }
+                if(value != -1.0) {
+                    returnValue.add(EntryFactory.getFactory().getDateDataEntry(
+                            s.getTime(),
+                            value,
+                            EntryType.parseType(area)
+                    ));
+                }
+
+                s.set(Calendar.DAY_OF_MONTH, 1);
+                s.add(Calendar.MONTH, 1);
+            }
+            return returnValue.toArray(new DateDataEntry[returnValue.size()]);
+        }finally {
+            jedis.close();
         }
-        return returnValue.toArray(new DateDataEntry[returnValue.size()]);
     }
 
     public static CacheManager getManager(){

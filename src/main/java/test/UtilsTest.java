@@ -1,5 +1,7 @@
 package test;
 
+import org.junit.Test;
+
 /**
  * Created by JHXSMatthew on 25/4/17.
  *
@@ -9,4 +11,6 @@ package test;
  *
  */
 public class UtilsTest {
+    //DateUtil tests
+
 }

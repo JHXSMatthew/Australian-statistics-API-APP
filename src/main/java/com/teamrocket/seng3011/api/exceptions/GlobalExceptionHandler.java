@@ -67,7 +67,10 @@ public class GlobalExceptionHandler {
         }else{
             if(e instanceof KnownException && idMap.containsKey(e.getClass())) {
                 return error(idMap.get(e.getClass()), e.getMessage());
+            }else if(idMap.containsKey(e.getClass())){
+                return error(idMap.get(e.getClass()),e.getMessage());
             }
+
             e.printStackTrace();
             return error(-999, e.getMessage());
 

@@ -21,10 +21,6 @@ import java.util.*;
  */
 public class CacheManager {
 
-    static {
-        getManager();
-    }
-
     private static CacheManager manager = null;
 
     private JedisPool pool;
@@ -99,8 +95,10 @@ public class CacheManager {
 
             for(Response<String> response : resultList){
                 String responseString = response.get();
-                if(responseString == null)
+                if(responseString == null) {
+                    APIController.debugPrint("[x] cache responseString null!");
                     return false;
+                }
 
                 List<DateRange> ranges = DateUtils.stringToDataRange(response.get());
                 boolean b = false;
@@ -110,8 +108,11 @@ public class CacheManager {
                         break;
                     }
                 }
-                if(!b)
+                if(!b) {
+                    APIController.debugPrint("[x] cache not in range ");
                     return false;
+
+                }
 
             }
         }finally {

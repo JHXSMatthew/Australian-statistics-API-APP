@@ -50,29 +50,15 @@ public class DateRange {
     }
 
     private void init(){
-        starting.set(Calendar.DATE,1);
-        ending.set(Calendar.DATE,1);
-        starting.add(Calendar.MONTH,1);
-        ending.add(Calendar.MONTH,1);
-        starting.add(Calendar.DATE,-1);
-        ending.add(Calendar.DATE,-1);
-        starting.set(Calendar.HOUR_OF_DAY, 0);
-        starting.set(Calendar.MINUTE, 0);
-        starting.set(Calendar.SECOND, 0);
-        starting.set(Calendar.MILLISECOND, 0);
-
-        ending.set(Calendar.HOUR_OF_DAY, 0);
-        ending.set(Calendar.MINUTE, 0);
-        ending.set(Calendar.SECOND, 0);
-        ending.set(Calendar.MILLISECOND, 0);
+        starting = DateUtils.setDateToLastInMonth(starting);
+        ending = DateUtils.setDateToLastInMonth(ending);
+        starting = DateUtils.setTimeToMidnight(starting);
+        ending = DateUtils.setTimeToMidnight(ending);
     }
 
-
     public boolean isInRange(Calendar morph){
-        morph.set(Calendar.HOUR_OF_DAY, 0);
-        morph.set(Calendar.MINUTE, 0);
-        morph.set(Calendar.SECOND, 0);
-        morph.set(Calendar.MILLISECOND, 0);
+        morph = DateUtils.setTimeToMidnight(morph);
+        morph = DateUtils.setDateToLastInMonth(morph);
         return  morph.after(starting) && morph.before(ending)
                 || morph.equals(ending) || morph.equals(starting);
 

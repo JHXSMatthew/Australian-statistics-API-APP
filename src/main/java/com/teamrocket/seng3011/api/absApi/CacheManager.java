@@ -84,6 +84,10 @@ public class CacheManager {
         Jedis jedis = pool.getResource();
         Pipeline pipeline = jedis.pipelined();
         List<Response<String>> resultList = new ArrayList<>();
+        Date actualEnding = end;
+        Date today = DateUtils.setTimeToMidnight(Calendar.getInstance().getTime());
+        if(today.before(DateUtils.setTimeToMidnight(actualEnding)))
+            actualEnding =today;
         try {
             for(HaveID c : category){
                 for(HaveID s : region){
@@ -103,7 +107,7 @@ public class CacheManager {
                 List<DateRange> ranges = DateUtils.stringToDataRange(response.get());
                 boolean b = false;
                 for (DateRange r : ranges) {
-                    if (r.isInRange(start) && r.isInRange(end)) {
+                    if (r.isInRange(start) && r.isInRange(actualEnding)) {
                         b = true;
                         break;
                     }

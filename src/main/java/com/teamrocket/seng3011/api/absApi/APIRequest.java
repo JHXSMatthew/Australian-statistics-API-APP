@@ -69,8 +69,8 @@ public class APIRequest {
         ThreadUtils.runTask(new Runnable() {
             @Override
             public void run() {
-                CacheManager.getManager().cache(type.getCacheKey(),copy);
                 try {
+                    CacheManager.getManager().cache(type.getCacheKey(),copy);
                     Date actualEnding = ending;
                     Date today = DateUtils.setTimeToMidnight(Calendar.getInstance().getTime());
                     if(today.before(DateUtils.setTimeToMidnight(actualEnding)))

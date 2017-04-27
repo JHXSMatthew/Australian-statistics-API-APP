@@ -30,7 +30,7 @@ public class CacheManager {
     public CacheManager() throws Exception {
         manager = this;
         JedisPoolConfig config = new JedisPoolConfig();
-        config.setMaxTotal(1000); //TODO: change this while production
+        config.setMaxTotal(10000);
         config.setMaxWaitMillis(1000);
         try{
             pool = new JedisPool(config,"localhost",6379);

@@ -55,6 +55,7 @@ public class CacheManager {
         });
     }
 
+    @Deprecated
     public boolean isCached(int area, int category, int region, Date start, Date end){
         String key = getKey(area,category,region);
         Jedis jedis = pool.getResource();
@@ -136,6 +137,7 @@ public class CacheManager {
      * @param date
      * @param data
      */
+    @Deprecated
     public void cache(int area, int category, int region, String date,String data){
         Jedis jedis = pool.getResource();
         try {

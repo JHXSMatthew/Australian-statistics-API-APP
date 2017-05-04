@@ -160,7 +160,6 @@ class DataAnalyzer extends Component {
           dataType: dataType
         };
     });
-
   }
 
   render(){
@@ -199,7 +198,6 @@ class Charts extends Component {
 
   toggle(tab) {
     if (this.state.activeTab !== tab) {
-      console.log(tab);
       this.setState({
         activeTab: tab
       });
@@ -313,19 +311,11 @@ class Charts extends Component {
       }
 
       this.setState(function (prevState, props) {
-        console.log("prev");
-
-        console.log(prevState);
-        console.log("props");
-        console.log(props);
-
           return {
             charts: charts,
             navs: navs
           };
       });
-
-      console.log(this.state);
     }
   }
 
@@ -706,8 +696,8 @@ class MonthBox extends Component {
         if (m && m.year && m.month) return (DATE_LANG.months[m.month-1] + '. ' + m.year)
         return '?'
     }
-    return <div className="box" onClick={this.handleClick}>
-              <button type="button" className="btn btn-outline-secondary btn-block">{makeText(this.props.value.from) + ' ~ ' + makeText(this.props.value.to)}</button>
+    return <div className="a" onClick={this.handleClick}>
+              <button type="button" className="btn btn-outline-primary btn-block"><b>{makeText(this.props.value.from) + ' ~ ' + makeText(this.props.value.to)}</b></button>
             </div>
   }
 

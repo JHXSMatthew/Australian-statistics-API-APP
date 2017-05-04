@@ -7,7 +7,9 @@ import { PopoverTitle, PopoverContent,Popover,Button, Modal, ModalHeader, ModalB
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Bar, Doughnut, Line, Pie, Polar, Radar } from 'react-chartjs-2';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-
+import 'chartjs-plugin-zoom/chartjs-plugin-zoom.js';
+import 'hammerjs/hammer.min.js';
+import 'moment/moment.js';
 
 const STATE = [
 { label: 'Australian', value: 'AUS' },
@@ -264,7 +266,7 @@ class Charts extends Component {
                 }
               }
               if(!contain){
-                labels.push( dateData[k].Date);
+                labels.push(dateData[k].Date);
               }
             }
             dataSet.push(line);
@@ -275,7 +277,7 @@ class Charts extends Component {
               {data[i].Category}
           </Tab>
         );
-
+        console.log(dataSet);
         charts.push(
           <TabPanel key={data[i].Category}>
             <div className="chart-wrapper">
@@ -285,7 +287,6 @@ class Charts extends Component {
                   labels: labels
                 }}
                 options={{
-                  maintainAspectRatio: true,
                   responsive: true,
                   scales: {
                     xAxes: [{
@@ -293,7 +294,12 @@ class Charts extends Component {
                         scaleLabel: {
                             display: true,
                             labelString: 'Date'
+                        },
+                        ticks:{
+                          min:labels[0],
+                          max:labels[labels.length -1]
                         }
+
                     }],
                     yAxes: [{
                         display: true,
@@ -302,7 +308,16 @@ class Charts extends Component {
                             labelString: ylabel
                         }
                     }]
-                }
+                },
+                pan: {
+      						enabled: true,
+      						mode: 'x'
+      					},
+                zoom: {
+        					enabled: true,
+        					drag: false,
+        					mode: 'x',
+        				}
                 }}
               />
             </div>

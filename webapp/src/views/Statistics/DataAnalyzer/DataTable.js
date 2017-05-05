@@ -61,7 +61,7 @@ class DataTable extends Component {
     }
 
     return(
-      <div>
+      <div className="card" >
         <div className="card-header">
           <strong>Data Set {unit} <span className="float-right"><i className="icon-question" id="Popover2" onClick={this.toggle2}></i></span></strong>
         </div>
@@ -69,7 +69,7 @@ class DataTable extends Component {
          <PopoverTitle>Data Set</PopoverTitle>
          <PopoverContent>This table will initially list categories and display their corresponding average values fetched by the data fetcher. The table can expand the data set with the arrow on the left of the rows to show the averages of the value per state requested. it can further expand to display individual values for the months requested. </PopoverContent>
        </Popover>
-        <div className="card-block">
+        <div className="card-block scrollPanel">
           <div className="row">
             <div className="col-sm-12 col-md-12">
               <ReactTable

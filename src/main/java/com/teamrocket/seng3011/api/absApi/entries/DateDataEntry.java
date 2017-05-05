@@ -1,5 +1,6 @@
 package com.teamrocket.seng3011.api.absApi.entries;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.teamrocket.seng3011.utils.DateUtils;
 
@@ -28,4 +29,7 @@ public abstract class DateDataEntry {
     public void setDate(String date) {
         this.date = date;
     }
+
+    @JsonIgnore
+    public abstract String getData();
 }

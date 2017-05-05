@@ -8,6 +8,6 @@ package com.teamrocket.seng3011.api;
 
 public class APIConfiguration {
     public static double version = 0.1;
-
+    public static boolean cache = true;
 
 }

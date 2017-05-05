@@ -6,7 +6,10 @@ import com.teamrocket.seng3011.api.exceptions.KnownException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by JHXSMatthew on 17/3/17.
@@ -38,6 +41,65 @@ public class DateUtils {
             throw new DateInvalidException(date);
         }
     }
+
+    public static List<DateRange> stringToDataRange(String s){
+        List<DateRange> rangeList = new ArrayList<>();
+        String[] entries = s.split(";");
+        for(String entry : entries){
+            String[] range = entry.split(",");
+            rangeList.add(new DateRange(range[0],range[1]));
+        }
+        return rangeList;
+    }
+
+    public static String dateRangeToString(List<DateRange> ranges){
+        StringBuilder builder = new StringBuilder();
+        for(DateRange r : ranges){
+            builder.append(dateToStringYMD(r.getStarting().getTime()))
+                    .append(",")
+                    .append(dateToStringYMD(r.getEnding().getTime()))
+                    .append(";");
+        }
+        return builder.substring(0,builder.length() -1);
+    }
+
+    public static Date setTimeToMidnight(Date date) {
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.setTime( date );
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        return calendar.getTime();
+    }
+
+    public static Calendar setTimeToMidnight(Calendar calendar) {
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        return calendar;
+    }
+
+    public static Calendar setDateToLastInMonth(Date date){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.DATE,1);
+        calendar.add(Calendar.MONTH,1);
+        calendar.add(Calendar.DATE,-1);
+        return calendar;
+    }
+
+    public static Calendar setDateToLastInMonth(Calendar calendar){
+        calendar.set(Calendar.DATE,1);
+        calendar.add(Calendar.MONTH,1);
+        calendar.add(Calendar.DATE,-1);
+        return calendar;
+    }
+
 
 
 }

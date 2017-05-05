@@ -3,10 +3,15 @@ package com.teamrocket.seng3011.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.teamrocket.seng3011.api.exceptions.NoLogFileException;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -68,6 +73,19 @@ public class LogManager {
         return (OS.indexOf("sunos") >= 0);
     }
 
+    public String getLog(String number) throws NoLogFileException {
+        File f = new File(manager.folder, number);
+        if(!f.exists()){
+            throw new NoLogFileException("no such tracking number " + number );
+        }
+        try {
+            return new String(Files.readAllBytes(Paths.get(f.getPath())));
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new NoLogFileException("Internal error" + number );
+        }
+    }
+
     private Map<String, String> log(String parameters) {
         Map<String, String> map = new HashMap<>();
         map.put("devTeam", "TeamRocket");
@@ -84,10 +102,11 @@ public class LogManager {
         return save(map);
     }
 
-    public String log(String parameters, Date starting, Date ending) {
+    public String log(String parameters, Date starting, Date ending,long exetime) {
         Map<String, String> map = log(parameters);
         map.put("starting", df.format(starting));
         map.put("ending", df.format(ending));
+        map.put("executingTime",String.valueOf(exetime));
         return save(map);
     }
 

@@ -18,6 +18,7 @@ class MerchandiseExports extends Component {
                     The API will return the monthly value of each commodity listed in the categories, for each region and within
                     the defined time period. <br/><br/>
 
+
                   HTTP Request <br/>
                   GET http://45.75.114.158/api/
                   <br/><br/>
@@ -65,7 +66,7 @@ class MerchandiseExports extends Component {
                               <td>null</td>
                               <td>Date</td>
                               <td>The ending search date</td>
-                            </tr>                                                                              
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -89,7 +90,7 @@ class MerchandiseExports extends Component {
                               <td>pretty</td>
                               <td>null</td>
                               <td>Returns a result JSON file that is much more human-readable</td>
-                            </tr>                                                                           
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -108,42 +109,33 @@ class MerchandiseExports extends Component {
                   For the following sample request:
                   <SyntaxHighlighter language='javascript' style={docco}>
                   {
-                  "http://45.76.114.158/api\n" +
-                  "   ?StatisticsArea=MerchandiseExports\n" +
-                  "   &State=NSW&Category=CrudMaterialAndInedible\n" +
-                  "   &startDate=2013-12-01\n" +
-                  "   &endDate=2014-01-01\n" 
+                    "http://45.76.114.158/api/?StatisticsArea=MerchandiseExports&State=NSW&Category=CrudMaterialAndInedible&startDate=2013-12-01&endDate=2014-01-01&pretty=true"
                   }
                   </SyntaxHighlighter>
                   Our API will return the following JSON response: <br/>
                   <SyntaxHighlighter language='javascript' style={docco}>
                   {
-                  "{\n" + 
-                  "   \"header\":{\n" +
-                  "     \"status\":\"success\"\n" +
-                  "   },\n" +
-                  "   \"data\":{\n" +
-                  "     \"MonthlyCommodityExportData\":[\n" +
-                  "       {\n" +
-                  "         \"RegionalData\":[\n" +
-                  "           {\n" +
-                  "             \"State\":\"NSW\",\n" +
-                  "             \"Data\":[\n" +
-                  "               {\n" +
-                  "                 \"Date\":\"2013-12-31\",\n" +
-                  "                 \"Turnover\":\"461563.709\"\n" +
-                  "               },\n" +
-                  "               {\n" +
-                  "                 \"Date\":\"2014-01-31\",\n" +
-                  "                 \"Turnover\":\"317914.026\"\n" +
-                  "               }\n" +
-                  "             ]\n" +
-                  "           }\n" +
-                  "         ],\n" +
-                  "         \"Commodity:\"\"CrudMaterialAndInedible\"\n" +
-                  "       }\n" +
-                  "   },\n" +
-                  "}\n" 
+                              "{\n" +
+                     "  \"header\" : {\n" +
+                     "    \"status\" : \"success\",\n" +
+                     "    \"requestNumber\" : \"201704122321416\"\n" +
+                     "  },\n" +
+                     "  \"data\" : {\n" +
+                     "    \"MonthlyCommodityExportData\" : [ {\n" +
+                     "      \"RegionalData\" : [ {\n" +
+                     "        \"State\" : \"NSW\",\n" +
+                     "        \"Data\" : [ {\n" +
+                     "          \"Date\" : \"2013-12-31\",\n" +
+                     "          \"Value\" : 461563.709\n" +
+                     "        }, {\n" +
+                     "          \"Date\" : \"2014-01-31\",\n" +
+                     "          \"Value\" : 317914.026\n" +
+                     "        } ]\n" +
+                     "      } ],\n" +
+                     "      \"Commodity\" : \"CrudMaterialAndInedible\"\n" +
+                     "    } ]\n" +
+                     "  }\n" +
+                     "}"
                   }
                   </SyntaxHighlighter>
                   </p>
@@ -180,7 +172,7 @@ class MerchandiseExports extends Component {
                               <td>String</td>
                               <td>Success, Error</td>
                               <td>Returns success if the API call has been successful, else will return error to indicate the call has failed</td>
-                            </tr>                                                                           
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -208,7 +200,7 @@ class MerchandiseExports extends Component {
                               <td>Array</td>
                               <td>RegionalData[...] & Commodity</td>
                               <td>An array of monthly commodity values and actual Data by regions</td>
-                            </tr>                                                                           
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -234,13 +226,13 @@ class MerchandiseExports extends Component {
                               <td>Array</td>
                               <td>State & Data[...]</td>
                               <td>An array of regional data</td>
-                            </tr>  
+                            </tr>
                             <tr>
                               <td>Commodity</td>
                               <td>Category</td>
                               <td>Category</td>
                               <td>Returns one category of commodities in the area</td>
-                            </tr>                                                                         
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -266,13 +258,13 @@ class MerchandiseExports extends Component {
                               <td>Array</td>
                               <td>Date & Turnover</td>
                               <td>An array which includes the date and turnover data</td>
-                            </tr>  
+                            </tr>
                             <tr>
                               <td>State</td>
                               <td>State</td>
                               <td>State</td>
                               <td>An array which contains the regional information</td>
-                            </tr>                                                                         
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -292,42 +284,33 @@ class MerchandiseExports extends Component {
                   For the following sample request:
                   <SyntaxHighlighter language='javascript' style={docco}>
                   {
-                  "http://45.76.114.158/api\n" +
-                  "   ?StatisticsArea=MerchandiseExports\n" +
-                  "   &State=NSW&Category=CrudMaterialAndInedible\n" +
-                  "   &startDate=2013-12-01\n" +
-                  "   &endDate=2014-01-01\n" 
+                    "http://45.76.114.158/api/?StatisticsArea=MerchandiseExports&State=NSW&Category=CrudMaterialAndInedible&startDate=2013-12-01&endDate=2014-01-01&pretty=true"
                   }
                   </SyntaxHighlighter>
                   Our API will return the following JSON response: <br/>
                   <SyntaxHighlighter language='javascript' style={docco}>
                   {
-                  "{\n" + 
-                  "   \"header\":{\n" +
-                  "     \"status\":\"success\"\n" +
-                  "   },\n" +
-                  "   \"data\":{\n" +
-                  "     \"MonthlyCommodityExportData\":[\n" +
-                  "       {\n" +
-                  "         \"RegionalData\":[\n" +
-                  "           {\n" +
-                  "             \"State\":\"NSW\",\n" +
-                  "             \"Data\":[\n" +
-                  "               {\n" +
-                  "                 \"Date\":\"2013-12-31\",\n" +
-                  "                 \"Turnover\":\"461563.709\"\n" +
-                  "               },\n" +
-                  "               {\n" +
-                  "                 \"Date\":\"2014-01-31\",\n" +
-                  "                 \"Turnover\":\"317914.026\"\n" +
-                  "               }\n" +
-                  "             ]\n" +
-                  "           }\n" +
-                  "         ],\n" +
-                  "         \"Commodity:\"\"CrudMaterialAndInedible\"\n" +
-                  "       }\n" +
-                  "   },\n" +
-                  "}\n" 
+                            "{\n" +
+                    "  \"header\" : {\n" +
+                    "    \"status\" : \"success\",\n" +
+                    "    \"requestNumber\" : \"201704122324541\"\n" +
+                    "  },\n" +
+                    "  \"data\" : {\n" +
+                    "    \"MonthlyCommodityExportData\" : [ {\n" +
+                    "      \"RegionalData\" : [ {\n" +
+                    "        \"State\" : \"NSW\",\n" +
+                    "        \"Data\" : [ {\n" +
+                    "          \"Date\" : \"2013-12-31\",\n" +
+                    "          \"Value\" : 461563.709\n" +
+                    "        }, {\n" +
+                    "          \"Date\" : \"2014-01-31\",\n" +
+                    "          \"Value\" : 317914.026\n" +
+                    "        } ]\n" +
+                    "      } ],\n" +
+                    "      \"Commodity\" : \"CrudMaterialAndInedible\"\n" +
+                    "    } ]\n" +
+                    "  }\n" +
+                    "}"
                   }
                   </SyntaxHighlighter>
                   </p>

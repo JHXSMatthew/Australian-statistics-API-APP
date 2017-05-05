@@ -1,10 +1,22 @@
 import React, { Component } from 'react';
+import { Parallax, Background } from 'react-parallax';
+import homeBackground from './home_background.png' // relative path to image 
 
 class Home extends Component {
 
   render() {
     return (
+
       <div className="animated fadeIn">
+
+      <div style={{height: '400px'}}>
+        <Parallax bgImage={homeBackground} strength={-300} style={{height: '300px'}}>
+          <br/>
+          <h1 style={{textAlign: 'center', color: 'white'}}><br/><br/>Team Rocket <br/> Statistics API <br/></h1>
+          <div style={{height: '400px'}}></div> 
+        </Parallax>
+      </div>
+
         <div className="row">
             <div className="card">
               <div className="card-header">

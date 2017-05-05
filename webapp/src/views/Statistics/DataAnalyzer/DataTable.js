@@ -61,7 +61,7 @@ class DataTable extends Component {
     }
 
     return(
-      <div className="card">
+      <div>
         <div className="card-header">
           <strong>Data Set {unit} <span className="float-right"><i className="icon-question" id="Popover2" onClick={this.toggle2}></i></span></strong>
         </div>

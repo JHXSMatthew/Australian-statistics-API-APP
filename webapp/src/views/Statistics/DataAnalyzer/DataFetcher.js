@@ -147,7 +147,7 @@ class DataFetcher extends Component {
 
               <Picker
                   ref="pickRange"
-                  years={{min: 1995, max: 2017}}
+                  years={{min: 1983, max: 2017}}
                   range={this.state.mrange}
                   lang={DATE_LANG}
                   theme="light"

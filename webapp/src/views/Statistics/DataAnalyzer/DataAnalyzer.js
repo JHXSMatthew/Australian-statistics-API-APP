@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import DataFetcher from './DataFetcher.js';
-import DataTable from './DataTable.js';
-import Charts from './ChartSet.js';
+import ResultPanel from './ResultPanel.js';
 import 'react-table/react-table.css';
-import { PopoverTitle, PopoverContent,Popover,Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { PopoverTitle, PopoverContent,Popover,Button, Modal, ModalHeader, ModalBody, ModalFooter ,Row, Col,Container} from 'reactstrap';
+
 
 export const STATE = [
 { label: 'Australian', value: 'AUS' },
@@ -97,8 +97,10 @@ class DataAnalyzer extends Component {
                 if(regional[j].State === "Australia"){
                   //don't add it. logically AU contains all states
                 }else{
-                  total += regionalTotal/regionalCount;
-                  count ++ ;
+                  if(!isNaN(regional[j].average)){
+                    total += regionalTotal/regionalCount;
+                    count ++ ;
+                  }
                 }
 
               }
@@ -135,8 +137,10 @@ class DataAnalyzer extends Component {
               if(regional[j].State === "Australia"){
                 //don't add it. logically AU contains all states
               }else{
-                total += regionalTotal/regionalCount;
-                count ++ ;
+                if(!isNaN(regional[j].average)){
+                  total += regionalTotal/regionalCount;
+                  count ++ ;
+                }
               }
             }
           }
@@ -153,72 +157,28 @@ class DataAnalyzer extends Component {
   }
 
   render(){
-      return (
-        <div className="animated fadeIn">
-          <div className="row">
-            <div className="col-sm-6 col-md-8">
-              {this.state.dataType &&
-                <Charts data={this.state.data} dataType={this.state.dataType}/>
-              }
-          </div>
-          </div>
-          <div className="row">
-            <div className="col-sm-6">
-              <DataFetcher addDataEntry={this.addDataEntry} />
+      if(this.state.dataType){
+
+        return (
+            <ResultPanel data={this.state.data} dataType={this.state.dataType}></ResultPanel>
+        )
+      }else{
+        return(
+            <div className="animated fadeIn">
+                <Container>
+                  <Row>
+                    <Col sm={{ size: 6, push: 2, pull: 2, offset: 1 }}>
+                        <DataFetcher addDataEntry={this.addDataEntry} />
+                    </Col>
+                  </Row>
+                </Container>
             </div>
-            <div className="col-sm-6">
-              <DataTable data={this.state.data} dataType={this.state.dataType}/>
-            </div>
-          </div>
-        </div>
-      )
+        )
+
+      }
+
 
   }
 }
-
-
-
-/*
-//data set componenets
-
-class DataSet extends Component {
-  constructor(props){
-    super(props);
-  }
-
-  render(){
-    return (
-      <div className="card">
-        <div className="card-header">
-          <strong>Data Set</strong>
-        </div>
-        <div className="card-block">
-          <div id="accordion" role="tablist" aria-multiselectable="true">
-            {this.props.entries}
-          </div>
-        </div>
-      </div>
-    )
-  }
-}
-
-class DataEntry extends Component{
-  constructor(props){
-    super(props);
-    this.state ={
-      json: this.props.json
-    }
-  }
-
-  render(){
-    return (
-
-    )
-  }
-
-}
-
-*/
-
 
 export default DataAnalyzer;

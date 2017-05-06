@@ -160,7 +160,9 @@ class DataAnalyzer extends Component {
       if(this.state.dataType){
 
         return (
+          <div className="animated fadeIn">
             <ResultPanel data={this.state.data} dataType={this.state.dataType}></ResultPanel>
+          </div>
         )
       }else{
         return(

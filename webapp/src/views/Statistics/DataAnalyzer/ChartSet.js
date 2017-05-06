@@ -102,7 +102,6 @@ class Charts extends Component {
                 }}
                 options={{
                   responsive: true,
-                  maintainAspectRatio: true,
                   scales: {
                     xAxes: [{
                         display: true,
@@ -154,16 +153,25 @@ class Charts extends Component {
 
 
     return (
-
+        <div className="card">
+          <div className="card-header">
+            <strong>Charts</strong>
+          </div>
+          <div className="card-block">
+            <div className="col-md-12 mb-12">
               <Tabs
                 selectedIndex={0}
               >
                 <TabList>
                     {this.state.navs}
                 </TabList>
-                {this.state.charts}
-            </Tabs>
 
+                {this.state.charts}
+
+            </Tabs>
+            </div>
+          </div>
+        </div>
     )
   }
 }

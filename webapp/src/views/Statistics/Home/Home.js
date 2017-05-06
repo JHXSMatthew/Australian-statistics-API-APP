@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
 import { Parallax, Background } from 'react-parallax';
 import homeBackground from './home_background.png' // relative path to image 
-import titleFont from './Fins-Regular.otf';
+import Icon from 'react-icons-kit';
+      import { graphs } from 'react-icons-kit/metrize/graphs';
+      import { bolt } from 'react-icons-kit/metrize/bolt'
+      import { optionsSettings } from 'react-icons-kit/metrize/optionsSettings';
+      import { bars } from 'react-icons-kit/metrize/bars';
+      import { circles } from 'react-icons-kit/metrize/circles';
+      import { hddRaid } from 'react-icons-kit/metrize/hddRaid'
 
 class Home extends Component {
 
@@ -37,9 +43,68 @@ class Home extends Component {
             <a href="#/dataAnalyzer">Visit our analytics interface here.</a></h6>
             <br/>
         </div>
-        <div className="card" style={{backgroundColor: '#263238'}}>
-          hello darkness my old friend
+
+        <div className="card" style={{backgroundColor: '#263238', color: 'white', padding: '20px'}}>
+        <br/>
+        <h1 style={{textAlign: "center"}}>Features</h1>
+        <br/><br/>
+         <div className="row" style={{textAlign: "center"}}>
+           <div className="col">
+             <div>
+               <Icon icon={bolt} size={100}/> 
+               <br/>
+               <h6>Speed</h6> 
+             </div>
+           </div>
+
+           <div className="col">
+             <div>
+               <Icon icon={graphs} size={100}/> 
+               <br/>
+               <h6>Analytics</h6> 
+             </div>
+           </div>
+
+            <div className="col">
+             <div>
+               <Icon icon={hddRaid} size={100}/> 
+               <br/>
+               <h6>Caching</h6> 
+             </div>
+            </div>
+          </div>
+
+          <br/><br/>
+         <div className="row" style={{textAlign: "center"}}>
+           <div className="col">
+             <div>
+               <Icon icon={circles} size={100}/> 
+               <br/>
+               <h6>Integrations</h6> 
+             </div>
+           </div>
+
+           <div className="col">
+             <div>
+               <Icon icon={bars} size={100}/> 
+               <br/>
+               <h6>Data</h6> 
+             </div>
+           </div>
+
+            <div className="col">
+             <div>
+               <Icon icon={optionsSettings} size={100}/> 
+               <br/>
+               <h6>Support</h6> 
+             </div>
+            </div>
+          </div>
+          
+          <br/>
         </div>
+
+
       </div>
     )
   }

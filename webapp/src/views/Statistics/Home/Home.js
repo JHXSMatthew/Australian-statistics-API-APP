@@ -53,7 +53,8 @@ class Home extends Component {
              <div>
                <Icon icon={bolt} size={100}/> 
                <br/>
-               <h6>Speed</h6> 
+               <h5>Speed</h5> 
+               <h10>15ms average response times means less time waiting, and more time doing.</h10>
              </div>
            </div>
 
@@ -61,7 +62,8 @@ class Home extends Component {
              <div>
                <Icon icon={graphs} size={100}/> 
                <br/>
-               <h6>Analytics</h6> 
+               <h5>Analytics</h5>
+               <h10>Visualisation and comparison tools gives full perspective of the data, all in one place. </h10> 
              </div>
            </div>
 
@@ -69,7 +71,8 @@ class Home extends Component {
              <div>
                <Icon icon={hddRaid} size={100}/> 
                <br/>
-               <h6>Caching</h6> 
+               <h5>Caching</h5> 
+               <h10>Caching data allows for fast data access, even without a connection to ABS. </h10> 
              </div>
             </div>
           </div>
@@ -80,7 +83,8 @@ class Home extends Component {
              <div>
                <Icon icon={circles} size={100}/> 
                <br/>
-               <h6>Integrations</h6> 
+               <h5>Integrations</h5> 
+               <h10>Integrations with external APIs gives more tools for data analysis. </h10> 
              </div>
            </div>
 
@@ -88,7 +92,8 @@ class Home extends Component {
              <div>
                <Icon icon={bars} size={100}/> 
                <br/>
-               <h6>Data</h6> 
+               <h5>Data</h5> 
+               <h10>Using ABS as the backbone of our database means access to thousands of statistics. </h10> 
              </div>
            </div>
 
@@ -96,11 +101,12 @@ class Home extends Component {
              <div>
                <Icon icon={optionsSettings} size={100}/> 
                <br/>
-               <h6>Support</h6> 
+               <h5>Support</h5> 
+               <h10>Complete documentation available online, and fast support response. </h10> 
              </div>
             </div>
           </div>
-          
+
           <br/>
         </div>
 

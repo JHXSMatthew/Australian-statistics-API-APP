@@ -23,36 +23,54 @@ export const AREA = [
 ];
 
 export const CATEGORY_ME = [
-  { label: 'All categories', value: 'Total' },
-  { label: 'Food And Live Animals', value: 'FoodAndLiveAnimals' },
-  { label: 'Beverages And Tobacco', value: 'BeveragesAndTobacco' },
-  { label: 'Crud Material And Inedible', value: 'CrudMaterialAndInedible' },
-  { label: 'Mineral Fuel Lubricent And related material', value: 'MineralFuelLubricentAndRelatedMaterial' },
-  { label: 'Animal and vegitable oil fat and waxes', value: 'AnimalAndVegitableOilFatAndWaxes' },
-  { label: 'Chemicals And Related Products', value: 'ChemicalsAndRelatedProducts' },
-  { label: 'Manufacture Goods', value: 'ManufacturedGoods' },
-  { label: 'Machinery And Transport Equipments', value: 'MachineryAndTransportEquipments' },
-  { label: 'Other Manufactured Articles', value: 'OtherManufacturedArticles' },
-  { label: 'Unclassified', value: 'Unclassified' },
+  { label: 'All categories', value: 'Total' , },
+  { label: 'Food And Live Animals', value: 'FoodAndLiveAnimals', topics:['FOD','COR','GRA','COC','LIV','SUG','ORJ','MEAL','COF','TEA'], InstrumentID: [] },
+  { label: 'Beverages And Tobacco', value: 'BeveragesAndTobacco', topics: ['BEV'] },
+  { label: 'Crud Material And Inedible', value: 'CrudMaterialAndInedible', topics: ['RUB','TIM']},
+  { label: 'Mineral Fuel Lubricent And related material', value: 'MineralFuelLubricentAndRelatedMaterial', topics:['LNG','COA','HOIL','LPG','NGS','JET','MOG'] },
+  { label: 'Animal and vegitable oil fat and waxes', value: 'AnimalAndVegitableOilFatAndWaxes', topics:['OILS']},
+  { label: 'Chemicals And Related Products', value: 'ChemicalsAndRelatedProducts', topics:['CHE','DRU','PLAS'] },
+  { label: 'Manufacture Goods', value: 'ManufacturedGoods' , topics:['STL','MET','GOL','TIM']},
+  { label: 'Machinery And Transport Equipments', value: 'MachineryAndTransportEquipments',topics:['AUT','AIR','MAC','ELC']},
+  { label: 'Other Manufactured Articles', value: 'OtherManufacturedArticles' , topics:['BLD','APL']},
+  { label: 'Unclassified', value: 'Unclassified' , topics: ['MIS','BIOF','GMO','MIN','URAN','WOOL','PROD','CRU','ENR','NUC','RNW']},
 ];
 
 export const CATEGORY_RT = [
 { label: 'All categories', value: 'Total' },
-{ label: 'Food related category', value: 'Food' },
-{ label: 'HouseholdGood category', value: 'HouseholdGood' },
-{ label: 'Clothing Footware And Personal Accessory category', value: 'ClothingFootwareAndPersonalAccessory' },
-{ label: 'Stores', value: 'DepartmentStores' },
-{ label: 'Restaurants', value: 'CafesResturantsAndTakeawayFood' },
-{ label: 'others', value: 'Other' },
+{ label: 'Food related category', value: 'Food' , topics: ['RET']},
+{ label: 'HouseholdGood category', value: 'HouseholdGood' , topics: ['FOD']},
+{ label: 'Clothing Footware And Personal Accessory category', value: 'ClothingFootwareAndPersonalAccessory', topics:['TEX'] },
+{ label: 'Stores', value: 'DepartmentStores' , topics: ['WHO']},
+{ label: 'Restaurants', value: 'CafesResturantsAndTakeawayFood', topics:['LEI'] },
+{ label: 'others', value: 'Other' , topics:['RET']},
 ];
 
-function valueToLabel(array,value){
+export function valueToLabel(array,value){
   for(var i = 0 ; i < array.length ; i ++){
     if(array[i].value && array[i].value === value){
       return array[i].label;
     }
   }
   return null;
+}
+
+export function labelToTopics(array,label){
+    var returnValue = [];
+    if(label === 'All categories'){
+      for(var i = 0 ; i < array.length ; i ++){
+        for(var j = 0; j < array[i].topics.length ; j ++){
+          returnValue.push(array[i].topics[j]);
+        }
+      }
+    }else{
+      for(var i = 0 ; i < array.length ; i ++){
+        if(array[i].label === label){
+          return array[i].topics;
+        }
+      }
+    }
+    return returnValue;
 }
 
 class DataAnalyzer extends Component {

@@ -8,8 +8,14 @@ import Icon from 'react-icons-kit';
       import { bars } from 'react-icons-kit/metrize/bars';
       import { circles } from 'react-icons-kit/metrize/circles';
       import { hddRaid } from 'react-icons-kit/metrize/hddRaid'
+import { Link } from 'react-router'
 
 class Home extends Component {
+
+  handleClick(e) {
+    e.preventDefault();
+    this.props.history.push('/about');
+  }
 
   render() {
     return (
@@ -19,14 +25,17 @@ class Home extends Component {
         <div style={{height: '450px'}}>
           <Parallax bgImage={homeBackground} strength={-300} style={{height: '350px'}}>
             <br/>
-            <h1 style={{textAlign: 'center', color: 'white', textShadow: "1px 1px black"}}><br/><br/>Team Rocket <br/> Statistics API <br/></h1>
-            <div style={{height: '250px'}}></div> 
+            <h1 style={{textAlign: 'center', color: 'white', textShadow: "1px 1px black"}}>
+            <br/><br/>Team Rocket <br/> Statistics API<br/></h1>
+            <div style={{textAlign:'center', marginTop: '180px'}}>
+              <a class="nav-link" href="#dataAnalyzer" style={{textAlign: "center", borderRadius:"25px", padding: '15px ', backgroundColor: '#288BE4', color: 'white', fontSize:'20px'}}>Analytics Platform</a>
+            </div>
+            <div style={{height: '70px'}}></div> 
           </Parallax>
         </div>
 
-        <div style={{backgroundColor: 'white'}}>
+        <div style={{backgroundColor: 'white', marginTop: '20px'}}>
           <h1 style={{textAlign: 'center'}}><br/>Statistics available at rocket speeds.<br/></h1><br/>
-
             <h6 style={{textAlign: 'center', padding: '20px', lineHeight: '20px'}}>
             Our team has developed an API that retrieves Statistics on retail and merchandise export data within Australia. 
             The user is able to access and specify various fields of statistical areas such as data types, geographical regions,

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, {Component} from 'react';
 import DataFetcher from './DataFetcher.js';
 import ResultPanel from './ResultPanel.js';

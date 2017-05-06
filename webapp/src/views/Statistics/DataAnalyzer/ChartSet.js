@@ -8,6 +8,7 @@ class Charts extends Component {
   constructor(props){
     super(props);
     this.toggle = this.toggle.bind(this);
+    this.handleClick = this.handleClick.bind(this);
     this.state = {
       activeTab: '1'
     };
@@ -21,6 +22,16 @@ class Charts extends Component {
     }
   }
 
+  handleClick(e,c){
+
+    if(e){
+      var element = e[0];
+      var index = element._index;
+      var date = element._xScale.ticks[index];
+      console.log(date);
+    }
+
+  }
 
   componentWillMount(){
     this.componentWillReceiveProps(this.props);
@@ -100,6 +111,8 @@ class Charts extends Component {
                   datasets: dataSet,
                   labels: labels
                 }}
+                getElementAtEvent={this.handleClick}
+
                 options={{
                   responsive: true,
                   scales: {
@@ -175,5 +188,6 @@ class Charts extends Component {
     )
   }
 }
+
 
 export default Charts;

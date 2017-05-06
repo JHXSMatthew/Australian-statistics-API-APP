@@ -1,34 +1,41 @@
 import React, {Component} from 'react';
 import { Line } from 'react-chartjs-2';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import TimePoint from './TimePoint.js';
+import TimePointsPanel from './TimePointPanel.js';
+
+import { ListGroup,ListGroupItem,Label,FormGroup,Input,CardColumns,CardHeader, Card, CardText, CardBlock,Row, Col,Container} from 'reactstrap';
 import 'chartjs-plugin-zoom/chartjs-plugin-zoom.js';
 
 // chats components
 class Charts extends Component {
   constructor(props){
     super(props);
-    this.toggle = this.toggle.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.state = {
-      activeTab: '1'
+      timePoints: [],
+      tabIndex: 0
     };
   }
 
-  toggle(tab) {
-    if (this.state.activeTab !== tab) {
-      this.setState({
-        activeTab: tab
-      });
-    }
-  }
+
 
   handleClick(e,c){
-
-    if(e){
+    if(e && e[0]){
       var element = e[0];
       var index = element._index;
       var date = element._xScale.ticks[index];
-      console.log(date);
+      var tp = this.state.timePoints;
+      for(var i = 0 ; i < tp.length ; i ++){
+        if(tp[i].key === date+this.state.navs[this.state.tabIndex].key){
+          console.log("duplicate");
+          return;
+        }
+      }
+      tp.unshift(<TimePoint key={date+this.state.navs[this.state.tabIndex].key} time={date} category={this.state.navs[this.state.tabIndex].key} />)
+      this.setState({
+        timePoints: tp,
+      });
     }
 
   }
@@ -166,25 +173,29 @@ class Charts extends Component {
 
 
     return (
-        <div className="card">
-          <div className="card-header">
-            <strong>Charts</strong>
-          </div>
-          <div className="card-block">
-            <div className="col-md-12 mb-12">
-              <Tabs
-                selectedIndex={0}
-              >
-                <TabList>
-                    {this.state.navs}
-                </TabList>
 
-                {this.state.charts}
-
-            </Tabs>
-            </div>
-          </div>
-        </div>
+        <Col md="8" xs="8" >
+          <Card>
+            <CardHeader>
+              <strong>Charts</strong>
+            </CardHeader>
+            <CardBlock>
+              <Col md="12" xs="12">
+                <Tabs selectedIndex={this.state.tabIndex} onSelect={tabIndex => this.setState({ tabIndex })}>
+                  <TabList>
+                      {this.state.navs}
+                  </TabList>
+                  {this.state.charts}
+                </Tabs>
+              </Col>
+            </CardBlock>
+          </Card>
+          <Row>
+            <Col md="12" xs="12">
+              <TimePointsPanel timePoints={this.state.timePoints}/>
+            </Col>
+          </Row>
+        </Col>
     )
   }
 }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Parallax, Background } from 'react-parallax';
-import homeBackground from './home_background.png' // relative path to image 
+import homeBackground from './home_background.png' // relative path to image
+import rocketMin from './rocket_img.png' // relative path to image  
 import Icon from 'react-icons-kit';
       import { graphs } from 'react-icons-kit/metrize/graphs';
       import { bolt } from 'react-icons-kit/metrize/bolt'
@@ -42,15 +43,14 @@ class Home extends Component {
             categories of data and time period. Leave the rest to us - the information requested will be delivered at lightning
             fast speeds, available for viewing and analysis on our analytics platform, or as raw JSON.</h6>
 
-            <h6 style={{textAlign: 'center', padding: '20px', lineHeight: '20px'}}>
-            Users are able to call our API through standard HTTP request methods. To learn about the relevant parameters and
-            expected inputs and outputs to use our API through this method,
-            <a href="#/documentation/DeveloperAPI">visit our documentation here.</a></h6>
+            <h6 style={{textAlign: 'center', padding: '20px', paddingTop:'0px', lineHeight: '20px'}}>
+            Users are able to call our API through standard HTTP request methods. </h6>
 
-            <h6 style={{textAlign: 'center', padding: '20px', lineHeight: '20px'}}>
-            Users are able to test and use our API live through our analytics interface. 
-            <a href="#/dataAnalyzer">Visit our analytics interface here.</a></h6>
-            <br/>
+            <div style={{textAlign: 'center', padding: '10px'}}>
+              <a class="nav-link" href="#Documentation/DeveloperAPI" style={{textAlign: "center", borderRadius:"25px", padding: '15px', backgroundColor: '#288BE4', color: 'white', fontSize:'20px'}}>Documentation</a>
+            </div>
+            <img src={rocketMin} style={{width: '100%',paddingTop:'20px'}}/>
+            <br/><br/>
         </div>
 
         <div className="card" style={{backgroundColor: '#263238', color: 'white', padding: '20px'}}>

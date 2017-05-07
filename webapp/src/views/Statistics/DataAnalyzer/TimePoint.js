@@ -12,26 +12,40 @@ class TimePoint extends Component{
       time: this.props.time,
       category: this.props.category,
       up: 5,
-      low: 5
+      low: 5,
+      canUpdate: false,
+      update: false
     };
     this.setUp = this.setUp.bind(this);
     this.setLow = this.setLow.bind(this);
     this.getStarting = this.getStarting.bind(this);
     this.getEnd = this.getEnd.bind(this);
     this.getDate = this.getDate.bind(this);
+    this.update = this.update.bind(this);
   }
 
+  update(event){
+    this.setState({
+      canUpdate: false,
+      update: true
+    });
+    console.log("update clicked.");
+  }
   setUp(event){
     var v = event.target.value;
     this.setState({
-      up: {v}
+      update: false,
+      up: v,
+      canUpdate: true
     });
   }
 
   setLow(event){
     var v = event.target.value;
     this.setState({
-      low: {v}
+      canUpdate: true,
+      update: false,
+      low: v
     });
   }
 
@@ -58,24 +72,30 @@ class TimePoint extends Component{
           <CardHeader>
             Time Point at {this.state.time} for {this.props.category}
           </CardHeader>
-
               <ListGroup>
                 <ListGroupItem>
-                  <Col>
+                  <Col  md="5" xs="5">
                     <Label>Days Before</Label>
                     <Input type="number" defaultValue="5" size="sm" placeholder="Days Before Time Point" onChange={this.setLow} />
                   </Col>
-                  <Col>
+                  <Col md="5" xs="5">
                     <Label>Days After</Label>
                     <Input type="number" defaultValue="5" size="sm" placeholder="Days After Time Point" onChange={this.setUp} />
+                  </Col>
+                  <Col md="2" xs="2">
+                    <Label>Click To Update
+                    </Label>
+                    <Button outline color="info" disabled={!this.state.canUpdate} onClick={this.update} >
+                       Update
+                    </Button>
                   </Col>
                 </ListGroupItem>
 
                 <ListGroupItem>
-                  <CompanyReturn category={this.props.category} date={this.getDate} up={this.state.up} low={this.state.low}/>
+                  <CompanyReturn category={this.props.category} date={this.getDate} up={this.state.up} low={this.state.low} update={this.state.update}/>
                 </ListGroupItem>
                 <ListGroupItem>
-                    <News category={this.props.category} starting={this.getStarting} ending={this.getEnd}/>
+                    <News category={this.props.category} starting={this.getStarting} ending={this.getEnd}  update={this.state.update}/>
                 </ListGroupItem>
               </ListGroup>
         </Card>
@@ -123,10 +143,14 @@ class News extends Component{
 
   }
   componentWillMount(){
-    this.componentWillReceiveProps(this.props);
+    this.fetch();
   }
 
   componentWillReceiveProps(nextProps){
+    if(!nextProps.update){
+      return;
+    }
+    this.state.table = [];
     this.fetch();
   }
 
@@ -295,10 +319,14 @@ class CompanyReturn extends Component{
   }
 
   componentWillMount(){
-    this.componentWillReceiveProps(this.props);
+    this.fetch();
   }
 
   componentWillReceiveProps(nextProps){
+    if(!nextProps.update){
+      return;
+    }
+    this.state.table = [];
     this.fetch();
   }
 

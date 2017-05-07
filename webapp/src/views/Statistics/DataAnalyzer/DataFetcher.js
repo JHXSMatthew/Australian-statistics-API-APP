@@ -102,64 +102,66 @@ class DataFetcher extends Component {
     var button = (this.state.area && this.state.region && this.state.category && this.state.region.length > 0 && this.state.category.length > 0) ? false : true;
 
     return (
-        <div className="card">
-          <div className="card-header">
-            <strong>Data fetcher</strong>
-            <span className="float-right"><i className="icon-question" id="Popover1" onClick={this.toggle}></i></span>
-          </div>
-          <Popover placement="bottom" isOpen={this.state.popoverOpen} target="Popover1" toggle={this.toggle}>
-             <PopoverTitle>Data Fetcher</PopoverTitle>
-             <PopoverContent>Fill all forms and click fetch to fetch data. All fetched data will be shown in Data Set and charts will be shown.</PopoverContent>
-           </Popover>
-          <div className="card-block">
-            <div className="row">
-              <div className="col-sm-12 col-md-12">
-                <div className="form-group">
-                  <label htmlFor="name">Statistics Area</label>
-                  <AreaSelector setArea={this.setArea}/>
-                </div>
-              </div>
+        <div style={{padding: 20}}>
+          <div className="card">
+            <div className="card-header">
+              <strong>Data fetcher</strong>
+              <span className="float-right"><i className="icon-question" id="Popover1" onClick={this.toggle}></i></span>
             </div>
-            <div className="row">
-              <div className="col-sm-12 col-md-12">
-                <div className="form-group">
-                  <label htmlFor="regions">Regions</label>
-                  <StateSelector setRegion={this.setRegion}/>
+            <Popover placement="bottom" isOpen={this.state.popoverOpen} target="Popover1" toggle={this.toggle}>
+               <PopoverTitle>Data Fetcher</PopoverTitle>
+               <PopoverContent>Fill all forms and click fetch to fetch data. All fetched data will be shown in Data Set and charts will be shown.</PopoverContent>
+             </Popover>
+            <div className="card-block">
+              <div className="row">
+                <div className="col-sm-12 col-md-12">
+                  <div className="form-group">
+                    <label htmlFor="name">Statistics Area</label>
+                    <AreaSelector setArea={this.setArea}/>
+                  </div>
                 </div>
               </div>
+              <div className="row">
+                <div className="col-sm-12 col-md-12">
+                  <div className="form-group">
+                    <label htmlFor="regions">Regions</label>
+                    <StateSelector setRegion={this.setRegion}/>
+                  </div>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-sm-12 col-md-12">
+                  <div className="form-group">
+                    <label htmlFor="category">Category</label>
+                    <CategorySelector setCategory={this.setCategory} area={this.state.area} category={this.state.category}/>
+                  </div>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-sm-12 col-md-12">
+                  <div className="form-group">
+                    <label htmlFor="daterange">Date Range</label>
+                    <MonthBox value={this.state.mrange} ClickRangeBox={this.handleClickRangeBox} />
+                  </div>
+                </div>
+              </div>
+
+                <Picker
+                    ref="pickRange"
+                    years={{min: 1983, max: 2017}}
+                    range={this.state.mrange}
+                    lang={DATE_LANG}
+                    theme="light"
+                    onChange={this.handleRangeChange}
+                    onDismiss={this.handleRangeDissmis}
+                    >
+                </Picker>
             </div>
-            <div className="row">
-              <div className="col-sm-12 col-md-12">
-                <div className="form-group">
-                  <label htmlFor="category">Category</label>
-                  <CategorySelector setCategory={this.setCategory} area={this.state.area} category={this.state.category}/>
-                </div>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-sm-12 col-md-12">
-                <div className="form-group">
-                  <label htmlFor="daterange">Date Range</label>
-                  <MonthBox value={this.state.mrange} ClickRangeBox={this.handleClickRangeBox} />
-                </div>
-              </div>
+            <div className="card-footer">
+              <button className="btn btn-sm btn-primary" onClick={this.fetch} disabled={button} ><i className="fa fa-dot-circle-o" ></i> Fetch</button>
             </div>
 
-              <Picker
-                  ref="pickRange"
-                  years={{min: 1983, max: 2017}}
-                  range={this.state.mrange}
-                  lang={DATE_LANG}
-                  theme="light"
-                  onChange={this.handleRangeChange}
-                  onDismiss={this.handleRangeDissmis}
-                  >
-              </Picker>
           </div>
-          <div className="card-footer">
-            <button className="btn btn-sm btn-primary" onClick={this.fetch} disabled={button} ><i className="fa fa-dot-circle-o" ></i> Fetch</button>
-          </div>
-
         </div>
 
     )

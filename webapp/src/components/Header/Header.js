@@ -49,7 +49,7 @@ class Header extends Component {
             <a className="nav-link" href="#/release">Release</a>
           </li>
           <li className="nav-item px-1">
-            <a className="nav-link" href="#/documentation/gettingStarted">Documentation</a>
+            <a className="nav-link" href="#/documentation/DeveloperAPI">Documentation</a>
           </li>
           <li className="nav-item px-1">
             <a className="nav-link" href="#/about">About</a>

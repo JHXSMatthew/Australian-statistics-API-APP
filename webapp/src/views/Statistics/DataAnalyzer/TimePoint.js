@@ -91,7 +91,9 @@ function labelToTopics(array,label){
       for(var i = 0 ; i < array.length ; i ++){
         if(array[i].topics){
           for(var j = 0; j < array[i].topics.length ; j ++){
-            returnValue.push(array[i].topics[j]);
+            if(returnValue.indexOf(array[i].topics[j]) == -1){
+              returnValue.push(array[i].topics[j]);
+            }
           }
         }
       }
@@ -266,7 +268,9 @@ function labelToInstruments(array,label){
       for(var i = 0 ; i < array.length ; i ++){
         if(array[i].instruments){
           for(var j = 0; j < array[i].instruments.length ; j ++){
-            returnValue.push(array[i].instruments[j]);
+            if(returnValue.indexOf(array[i].instruments[j]) == -1){
+              returnValue.push(array[i].instruments[j]);
+            }
           }
         }
       }

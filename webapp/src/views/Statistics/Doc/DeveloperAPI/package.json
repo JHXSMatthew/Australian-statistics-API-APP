@@ -2,5 +2,8 @@
   "name": "Introduction",
   "version": "0.0.0",
   "private": true,
-  "main": "./Introduction.js"
+  "main": "./Introduction.js",
+  "dependencies": {
+    "@synapsestudios/react-scroll": "^1.0.4"
+  }
 }

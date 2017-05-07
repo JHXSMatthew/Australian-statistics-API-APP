@@ -45,6 +45,9 @@ class Header extends Component {
             <a className="nav-link" href="#/release" style={{color:'white'}}>Release</a>
           </li>
           <li className="nav-item px-1">
+            <a className="nav-link" href="#/dataAnalyzer" style={{color:'white'}}>Analytics Platform</a>
+          </li>
+          <li className="nav-item px-1">
             <a className="nav-link" href="#/documentation/DeveloperAPI" style={{color:'white'}}>Documentation</a>
           </li>
           <li className="nav-item px-1">

@@ -24,18 +24,17 @@ class Home extends Component {
       <div className="animated fadeIn">
 
         <div style={{height: '450px'}}>
-          <Parallax bgImage={homeBackground} strength={-300} style={{height: '350px'}}>
-            <br/>
-            <h1 style={{textAlign: 'center', color: 'white', textShadow: "1px 1px black"}}>
-            <br/><br/>Team Rocket <br/> Statistics API<br/></h1>
-            <div style={{textAlign:'center', marginTop: '180px'}}>
+          <Parallax bgImage={homeBackground} strength={-300} style={{height: '500px'}}>
+            <h1 style={{textAlign: 'center', color: 'white', textShadow: "2px 2px 20px black", fontFamily: "signPainter", fontSize: '80px'}}>
+            <br/>Team Rocket <br/> Statistics API<br/></h1>
+            <div style={{textAlign:'center', marginTop: '150px'}}>
               <a class="nav-link" href="#dataAnalyzer" style={{textAlign: "center", borderRadius:"25px", padding: '15px ', backgroundColor: '#288BE4', color: 'white', fontSize:'20px'}}>Analytics Platform</a>
             </div>
-            <div style={{height: '70px'}}></div> 
+            <div style={{height: '110px'}}></div> 
           </Parallax>
         </div>
 
-        <div style={{backgroundColor: 'white', marginTop: '20px'}}>
+        <div style={{backgroundColor: 'white', marginTop: '80px'}}>
           <h1 style={{textAlign: 'center'}}><br/>Statistics available at rocket speeds.<br/></h1><br/>
             <h6 style={{textAlign: 'center', padding: '20px', lineHeight: '20px'}}>
             Our team has developed an API that retrieves Statistics on retail and merchandise export data within Australia. 
@@ -50,11 +49,9 @@ class Home extends Component {
               <a class="nav-link" href="#Documentation/DeveloperAPI" style={{textAlign: "center", borderRadius:"25px", padding: '15px', backgroundColor: '#288BE4', color: 'white', fontSize:'20px'}}>Documentation</a>
             </div>
             <img src={rocketMin} style={{width: '100%',paddingTop:'20px'}}/>
-            <br/><br/>
         </div>
 
         <div className="card" style={{backgroundColor: '#263238', color: 'white', padding: '20px'}}>
-        <br/>
         <h1 style={{textAlign: "center"}}>Features</h1>
         <br/><br/>
          <div className="row" style={{textAlign: "center"}}>

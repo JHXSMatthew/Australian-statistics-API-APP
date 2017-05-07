@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import { ListGroup,ListGroupItem,Label,FormGroup,Input,CardColumns,CardHeader, Card, CardText, CardBlock,Row, Col,Container} from 'reactstrap';
+import {ModalFooter, ModalBody, ModalHeader,Modal, Button, ListGroup,ListGroupItem,Label,FormGroup,Input,CardColumns,CardHeader, Card, CardText, CardBlock,Row, Col,Container} from 'reactstrap';
 import ReactTable from 'react-table'
 import {CATEGORY_RT} from './DataAnalyzer.js';
 import {CATEGORY_ME} from './DataAnalyzer.js';
@@ -77,7 +77,6 @@ class TimePoint extends Component{
                 <ListGroupItem>
                     <News category={this.props.category} starting={this.getStarting} ending={this.getEnd}/>
                 </ListGroupItem>
-
               </ListGroup>
         </Card>
       )
@@ -116,12 +115,18 @@ class News extends Component{
 
   constructor(props){
     super(props);
-    console.log(this.props.ending());
-    console.log(this.props.starting());
-    //this.fetch();
+    this.state = {
+      table: []
+    }
+
+  }
+  componentWillMount(){
+    this.componentWillReceiveProps(this.props);
   }
 
-
+  componentWillReceiveProps(nextProps){
+    this.fetch();
+  }
 
   fetch(){
     var that = this;
@@ -129,51 +134,128 @@ class News extends Component{
     var topics = labelToTopics(CATEGORY_RT,this.props.category);
     if(!topics){
       topics = labelToTopics(CATEGORY_ME,this.props.category);
+    }/*
+    var instruments = labelToInstruments(CATEGORY_RT,this.props.category);
+    if(!instruments){
+      instruments = labelToInstruments(CATEGORY_ME,this.props.category);
     }
-    var InstrumentIDs = ""; //TODO: Mathew's insturments ID
-  //  var url = 'https://nickr.xyz/coolbananas/api/?TopicCodes='+ topics.join() +'&StartDate='
-  //  + this.getDateString(this.props.starting()) +'T00:00:00.000Z&EndDate='+ this.getDateString(this.props.ending()) +'T00:00:00.000Z';
-  //  console.log(url);
-    // var url = "https://nickr.xyz/coolbananas/api/?InstrumentIDs=BHP.AX,BLT.L&TopicCodes=AMERS,COM&StartDate=2015-10-01T00:00:00.000Z&EndDate=2015-10-10T00:00:00.000Z";
-    //TODO: wtf is this new API, we need somehow ask this or what.  NO DATA for relevant topics AT ALL!
-    var url = "http://174.138.67.207/InstrumentID/ABP.AX,AAPL/DateOfInterest/2012-12-10/List_of_Var/CM_Return,AV_Return/Upper_window/5/Lower_window/3";
+    var ids = [];
+    var names = [];
+    for(var i = 0 ; i < instruments.length ; i ++){
+      ids.push(instruments[i].id);
+      names.push(instruments[i].name);
+    }
 
-    fetch( url,{
+
+        var urlIns = 'https://nickr.xyz/coolbananas/api/?=InstrumentIDs='+ ids.join() +'&StartDate='
+        + getDateString(this.props.starting()) +'T00:00:00.000Z&EndDate='+ getDateString(this.props.ending()) +'T00:00:00.000Z';
+        console.log("News True URL: " + urlIns);
+
+        fetch( proxy + urlIns,{
+          method: 'GET',
+        })
+        .then(function(response) {
+          if (response.status >= 400) {
+            alert("news API data source is down, check console for details.")
+            return;
+          }
+          return response.json().then(function (json) {
+            console.log(json);
+          })
+
+        });
+    */
+
+    var proxy = "https://cors-anywhere.herokuapp.com/";
+    //Cool banananananan's news API
+    //var urlTopics = 'https://nickr.xyz/coolbananas/api/?TopicCodes='+ topics.join() +'&StartDate='
+    //+ getDateString(this.props.starting()) +'T00:00:00.000Z&EndDate='+ getDateString(this.props.ending()) +'T00:00:00.000Z';
+    var urlTopics = "https://nickr.xyz/coolbananas/api/?InstrumentIDs=BHP.AX,BLT.L&TopicCodes=AMERS,COM&StartDate=2015-10-01T00:00:00.000Z&EndDate=2015-10-10T00:00:00.000Z";
+    console.log("News True URL: " + urlTopics);
+
+    fetch( proxy + urlTopics,{
       method: 'GET',
-      headers: {
-       'Accept': 'application/json',
-       'Content-Type': 'application/json',
-      }
     })
     .then(function(response) {
       if (response.status >= 400) {
-        alert("Our data source is down, please wait for a while and we'll fix it asap.")
+        alert("news API data source is down, check console for details.")
         return;
       }
       return response.json().then(function (json) {
+        json = json.NewsDataSet;
+        for(var i = 0 ; i < json.length ; i ++){
+          json[i].button = <NewsArticle title={json[i].Headline} article={json[i].NewsText} />
+        }
+        that.setState({
+          table: json
+        });
         console.log(json);
       })
 
     });
 
+
+
   }
 
   render(){
-
-    console.log(this.props.category);
-    var topics = labelToTopics(CATEGORY_RT,this.props.category);
-    if(!topics){
-      topics = labelToTopics(CATEGORY_ME,this.props.category);
-    }
-
+    const newsTable = [{
+      header: 'News Title',
+      accessor: 'Headline' // String-based value accessors!
+    }, {
+      header: 'Article',
+      accessor: 'button',
+      maxWidth: 100
+    }];
     return(
-      <div>
-        {topics}
-      </div>
+        <Col md="12" xs="12">
+          <ReactTable
+            data={this.state.table}
+            columns={newsTable}
+            defaultPageSize={5}
+            noDataText='Loading...'
+            pageSize={(this.state.table &&  this.state.table.length) ?  this.state.table.length : 7}
+          />
+      </Col>
     );
 
   }
 
+}
+
+class NewsArticle extends Component{
+  constructor(props) {
+    super(props);
+    this.state = {
+      modal: false
+    }
+    this.toggle = this.toggle.bind(this);
+  }
+
+  toggle() {
+    this.setState({
+      modal: !this.state.modal
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <Button color="info" onClick={this.toggle}>View</Button>
+        <Modal size="modal-lg" isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+          <ModalHeader toggle={this.toggle}>{this.props.title}</ModalHeader>
+          <ModalBody>
+            {this.props.article.split("\n").map(i => {
+              return <div key={i} >{i}</div>;
+            })}
+          </ModalBody>
+          <ModalFooter>
+            <Button color="secondary" onClick={this.toggle}>Close</Button>
+          </ModalFooter>
+        </Modal>
+      </div>
+    );
+  }
 }
 
 
@@ -215,7 +297,9 @@ class CompanyReturn extends Component{
   componentWillReceiveProps(nextProps){
     this.fetch();
   }
-  fetch(){
+
+  fetch(a){
+
     var that = this;
     var instruments = labelToInstruments(CATEGORY_RT,this.props.category);
     if(!instruments){
@@ -229,42 +313,57 @@ class CompanyReturn extends Component{
     }
 
     var proxy = "https://cors-anywhere.herokuapp.com/";
-  // seesharp's API
-  //  var url = "http://174.138.67.207/InstrumentID/"+ ids.join()
-  //      +  "/DateOfInterest/"+ getDateString(this.props.date())
-  //      +  "/List_of_Var/CM_Return,AV_Return/Upper_window/"+ this.props.up
-  //      +  "/Lower_window/" + this.props.low;
+
    //Alvin's frined's API,
-    var url = "http://128.199.255.9/v3/id="+ ids.join(";")
-       +  "&dateOfInterest="+ getDateString(this.props.date())
-       +  "&listOfVars=AV_Return;CM_Return&upperWindow="+ this.props.up
-       +  "&lowerWindow=" + this.props.low;
-
+    var url  = "http://174.138.67.207/InstrumentID/"+ ids.join()
+        +  "/DateOfInterest/"+ getDateString(this.props.date())
+       +  "/List_of_Var/CM_Return,AV_Return/Upper_window/"+ this.props.up
+      +  "/Lower_window/" + this.props.low;
+    if(a){
+       // seesharp's API
+      url = "http://128.199.255.9/v3/id="+ ids.join(";")
+           +  "&dateOfInterest="+ getDateString(this.props.date())
+           +  "&listOfVars=AV_Return;CM_Return&upperWindow="+ this.props.up
+           +  "&lowerWindow=" + this.props.low;
+    }
     console.log("company return True URL:" + url);
-    fetch(proxy + url,{
-      method: 'GET',
+    try{
+      fetch(proxy + url,{
+        method: 'GET',
 
-    })
-    .then(function(response) {
-      if (response.status >= 400) {
-        alert("CompanyReturns API down, check console.");
-        return;
-      }
-      return response.json().then(function (json) {
-        json = json.CompanyReturns;
-        for(var i = 0 ; i < json.length ; i++ ){
-          json[i].name = names[ids.indexOf(json[i].InstrumentID)];
-          var av = 0;
-          for(var j = 0 ; j < json[i].Data.length ; j ++){
-            av += json[i].Data[j].AV_Return;
-          }
-          json[i].AV_Return = av/json[i].Data.length ;
-        }
-        that.setState({
-          table: json
-        });
       })
-    });
+      .then(function(response) {
+        if (response.status >= 400) {
+          alert("CompanyReturns API down, check console.");
+          if(!a){
+            that.fetch(true);
+          }
+          return;
+        }
+        return response.json().then(function (json) {
+          json = json.CompanyReturns;
+          for(var i = 0 ; i < json.length ; i++ ){
+            json[i].name = names[ids.indexOf(json[i].InstrumentID)];
+            var av = 0;
+            for(var j = 0 ; j < json[i].Data.length ; j ++){
+              av += json[i].Data[j].AV_Return;
+            }
+            json[i].AV_Return = av/json[i].Data.length ;
+          }
+          that.setState({
+            table: json
+          });
+        })
+      }).then(function(something){
+        if(!a){
+          that.fetch(true);
+      }});
+
+    }catch(e){
+      if(!a){
+        that.fetch(true);
+      }
+    }
   }
 
   render(){
@@ -292,8 +391,6 @@ class CompanyReturn extends Component{
         accessor: 'CM_Return',
       }
     ];
-    console.log(this.state.table);
-
     return(
         <Col md="12" xs="12">
           <ReactTable
@@ -318,6 +415,8 @@ class CompanyReturn extends Component{
   }
 
 }
+
+
 
 
 

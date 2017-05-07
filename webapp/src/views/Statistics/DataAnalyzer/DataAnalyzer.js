@@ -28,53 +28,53 @@ export const CATEGORY_ME = [
     value: 'Total' ,
   },
   { label: 'Food And Live Animals', value: 'FoodAndLiveAnimals',
-    topics:["AAA"],
+    topics:["RETA"],
     instruments: [{name:"Australian Agricultural Company", id:"AAC.AX"},{name:"Elders Ltd",id:"ELD.AX"},{name:"Graincorp Ltd",id:"GNC.AX"},{name: "Ridley Corporation Ltd",id:"RIC.AX"},{name:"Tassal Group Limited",id:"TGR.AX"},{name:"Webster Ltd",id:"WBA.AX"}]
    },
   { label: 'Beverages And Tobacco', value: 'BeveragesAndTobacco',
-    topics: ['BEV'],
+    topics: ['RETA'],
     instruments: [{name:"Coca Cola",id:"CCL.AX"}, {name:"Australian Whiskey Holdings",id:"AWY.AX"}, {name:"Tianmei Beverage Group Corporation Limited",id:"TB8.AX"}]
   },
   { label: 'Crud Material And Inedible',
     value: 'CrudMaterialAndInedible',
-    topics: ['RUB','TIM'],
+    topics: ['RETA'],
     instruments: [{name:"Alicanto Minerals Limited",id:"AQI.AX"}, {name:"Alara Resources Limited",id:"AUQ.AX"}, {name:"Atc Alloys Ltd",id:"ATA.AX"}, {name:"Woollongong Coal Limited",id:"WLC.AX"}]
 
   },
   { label: 'Mineral Fuel Lubricent And related material',
     value: 'MineralFuelLubricentAndRelatedMaterial',
-    topics:['LNG','COA','HOIL','LPG','NGS','JET','MOG'],
+    topics:['RETA'],
     instruments: [{name:"Ceramic Fuel Cells Limited",id:"CFU.AX"}, {name:"Antilles Oil And Gas",id:"AZZ.AX"}, {name:"Austex Oil Limited",id:"AOK.AX"}, {name:"Freedom Oil And Gas Limited",id:"FDM.AX"}, {name:"BHP Billiton Limited",id:"BHP.AX"}]
    },
   { label: 'Animal and vegitable oil fat and waxes',
     value: 'AnimalAndVegitableOilFatAndWaxes',
-    topics:['OILS'],
+    topics:['RETA'],
     instruments: [{name:"Australian Agricultural Company", id:"AAC.AX"},{name:"Elders Ltd",id:"ELD.AX"},{name:"Graincorp Ltd",id:"GNC.AX"},{name: "Ridley Corporation Ltd",id:"RIC.AX"},{name:"Tassal Group Limited",id:"TGR.AX"},{name:"Webster Ltd",id:"WBA.AX"}]
   },
   { label: 'Chemicals And Related Products',
     value: 'ChemicalsAndRelatedProducts',
-    topics:['CHE','DRU','PLAS'],
+    topics:['RETA'],
     instruments: [{name:"Acrux Limited",id:"ACR.AX"}, {name:"Bioxyne Limited",id:"BXN.AX"}, {name:"Living Cell Technologies",id:"LCT.AX"}, {name:"Medlab Clinical Limited",id:"MDC.AX"}, {name:"Suda Ltd",id:"SUD.AX"}]
 
    },
   { label: 'Manufacture Goods',
     value: 'ManufacturedGoods' ,
-    topics:['STL','MET','GOL','TIM'],
+    topics:['RETA'],
     instruments: [{name:"Ookami Limited",id:"OOK.AX"}, {name:"Advanced Braking Technology",id:"ABV.AX"}, {name:"Bluglass Limited",id:"BLG.AX"}]
   },
   { label: 'Machinery And Transport Equipments',
     value: 'MachineryAndTransportEquipments',
-    topics:['AUT','AIR','MAC','ELC'],
+    topics:['RETA'],
     instruments: [{name:"Traffic Technologies Limited",id:"TTI.AX"}, {name:"Macquarie Atlas Roads Group",id:"MQA.AX"}, {name:"Sydney Airport",id:"SYD.AX"}, {name:"Aurizon Holdings Limited",id:"AZJ.AX"}]
   },
   { label: 'Other Manufactured Articles',
     value: 'OtherManufacturedArticles' ,
-    topics:['BLD','APL'],
+    topics:['RETA'],
     instruments: [{name:"Silex Systems Limited",id:"SLX.AX"}, {name:"Netcomm Wireless Limited",id:"NTC.AX"}, {name:"Group Limited",id:"NASDAQ"}]
   },
   { label: 'Unclassified',
     value: 'Unclassified' ,
-    topics: ['MIS','BIOF','GMO','MIN','URAN','WOOL','PROD','CRU','ENR','NUC','RNW'],
+    topics: ['RETA'],
     instruments: [{name:"Coca Cola",id:"CCL.AX"}, {name:"Australian Whiskey Holdings",id:"AWY.AX"}, {name:"Tianmei Beverage Group Corporation Limited",id:"TB8.AX"}]
   },
 ];

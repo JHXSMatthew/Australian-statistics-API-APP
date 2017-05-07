@@ -17,6 +17,7 @@ export const STATE = [
 { label: 'Australian Capital Territory', value: 'ACT' },
 ];
 
+
 export const AREA = [
 { label: 'Merchandise Exports', value: 'MerchandiseExports' },
 { label: 'Retail', value: 'Retail' },
@@ -24,9 +25,14 @@ export const AREA = [
 
 export const CATEGORY_ME = [
   { label: 'All categories', value: 'Total' , },
-  { label: 'Food And Live Animals', value: 'FoodAndLiveAnimals', topics:['FOD','COR','GRA','COC','LIV','SUG','ORJ','MEAL','COF','TEA'], InstrumentID: [] },
-  { label: 'Beverages And Tobacco', value: 'BeveragesAndTobacco', topics: ['BEV'] },
-  { label: 'Crud Material And Inedible', value: 'CrudMaterialAndInedible', topics: ['RUB','TIM']},
+  { label: 'Food And Live Animals', value: 'FoodAndLiveAnimals',
+    topics:["AAA"],
+    instrumentIDs: [{id:"FNP.AX" , name:"freedom foods"}, "ING.AX","TGR.AX", "BHP.AX"] },
+  { label: 'Beverages And Tobacco', value: 'BeveragesAndTobacco',
+    topics: ['BEV'],
+    instrumentIDs: ['AHF.AX','AVG.AX','AWY.AX']},
+  { label: 'Crud Material And Inedible', value: 'CrudMaterialAndInedible',
+    topics: ['RUB','TIM']},
   { label: 'Mineral Fuel Lubricent And related material', value: 'MineralFuelLubricentAndRelatedMaterial', topics:['LNG','COA','HOIL','LPG','NGS','JET','MOG'] },
   { label: 'Animal and vegitable oil fat and waxes', value: 'AnimalAndVegitableOilFatAndWaxes', topics:['OILS']},
   { label: 'Chemicals And Related Products', value: 'ChemicalsAndRelatedProducts', topics:['CHE','DRU','PLAS'] },
@@ -55,23 +61,7 @@ export function valueToLabel(array,value){
   return null;
 }
 
-export function labelToTopics(array,label){
-    var returnValue = [];
-    if(label === 'All categories'){
-      for(var i = 0 ; i < array.length ; i ++){
-        for(var j = 0; j < array[i].topics.length ; j ++){
-          returnValue.push(array[i].topics[j]);
-        }
-      }
-    }else{
-      for(var i = 0 ; i < array.length ; i ++){
-        if(array[i].label === label){
-          return array[i].topics;
-        }
-      }
-    }
-    return returnValue;
-}
+
 
 class DataAnalyzer extends Component {
 

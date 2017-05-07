@@ -110,7 +110,12 @@ class News extends Component{
     super(props);
     console.log(this.props.ending());
     console.log(this.props.starting());
+    this.fetch();
+  }
 
+  getDateString(d){
+    d = new Date(d);
+    return d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
   }
 
 
@@ -122,7 +127,12 @@ class News extends Component{
       topics = labelToTopics(CATEGORY_ME,this.props.category);
     }
     var InstrumentIDs = ""; //TODO: Mathew's insturments ID
-    var url = 'https://nickr.xyz/coolbananas/api/?TopicCodes='+ topics.join() +'&StartDate=2015-10-01T00:00:00.000Z&EndDate=2015-10-10T00:00:00.000Z';
+  //  var url = 'https://nickr.xyz/coolbananas/api/?TopicCodes='+ topics.join() +'&StartDate='
+  //  + this.getDateString(this.props.starting()) +'T00:00:00.000Z&EndDate='+ this.getDateString(this.props.ending()) +'T00:00:00.000Z';
+  //  console.log(url);
+    // var url = "https://nickr.xyz/coolbananas/api/?InstrumentIDs=BHP.AX,BLT.L&TopicCodes=AMERS,COM&StartDate=2015-10-01T00:00:00.000Z&EndDate=2015-10-10T00:00:00.000Z";
+    //TODO: wtf is this new API, we need somehow ask this or what.  NO DATA for relevant topics AT ALL!
+    var url = "http://174.138.67.207/InstrumentID/ABP.AX,AAPL/DateOfInterest/2012-12-10/List_of_Var/CM_Return,AV_Return/Upper_window/5/Lower_window/3";
 
     fetch( url,{
       method: 'GET',
@@ -137,13 +147,13 @@ class News extends Component{
         return;
       }
       return response.json().then(function (json) {
-        //TODO: deal with empty data
-        that.props.addDataEntry(json,"Data Entry"+that.state.count++);
+        console.log(json);
       })
 
     });
 
   }
+
   render(){
 
     console.log(this.props.category);

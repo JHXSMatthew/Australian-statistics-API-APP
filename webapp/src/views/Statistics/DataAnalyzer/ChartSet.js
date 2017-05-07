@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
 import { Line } from 'react-chartjs-2';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import TimePoint from './TimePoint.js';
@@ -28,7 +29,6 @@ class Charts extends Component {
       var tp = this.state.timePoints;
       for(var i = 0 ; i < tp.length ; i ++){
         if(tp[i].key === date+this.state.navs[this.state.tabIndex].key){
-          console.log("duplicate");
           return;
         }
       }
@@ -36,6 +36,8 @@ class Charts extends Component {
       this.setState({
         timePoints: tp,
       });
+      const node = ReactDOM.findDOMNode(this.pointPanel);
+      node.scrollIntoView({behavior: "smooth"});
     }
 
   }
@@ -192,7 +194,7 @@ class Charts extends Component {
           </Card>
           <Row>
             <Col md="12" xs="12">
-              <TimePointsPanel timePoints={this.state.timePoints}/>
+              <TimePointsPanel ref={(panel) =>{this.pointPanel = panel;}}timePoints={this.state.timePoints}/>
             </Col>
           </Row>
         </Col>

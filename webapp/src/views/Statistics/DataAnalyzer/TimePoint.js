@@ -4,26 +4,6 @@ import ReactTable from 'react-table'
 import {CATEGORY_RT} from './DataAnalyzer.js';
 import {CATEGORY_ME} from './DataAnalyzer.js';
 
-function labelToTopics(array,label){
-    var returnValue = null;
-    if(label === 'All categories'){
-      returnValue = [];
-      for(var i = 0 ; i < array.length ; i ++){
-        if(array[i].topics){
-          for(var j = 0; j < array[i].topics.length ; j ++){
-            returnValue.push(array[i].topics[j]);
-          }
-        }
-      }
-    }else{
-      for(var i = 0 ; i < array.length ; i ++){
-        if(array[i].label === label){
-          return array[i].topics;
-        }
-      }
-    }
-    return returnValue;
-}
 
 class TimePoint extends Component{
   constructor(props){
@@ -38,7 +18,7 @@ class TimePoint extends Component{
     this.setLow = this.setLow.bind(this);
     this.getStarting = this.getStarting.bind(this);
     this.getEnd = this.getEnd.bind(this);
-
+    this.getDate = this.getDate.bind(this);
   }
 
   setUp(event){
@@ -92,7 +72,7 @@ class TimePoint extends Component{
                 </ListGroupItem>
 
                 <ListGroupItem>
-                    COMPANY RETURN
+                  <CompanyReturn category={this.props.category} date={this.getDate} up={this.state.up} low={this.state.low}/>
                 </ListGroupItem>
                 <ListGroupItem>
                     <News category={this.props.category} starting={this.getStarting} ending={this.getEnd}/>
@@ -104,19 +84,43 @@ class TimePoint extends Component{
   }
 }
 
+
+function labelToTopics(array,label){
+    var returnValue = null;
+    if(label === 'All categories'){
+      returnValue = [];
+      for(var i = 0 ; i < array.length ; i ++){
+        if(array[i].topics){
+          for(var j = 0; j < array[i].topics.length ; j ++){
+            returnValue.push(array[i].topics[j]);
+          }
+        }
+      }
+    }else{
+      for(var i = 0 ; i < array.length ; i ++){
+        if(array[i].label === label){
+          return array[i].topics;
+        }
+      }
+    }
+    return returnValue;
+}
+
+function getDateString(d){
+  d = new Date(d);
+  return d.getFullYear() + '-' +('0' + (d.getMonth()+1)).slice(-2) + '-' + ('0'+ (d.getDate()+1)).slice(-2);
+}
+
+
 class News extends Component{
 
   constructor(props){
     super(props);
     console.log(this.props.ending());
     console.log(this.props.starting());
-    this.fetch();
+    //this.fetch();
   }
 
-  getDateString(d){
-    d = new Date(d);
-    return d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
-  }
 
 
   fetch(){
@@ -173,41 +177,144 @@ class News extends Component{
 }
 
 
-class CompanyReturn extends Component{
+function labelToInstruments(array,label){
+    var returnValue = null;
+    if(label === 'All categories'){
+      returnValue = [];
+      for(var i = 0 ; i < array.length ; i ++){
+        if(array[i].instruments){
+          for(var j = 0; j < array[i].instruments.length ; j ++){
+            returnValue.push(array[i].instruments[j]);
+          }
+        }
+      }
+    }else{
+      for(var i = 0 ; i < array.length ; i ++){
+        if(array[i].label === label){
+          return array[i].instruments;
+        }
+      }
+    }
+    return returnValue;
+}
 
+
+class CompanyReturn extends Component{
   constructor(props){
     super(props);
+    this.state = {
+      table: []
+    }
 
   }
 
+  componentWillMount(){
+    this.componentWillReceiveProps(this.props);
+  }
 
+  componentWillReceiveProps(nextProps){
+    this.fetch();
+  }
   fetch(){
     var that = this;
+    var instruments = labelToInstruments(CATEGORY_RT,this.props.category);
+    if(!instruments){
+      instruments = labelToInstruments(CATEGORY_ME,this.props.category);
+    }
+    var ids = [];
+    var names = [];
+    for(var i = 0 ; i < instruments.length ; i ++){
+      ids.push(instruments[i].id);
+      names.push(instruments[i].name);
+    }
 
+    var proxy = "https://cors-anywhere.herokuapp.com/";
+  // seesharp's API
+  //  var url = "http://174.138.67.207/InstrumentID/"+ ids.join()
+  //      +  "/DateOfInterest/"+ getDateString(this.props.date())
+  //      +  "/List_of_Var/CM_Return,AV_Return/Upper_window/"+ this.props.up
+  //      +  "/Lower_window/" + this.props.low;
+   //Alvin's frined's API,
+    var url = "http://128.199.255.9/v3/id="+ ids.join(";")
+       +  "&dateOfInterest="+ getDateString(this.props.date())
+       +  "&listOfVars=AV_Return;CM_Return&upperWindow="+ this.props.up
+       +  "&lowerWindow=" + this.props.low;
 
-    //http://174.138.67.207/InstrumentID/ABP.AX,AAPL/DateOfInterest/2012-12-10/List_of_Var/CM_Return,AV_Return/Upper_window/5/Lower_window/3
-
-    var url = 'https://nickr.xyz/coolbananas/api/?InstrumentIDs=BHP.AX,BLT.L&TopicCodes=AMERS,COM&StartDate=2015-10-01T00:00:00.000Z&EndDate=2015-10-10T00:00:00.000Z'
-
-    fetch( url,{
+    console.log("company return True URL:" + url);
+    fetch(proxy + url,{
       method: 'GET',
-      headers: {
-       'Accept': 'application/json',
-       'Content-Type': 'application/json',
-      }
+
     })
     .then(function(response) {
       if (response.status >= 400) {
-        alert("Our data source is down, please wait for a while and we'll fix it asap.")
+        alert("CompanyReturns API down, check console.");
         return;
       }
       return response.json().then(function (json) {
-        //TODO: deal with empty data
-        that.props.addDataEntry(json,"Data Entry"+that.state.count++);
+        json = json.CompanyReturns;
+        for(var i = 0 ; i < json.length ; i++ ){
+          json[i].name = names[ids.indexOf(json[i].InstrumentID)];
+          var av = 0;
+          for(var j = 0 ; j < json[i].Data.length ; j ++){
+            av += json[i].Data[j].AV_Return;
+          }
+          json[i].AV_Return = av/json[i].Data.length ;
+        }
+        that.setState({
+          table: json
+        });
       })
-
     });
+  }
 
+  render(){
+      const compnayName = [{
+        header: 'Company',
+        accessor: 'name' // String-based value accessors!
+      }, {
+        header: 'InstrumentID',
+        accessor: 'InstrumentID',
+      }, {
+        header: 'Average Return',
+        accessor: 'AV_Return',
+      }];
+      const compnayDetail = [{
+        header: 'Date',
+        accessor: 'Date' // String-based value accessors!
+      },{
+       header: 'Return',
+       accessor: 'Return',
+      }, {
+        header: 'Average Retrun',
+        accessor: 'AV_Return',
+      }, {
+        header: ' Cumulative Return',
+        accessor: 'CM_Return',
+      }
+    ];
+    console.log(this.state.table);
+
+    return(
+        <Col md="12" xs="12">
+          <ReactTable
+            data={this.state.table}
+            columns={compnayName}
+            defaultPageSize={5}
+            noDataText='Loading...'
+            pageSize={(this.state.table &&  this.state.table.length) ?  this.state.table.length : 7}
+            SubComponent={(row) => {
+              return(
+                <ReactTable
+                  data={row.row.Data}
+                  columns={compnayDetail}
+                  defaultPageSize={10}
+                  showPagination={false}
+                />
+              )
+            }}
+          />
+      </Col>
+    )
   }
 
 }

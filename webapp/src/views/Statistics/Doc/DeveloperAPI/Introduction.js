@@ -1,8 +1,8 @@
-import React, { Component } from 'react'; 
+import React, { Component } from 'react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { docco } from 'react-syntax-highlighter/dist/styles';
 var Scroll = require('@synapsestudios/react-scroll');
- 
+
 var Helpers = Scroll.Helpers;
 
 var Element = React.createClass({
@@ -15,7 +15,7 @@ var Element = React.createClass({
     );
   }
 });
- 
+
 var Link = React.createClass({
   mixins: [Helpers.Scroll],
   render: function () {
@@ -39,7 +39,7 @@ class Introduction extends Component {
           <div className="col-2" style={{backgroundColor: '#263238', color:'white'}}>
             <div style={{position: 'fixed'}}>
               <div style={{padding:'10px'}}>
-                <Link to="introduction" spy={true} smooth={true} offset={-50} duration={500}> Introduction </Link> 
+                <Link to="introduction" spy={true} smooth={true} offset={-50} duration={500}> Introduction </Link>
               </div>
               <div style={{padding:'10px'}}>
                 <Link to="parameterConstraints" spy={true} smooth={true} offset={-50} duration={500} > Parameter Constraints </Link> <br/>
@@ -153,7 +153,7 @@ class Introduction extends Component {
                               <tr>
                                 <td>WA</td>
                                 <td>Western Australia</td>
-                              </tr>    
+                              </tr>
                               <tr>
                                 <td>TAS</td>
                                 <td>Tasmania</td>
@@ -161,11 +161,11 @@ class Introduction extends Component {
                               <tr>
                                 <td>NT</td>
                                 <td>Northern Territory</td>
-                              </tr> 
+                              </tr>
                               <tr>
                                 <td>ACT</td>
                                 <td>Australian Capital Territory</td>
-                              </tr>                                                                               
+                              </tr>
                             </tbody>
                           </table>
                         </div>
@@ -180,7 +180,7 @@ class Introduction extends Component {
                   <div className="card-block">
                     The category parameter indicates the categories in the specified statistical area, being either
                     Retail or Merchandise Exports. Categories should be given as a list, with each item separated
-                    by a "," character. Entered categories should match the statistical area, else an 
+                    by a "," character. Entered categories should match the statistical area, else an
                     error will be returned.<br/><br/>
                     <div className="row">
                       <div className="col align-items-center">
@@ -223,7 +223,7 @@ class Introduction extends Component {
                               <tr>
                                 <td>Other</td>
                                 <td>Retrieves miscellaneous data that does not belong to any category</td>
-                              </tr>   
+                              </tr>
                             </tbody>
                           </table>
                         </div>
@@ -244,47 +244,47 @@ class Introduction extends Component {
                               <tr>
                                 <td>Total</td>
                                 <td>Retrieves every single category below</td>
-                              </tr>   
+                              </tr>
                               <tr>
                                 <td>FoodAndLiveAnimals</td>
                                 <td>Retrieves export data on food and live animals in the region</td>
-                              </tr>   
+                              </tr>
                               <tr>
                                 <td>BeveragesAndTobacco</td>
                                 <td>Retrieves data on beverages and tobacco exported in the region</td>
-                              </tr>  
+                              </tr>
                               <tr>
                                 <td>CrudMaterialAndInedible</td>
                                 <td>Retrieves data on crud material and inedibles exported in the region</td>
-                              </tr>  
+                              </tr>
                               <tr>
                                 <td>MineralFuelLubricentAndRelatedMaterial</td>
                                 <td>Retrieves data on minerals, fuels and lubricents exported in the region</td>
-                              </tr>  
+                              </tr>
                               <tr>
                                 <td>AnimalAndVegitableOilFatAndWaxes</td>
                                 <td>Retrieves data on animal and vegetable oils, fats and waxes exported in the region</td>
-                              </tr>  
+                              </tr>
                               <tr>
                                 <td>ChemicalsAndRelatedProducts</td>
                                 <td>Retrieves data on chemicals and other chemical-related products exported in the region</td>
-                              </tr>  
+                              </tr>
                               <tr>
                                 <td>ManufacturedGoods</td>
                                 <td>Retrieves data on manufactured goods exported in the region</td>
-                              </tr>  
+                              </tr>
                               <tr>
                                 <td>MachineryAndTransportEquipments</td>
                                 <td>Retrieves data on machinery and transport equipments exported in the region</td>
-                              </tr>  
+                              </tr>
                               <tr>
                                 <td>OtherManufacturedArticles</td>
                                 <td>Retrieves data on other manufactured articles that have been exported in the region</td>
-                              </tr>  
+                              </tr>
                               <tr>
                                 <td>Unclassified</td>
                                 <td>Spooky! Retrieves unclassified exports in the region</td>
-                              </tr>  
+                              </tr>
                             </tbody>
                           </table>
                         </div>
@@ -298,7 +298,7 @@ class Introduction extends Component {
                   </div>
                   <div className="card-block">
                     There are two date parameters that need to be specified - a start date, as well as an end date. <br/><br/>
-                    Both dates are required to be in the format of YYYY-MM-DD (example, for the 2nd of March, 2017, 
+                    Both dates are required to be in the format of YYYY-MM-DD (example, for the 2nd of March, 2017,
                     you would need to enter 2017-03-02). <br/><br/>
                     The start date must exist before the end date, or else an error will be returned by the API.
                   </div>
@@ -933,7 +933,7 @@ class Introduction extends Component {
               </div>
 
             </Element>
-            
+
             <Element  name="Errors" className="Element">
               <div className="row">
                   <div className="card">
@@ -962,7 +962,7 @@ class Introduction extends Component {
                           <tr>
                             <td>0</td>
                             <td>MethodArgumentNotValidException – Your request contains improper arguments.</td>
-                          </tr>                          
+                          </tr>
                           <tr>
                             <td>1</td>
                             <td>MethodArgumentTypeMismatchException – Your request is in an illegal format.</td>
@@ -1006,7 +1006,7 @@ class Introduction extends Component {
                           <tr>
                             <td>11</td>
                             <td>DateInvalidException – No trolling please!</td>
-                          </tr>                      
+                          </tr>
                         </tbody>
                       </table>
                     </div>

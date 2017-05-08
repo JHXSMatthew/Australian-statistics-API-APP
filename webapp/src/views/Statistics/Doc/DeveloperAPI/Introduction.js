@@ -38,19 +38,19 @@ class Introduction extends Component {
 
           <div className="col-2" style={{backgroundColor: '#263238', color:'white'}}>
             <div style={{position: 'fixed'}}>
-              <div style={{padding:'10px'}}>
+              <div style={{padding:'10px', paddingTop: '20px', paddingLeft: '20px'}}>
                 <Link to="introduction" spy={true} smooth={true} offset={-70} duration={500}> Introduction </Link>
               </div>
-              <div style={{padding:'10px'}}>
+              <div style={{padding:'10px', paddingLeft:'20px'}}>
                 <Link to="parameterConstraints" spy={true} smooth={true} offset={-70} duration={500} > Parameter Constraints </Link> <br/>
               </div>
-              <div style={{padding:'10px'}}>
+              <div style={{padding:'10px', paddingLeft:'20px'}}>
                 <Link to="retail" spy={true} smooth={true} offset={-70} duration={500} > Retail </Link> <br/>
               </div>
-              <div style={{padding:'10px'}}>
+              <div style={{padding:'10px', paddingLeft:'20px'}}>
                 <Link to="merchandiseExports" spy={true} smooth={true} offset={-70} duration={500} >Merchandise Exports</Link> <br/>
               </div>
-              <div style={{padding:'10px'}}>
+              <div style={{padding:'10px', paddingLeft:'20px'}}>
                 <Link to="Errors" spy={true} smooth={true} offset={-70} duration={500} > Errors </Link> <br/>
               </div>
             </div>

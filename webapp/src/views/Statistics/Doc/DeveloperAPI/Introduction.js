@@ -53,6 +53,9 @@ class Introduction extends Component {
               <div style={{padding:'10px', paddingLeft:'20px'}}>
                 <Link to="Errors" spy={true} smooth={true} offset={-70} duration={500} > Errors </Link> <br/>
               </div>
+              <div style={{padding:'10px', paddingLeft:'20px'}}>
+                <Link to="Logs" spy={true} smooth={true} offset={-70} duration={500} > Data Logs </Link> <br/>
+              </div>
             </div>
           </div>
 
@@ -319,8 +322,8 @@ class Introduction extends Component {
                         The API should return the monthly turnover of each region and each category, for the specified
                         period of time. <br/><br/>
 
-                      HTTP Request <br/>
-                      GET http://45.75.114.158/api/
+                      An API request can be sent through a HTTP GET request through the URL: <br/><br/>
+                      <h6 style={{textAlign:'center',color:'blue'}}>http://45.75.114.158/api/</h6>
                       <br/><br/>
 
                       <h5>Required Query Parameters</h5>
@@ -632,8 +635,8 @@ class Introduction extends Component {
                         the defined time period. <br/><br/>
 
 
-                      HTTP Request <br/>
-                      GET http://45.75.114.158/api/
+                      An API request can be sent through a HTTP GET request through the URL: <br/><br/>
+                      <h6 style={{textAlign:'center',color:'blue'}}>http://45.75.114.158/api/</h6>
                       <br/><br/>
 
                       <h5>Required Query Parameters</h5>
@@ -1008,6 +1011,145 @@ class Introduction extends Component {
                       </tr>
                     </tbody>
                   </table>
+                </div>
+              </div>
+            </Element>
+
+            <Element name="Logs" className="element">
+              <div className="row">
+                <div className="col-7">
+                    <div className="card">
+                      <div className="card-header">
+                        Data Logs
+                      </div>
+                      <div className="card-block">
+                        Our API is able to send a data log on request of the user, in order to view specifics about API execution,
+                        as well as see potential errors that have occurred.  <br/><br/>
+
+                        Logs can be accessed by sending a HTTP GET request through the URL:
+                        <br/><br/>
+                        <h6 style={{textAlign:'center',color:'blue'}}>http://45.76.114.158/api/log?number=<b style={{color:'red'}}>requestID</b></h6>
+                        <br/>
+                        where <b style={{color:'red'}}>requestID</b> is the request number of the specific API call, available through the requestNumber parameter.
+                        <br/><br/><br/>
+                      <h5>Log Query Parameters</h5>
+                      <div className="row">
+                        <div className="col align-items-center">
+                          <div className="card">
+                            <table className="table">
+                              <thead>
+                                <tr>
+                                  <th>Parameter</th>
+                                  <th>Availability</th>
+                                  <th>Description</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>ending</td>
+                                  <td>Success</td>
+                                  <td>Date and time when the API returns the request.</td>
+                                </tr>
+                                <tr>
+                                  <td>executingTime</td>
+                                  <td>Success</td>
+                                  <td>Elapsed time taken for the API to process the request.</td>
+                                </tr>
+                                <tr>
+                                  <td>starting</td>
+                                  <td>Success</td>
+                                  <td>Date and time when the API recieves the request.</td>
+                                </tr>
+                                <tr>
+                                  <td>exception_message</td>
+                                  <td>Fail</td>
+                                  <td>Error message the API returns when failing to process the request.</td>
+                                </tr>
+                                <tr>
+                                  <td>stackTrack</td>
+                                  <td>Fail</td>
+                                  <td>Indication of the line within the API code which failed to execute the request.</td>
+                                </tr>
+                                <tr>
+                                  <td>exception</td>
+                                  <td>Fail</td>
+                                  <td>Error message the API returns when failing to process the request.</td>
+                                </tr>
+                                <tr>
+                                  <td>devTeam</td>
+                                  <td>Success and Fail</td>
+                                  <td>Current development team handling and hosting the API.</td>
+                                </tr>
+                                <tr>
+                                  <td>version</td>
+                                  <td>Success and Fail</td>
+                                  <td>Version of the API used to process the request.</td>
+                                </tr>
+                                <tr>
+                                  <td>parameters</td>
+                                  <td>Success and Fail</td>
+                                  <td>Parameters sent to the API through the request.</td>
+                                </tr>                                
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-5">
+                  <div className="card">
+                    <div className="card-header">
+                      Retail Example Request and Response
+                    </div>
+                    <div className="card-block">
+                      <p>
+                      For the following sample log request(success):
+                      <SyntaxHighlighter language='javascript' style={docco}>
+                      {
+                        "http://45.76.114.158/api/log?number=201705080431760"
+                      }
+                      </SyntaxHighlighter>
+                      Our API will return the following JSON response: <br/>
+                      <SyntaxHighlighter language='javascript' style={docco}>
+                      {
+                                    "{\n" +
+                          "    \"ending\" : \"2017-05-08 04:31:760\",\n" +
+                          "    \"executingTime\" : \"3\"\n" +
+                          "    \"starting\" : \"2017-05-08 04:31:757\"\n" +
+                          "    \"devTeam\" : \"TeamRocket\"\n" +
+                          "    \"version\" : \"statsAPI 0.1\"\n" +
+                          "    \"parameters\" : \"StatisticsArea=[MerchandiseExports]&State=[NSW]&Category=[CrudMaterialAndInedible]&startDate=[2013-12-01]&endDate=[2014-01-01]\"\n" +
+                          "}"
+                      }
+                      </SyntaxHighlighter>
+                      </p>
+                      <br/><br/>
+                      <p>
+                      For the following sample log request (fail):
+                      <SyntaxHighlighter language='javascript' style={docco}>
+                      {
+                        "http://45.76.114.158/api/log?number=201705080431760"
+                      }
+                      </SyntaxHighlighter>
+                      Our API will return the following JSON response: <br/>
+                      <SyntaxHighlighter language='javascript' style={docco}>
+                      {
+                                    "{\n" +
+                          "    \"exception\" : \"true\",\n" +
+                          "    \"stackTrack\" : \"com.teamrocket.seng3011.api.APIController.parseCategory(APIController.java:211)\"\n" +
+                          "    \"starting\" : \"2017-05-08 04:31:757\"\n" +
+                          "    \"devTeam\" : \"TeamRocket\"\n" +
+                          "    \"version\" : \"statsAPI 0.1\"\n" +
+                          "    \"parameters\" : \"StatisticsArea=[MerchandiseExports]&State=[NSW]&Category=[CrudMaterialAndIedible]&startDate=[2013-12-01]&endDate=[2014-01-01]\"\n" +
+                          "    \"exception_message\" : \"cannot not parse the category [CrudMaterialAndIedible]\"\n" +
+                          "}"
+                      }
+                      </SyntaxHighlighter>
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </Element>

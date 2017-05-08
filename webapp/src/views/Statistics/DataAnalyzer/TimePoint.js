@@ -150,7 +150,7 @@ class News extends Component{
     if(!nextProps.update){
       return;
     }
-    this.state.setState({table: []});
+    this.setState({table: []});
     this.fetch();
   }
 
@@ -326,7 +326,7 @@ class CompanyReturn extends Component{
     if(!nextProps.update){
       return;
     }
-    this.state.setState({table: []});
+    this.setState({table: []});
     this.fetch();
   }
 

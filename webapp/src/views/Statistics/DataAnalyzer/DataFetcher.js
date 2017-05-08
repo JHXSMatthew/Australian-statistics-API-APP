@@ -1,12 +1,13 @@
 //data fetcher components
 import React, {Component} from 'react';
-import Picker from 'react-month-picker';
 import Select from 'react-select';
 import { PopoverTitle, PopoverContent,Popover} from 'reactstrap';
 import {AREA} from './DataAnalyzer.js';
 import {STATE} from './DataAnalyzer.js';
 import {CATEGORY_RT} from './DataAnalyzer.js';
 import {CATEGORY_ME} from './DataAnalyzer.js';
+import Picker from 'react-month-picker';
+
 
 
 const DATE_LANG = {
@@ -169,19 +170,6 @@ class DataFetcher extends Component {
 }
 
 
-class Switch_Text extends Component{
-
-  render(){
-    return (
-      <label className="switch switch-3d switch-primary">
-        <input type="checkbox" className="switch-input" defaultChecked/>
-        <span className="switch-label"></span>
-        <span className="switch-handle"></span>
-      </label>
-    )
-  }
-
-}
 
 class MonthBox extends Component {
   constructor(props){

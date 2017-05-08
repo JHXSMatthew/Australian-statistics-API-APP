@@ -23,7 +23,7 @@ class Home extends Component {
       <div className="animated fadeIn">
 
         <div style={{height: '450px'}}>
-          <Parallax bgImage={homeBackground} strength={200} style={{height: '500px'}}> //IGNORE THIS WARNING, Lib's version is not compatible with react version.
+          <Parallax bgImage={homeBackground} strength={200} style={{height: '500px'}}> 
             <h1 style={{textAlign: 'center', color: 'white', textShadow: "2px 2px 20px black", fontFamily: "signPainter", fontSize: '80px'}}>
             <br/>Team Rocket <br/> Statistics API<br/></h1>
             <div style={{textAlign:'center', marginTop: '150px'}}>
@@ -33,7 +33,7 @@ class Home extends Component {
           </Parallax>
         </div>
 
-        <div style={{backgroundColor: 'white', marginTop: '80px'}}>
+        <div style={{backgroundColor: 'white', marginTop: '90px'}}>
           <h1 style={{textAlign: 'center'}}><br/>Statistics available at rocket speeds.<br/></h1><br/>
             <h6 style={{textAlign: 'center', padding: '20px', lineHeight: '20px'}}>
             Our team has developed an API that retrieves Statistics on retail and merchandise export data within Australia.

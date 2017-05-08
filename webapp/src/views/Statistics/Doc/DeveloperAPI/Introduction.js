@@ -1023,8 +1023,8 @@ class Introduction extends Component {
                         Data Logs
                       </div>
                       <div className="card-block">
-                        Our API is able to send a data log on request of the user, in order to view specifics about API execution,
-                        as well as see potential errors that have occurred.  <br/><br/>
+                        Our API is able to send a data log on request through to the user, in order to view specifics about API execution and
+                         see potential errors that may have occurred within the API.  <br/><br/>
 
                         Logs can be accessed by sending a HTTP GET request through the URL:
                         <br/><br/>

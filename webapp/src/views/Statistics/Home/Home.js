@@ -25,7 +25,7 @@ class Home extends Component {
 
         <div style={{height: '450px'}}>
           <Parallax bgImage={homeBackground} strength={200} style={{height: '500px'}}>
-            <h1 style={{textAlign: 'center', color: 'white', textShadow: "2px 2px 20px black", fontFamily: "signPainter", fontSize: '80px'}}>
+            <h1 style={{textAlign: 'center', color: 'white', textShadow: "4px 4px 20px black", fontFamily: "signPainter", fontSize: '80px'}}>
             <br/>Team Rocket <br/> Statistics API<br/></h1>
             <div style={{textAlign:'center', marginTop: '150px'}}>
               <a class="nav-link" href="#dataAnalyzer" style={{textAlign: "center", borderRadius:"25px", padding: '15px ', backgroundColor: '#288BE4', color: 'white', fontSize:'20px'}}>Analytics Platform</a>

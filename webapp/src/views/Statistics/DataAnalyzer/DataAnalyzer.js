@@ -88,23 +88,23 @@ export const CATEGORY_ME = [
 ];
 
 export const CATEGORY_RT = [
-  { label: 'All categories',
+  { label: 'All Categories',
     value: 'Total'
   },
-  { label: 'Food related category',
+  { label: 'Foods',
     value: 'Food' ,
     topics: ['RET'],
     instruments: [{name:"Freedom Foods",id:"FNP.AX"}, {name:"Tassal Group Limited",id:"TGR.AX"},
     {name:"Seafarms Group Limited",id:"SFG.AX"},{name:"Woolsworths",id:"WOW.AX"}]
   },
-  { label: 'HouseholdGood category',
+  { label: 'Household Goods',
     value: 'HouseholdGood' ,
     topics: ['FOD'],
     instruments: [{name:"Home Depot",id:"HD"}, {name:"Nick Scali",id:"NCK.AX"},
       {name:"Harvey Norman",id:"HVN.AX"}, {name:"Ennis Inc",id:"EBF"},
       {name:"Bed Bath And Beyond",id:"BBBY"}]
   },
-  { label: 'Clothing Footware And Personal Accessory category',
+  { label: 'Clothing, Footware and Personal Accessories',
     value: 'ClothingFootwareAndPersonalAccessory',
     topics:['TEX'],
     instruments: [{name:"Gap Inc",id:"GPS"}, {name:"Footlocker",id:"FL"},
@@ -123,7 +123,7 @@ export const CATEGORY_RT = [
     instruments: [{name:"Mcdonalds",id:"MCD"}, {name:"Ark Restaurants Corp",id:"ARKR"},
       {name:"BJ Resutaurants Inc",id:"BJRI"}, {name:"Starbucks",id:"SBUX"}]
    },
-  { label: 'others',
+  { label: 'Others',
     value: 'Other' ,
     topics:['RET'],
     instruments: [{name:"Jb Hifi",id:"JBH.AX"}, {name:"Activistic Limited",id:"ACU.AX"},

@@ -379,8 +379,17 @@ class CompanyReturn extends Component{
             var av = 0;
             for(var j = 0 ; j < json[i].Data.length ; j ++){
               av += json[i].Data[j].AV_Return;
+              json[i].Data[j].AV_Return *= 100 ;
+              json[i].Data[j].AV_Return = parseFloat(json[i].Data[j].AV_Return).toFixed(7);
+
+              json[i].Data[j].CM_Return *= 100 ;
+              json[i].Data[j].CM_Return = parseFloat(json[i].Data[j].CM_Return).toFixed(7);
+
+              json[i].Data[j].Return *= 100 ;
+              json[i].Data[j].Return = parseFloat(json[i].Data[j].Return).toFixed(7);
             }
-            json[i].AV_Return = av/json[i].Data.length ;
+            json[i].AV_Return = parseFloat(av/json[i].Data.length * 100).toFixed(7) ;
+
           }
           that.setState({
             table: json
@@ -406,7 +415,7 @@ class CompanyReturn extends Component{
         header: 'InstrumentID',
         accessor: 'InstrumentID',
       }, {
-        header: 'Average Return',
+        header: 'Average Return (%)',
         accessor: 'AV_Return',
       }];
       const compnayDetail = [{
@@ -416,10 +425,10 @@ class CompanyReturn extends Component{
        header: 'Return',
        accessor: 'Return',
       }, {
-        header: 'Average Retrun',
+        header: 'Average Retrun (%)',
         accessor: 'AV_Return',
       }, {
-        header: ' Cumulative Return',
+        header: ' Cumulative Return (%)',
         accessor: 'CM_Return',
       }
     ];

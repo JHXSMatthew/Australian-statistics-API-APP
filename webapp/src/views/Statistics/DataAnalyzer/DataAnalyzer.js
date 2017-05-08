@@ -37,39 +37,39 @@ export const CATEGORY_ME = [
     topics: ['RETA'],
     instruments: [{name:"Coca Cola",id:"CCL.AX"}, {name:"Australian Whiskey Holdings",id:"AWY.AX"}]
   },
-  { label: 'Crud Material And Inedible',
+  { label: 'Crud Material And Inedibles',
     value: 'CrudMaterialAndInedible',
     topics: ['RETA'],
     instruments: [{name:"Alicanto Minerals Limited",id:"AQI.AX"}, {name:"Alara Resources Limited",id:"AUQ.AX"},
       {name:"Atc Alloys Ltd",id:"ATA.AX"}, {name:"Woollongong Coal Limited",id:"WLC.AX"}]
 
   },
-  { label: 'Mineral Fuel Lubricent And related material',
+  { label: 'Mineral, Fuel, Lubricant and Related Material',
     value: 'MineralFuelLubricentAndRelatedMaterial',
     topics:['RETA'],
     instruments: [{name:"Ceramic Fuel Cells Limited",id:"CFU.AX"}, {name:"Antilles Oil And Gas",id:"AZZ.AX"},
       {name:"Austex Oil Limited",id:"AOK.AX"}, {name:"Freedom Oil And Gas Limited",id:"FDM.AX"}, {name:"BHP Billiton Limited",id:"BHP.AX"}]
    },
-  { label: 'Animal and vegitable oil fat and waxes',
+  { label: 'Animal and Vegetable Oil, Fat and Waxes',
     value: 'AnimalAndVegitableOilFatAndWaxes',
     topics:['RETA'],
     instruments: [{name:"Australian Agricultural Company", id:"AAC.AX"},{name:"Elders Ltd",id:"ELD.AX"},
       {name:"Graincorp Ltd",id:"GNC.AX"},{name: "Ridley Corporation Ltd",id:"RIC.AX"},{name:"Tassal Group Limited",id:"TGR.AX"},{name:"Webster Ltd",id:"WBA.AX"}]
   },
-  { label: 'Chemicals And Related Products',
+  { label: 'Chemicals and Related Products',
     value: 'ChemicalsAndRelatedProducts',
     topics:['RETA'],
     instruments: [{name:"Acrux Limited",id:"ACR.AX"}, {name:"Bioxyne Limited",id:"BXN.AX"},
       {name:"Living Cell Technologies",id:"LCT.AX"}, {name:"Suda Ltd",id:"SUD.AX"}]
 
    },
-  { label: 'Manufacture Goods',
+  { label: 'Manufactured Goods',
     value: 'ManufacturedGoods' ,
     topics:['RETA'],
     instruments: [{name:"Ookami Limited",id:"OOK.AX"}, {name:"Advanced Braking Technology",id:"ABV.AX"},
       {name:"Bluglass Limited",id:"BLG.AX"}]
   },
-  { label: 'Machinery And Transport Equipments',
+  { label: 'Machinery and Transport Equipments',
     value: 'MachineryAndTransportEquipments',
     topics:['RETA'],
     instruments: [{name:"Traffic Technologies Limited",id:"TTI.AX"}, {name:"Macquarie Atlas Roads Group",id:"MQA.AX"},

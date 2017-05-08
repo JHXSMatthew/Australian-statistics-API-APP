@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Parallax } from 'react-parallax';
-import homeBackground from './home_background.png' // relative path to image
+import homeBackground from './home_background_copy.png' // relative path to image
 import rocketMin from './rocket_img.png' // relative path to image
 import Icon from 'react-icons-kit';
       import { graphs } from 'react-icons-kit/metrize/graphs';

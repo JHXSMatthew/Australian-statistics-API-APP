@@ -88,7 +88,7 @@ export const CATEGORY_ME = [
 ];
 
 export const CATEGORY_RT = [
-  { label: 'All categories',
+  { label: 'All Categories',
     value: 'Total'
   },
   { label: 'Foods',

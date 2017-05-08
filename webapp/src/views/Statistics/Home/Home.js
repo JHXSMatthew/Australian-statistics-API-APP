@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Parallax } from 'react-parallax';
 import homeBackground from './home_background.png' // relative path to image
+import './Fins-Regular.otf';
 import rocketMin from './rocket_img.png' // relative path to image
 import Icon from 'react-icons-kit';
       import { graphs } from 'react-icons-kit/metrize/graphs';
@@ -23,7 +24,7 @@ class Home extends Component {
       <div className="animated fadeIn">
 
         <div style={{height: '450px'}}>
-          <Parallax bgImage={homeBackground} strength={200} style={{height: '500px'}}> 
+          <Parallax bgImage={homeBackground} strength={200} style={{height: '500px'}}>
             <h1 style={{textAlign: 'center', color: 'white', textShadow: "2px 2px 20px black", fontFamily: "signPainter", fontSize: '80px'}}>
             <br/>Team Rocket <br/> Statistics API<br/></h1>
             <div style={{textAlign:'center', marginTop: '150px'}}>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Parallax, Background } from 'react-parallax';
+import { Parallax } from 'react-parallax';
 import homeBackground from './home_background.png' // relative path to image
 import rocketMin from './rocket_img.png' // relative path to image
 import Icon from 'react-icons-kit';
@@ -9,7 +9,6 @@ import Icon from 'react-icons-kit';
       import { bars } from 'react-icons-kit/metrize/bars';
       import { circles } from 'react-icons-kit/metrize/circles';
       import { hddRaid } from 'react-icons-kit/metrize/hddRaid'
-import { Link } from 'react-router'
 
 class Home extends Component {
 
@@ -24,11 +23,11 @@ class Home extends Component {
       <div className="animated fadeIn">
 
         <div style={{height: '450px'}}>
-          <Parallax bgImage={homeBackground} strength={200} style={{height: '500px'}}>
+          <Parallax bgImage={homeBackground} strength={200} style={{height: '500px'}}> //IGNORE THIS WARNING, Lib's version is not compatible with react version.
             <h1 style={{textAlign: 'center', color: 'white', textShadow: "2px 2px 20px black", fontFamily: "signPainter", fontSize: '80px'}}>
             <br/>Team Rocket <br/> Statistics API<br/></h1>
             <div style={{textAlign:'center', marginTop: '150px'}}>
-              <a class="nav-link" href="#dataAnalyzer" style={{textAlign: "center", borderRadius:"25px", padding: '15px ', backgroundColor: '#288BE4', color: 'white', fontSize:'20px'}}>Analytics Platform</a>
+              <a  href="#dataAnalyzer" style={{textAlign: "center", borderRadius:"25px", padding: '15px ', backgroundColor: '#288BE4', color: 'white', fontSize:'20px'}}>Analytics Platform</a>
             </div>
             <div style={{height: '110px'}}></div>
           </Parallax>
@@ -46,7 +45,7 @@ class Home extends Component {
             Users are able to call our API through standard HTTP request methods. </h6>
 
             <div style={{textAlign: 'center', padding: '10px'}}>
-              <a class="nav-link" href="#Documentation/DeveloperAPI" style={{textAlign: "center", borderRadius:"25px", padding: '15px', backgroundColor: '#288BE4', color: 'white', fontSize:'20px'}}>Documentation</a>
+              <a href="#Documentation/DeveloperAPI" style={{textAlign: "center", borderRadius:"25px", padding: '15px', backgroundColor: '#288BE4', color: 'white', fontSize:'20px'}}>Documentation</a>
             </div>
             <img src={rocketMin} style={{width: '100%',paddingTop:'20px'}}/>
         </div>

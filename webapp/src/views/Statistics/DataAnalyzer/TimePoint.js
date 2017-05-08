@@ -118,7 +118,7 @@ function labelToTopics(array,label){
         }
       }
     }else{
-      for(var i = 0 ; i < array.length ; i ++){
+      for(i = 0 ; i < array.length ; i ++){
         if(array[i].label === label){
           return array[i].topics;
         }
@@ -150,7 +150,7 @@ class News extends Component{
     if(!nextProps.update){
       return;
     }
-    this.state.table = [];
+    this.state.setState({table: []});
     this.fetch();
   }
 
@@ -299,7 +299,7 @@ function labelToInstruments(array,label){
         }
       }
     }else{
-      for(var i = 0 ; i < array.length ; i ++){
+      for(i = 0 ; i < array.length ; i ++){
         if(array[i].label === label){
           return array[i].instruments;
         }
@@ -326,7 +326,7 @@ class CompanyReturn extends Component{
     if(!nextProps.update){
       return;
     }
-    this.state.table = [];
+    this.state.setState({table: []});
     this.fetch();
   }
 

@@ -5,7 +5,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import TimePoint from './TimePoint.js';
 import TimePointsPanel from './TimePointPanel.js';
 
-import { ListGroup,ListGroupItem,Label,FormGroup,Input,CardColumns,CardHeader, Card, CardText, CardBlock,Row, Col,Container} from 'reactstrap';
+import {Card,CardHeader,CardBlock,Row, Col} from 'reactstrap';
 import 'chartjs-plugin-zoom/chartjs-plugin-zoom.js';
 
 // chats components
@@ -92,7 +92,7 @@ class Charts extends Component {
 
             var dateData = regional[j].Data;
             for(var k=0; k < dateData.length; k++){
-              line.data .push(dateData[k].Value);
+              line.data.push(dateData[k].Value);
               var contain =false;
               for(var m=0; m < labels.length; m++){
                 if(labels[m] === dateData[k].Date){

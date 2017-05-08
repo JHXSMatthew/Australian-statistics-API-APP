@@ -1,20 +1,11 @@
 import React,{Component} from 'react';
 import DataTable from './DataTable.js';
 import Charts from './ChartSet.js';
-import Slider, { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
-import { ListGroup,ListGroupItem,Label,FormGroup,Input,CardColumns,CardHeader, Card, CardText, CardBlock,Row, Col,Container} from 'reactstrap';
+import { Row, Col,Container} from 'reactstrap';
 
 
 class ResultPanel extends Component{
-
-    constructor(props){
-      super(props);
-    }
-
-
-
-
     render(){
       return(
           <Container fluid={true}>

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import DataFetcher from './DataFetcher.js';
 import ResultPanel from './ResultPanel.js';
 import 'react-table/react-table.css';
-import { PopoverTitle, PopoverContent,Popover,Button, Modal, ModalHeader, ModalBody, ModalFooter ,Row, Col,Container} from 'reactstrap';
+import {Row, Col,Container} from 'reactstrap';
 
 
 export const STATE = [

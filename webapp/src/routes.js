@@ -3,7 +3,6 @@ import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 
 // Containers
 import Full from './containers/Full/'
-import Simple from './containers/Simple/'
 
 // OUR VIEWS
 import Home from './views/Statistics/Home'

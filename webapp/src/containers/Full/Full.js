@@ -6,7 +6,6 @@ import Footer from '../../components/Footer/';
 
 
 
-import Breadcrumbs from 'react-breadcrumbs';
 
 class Full extends Component {
   render() {

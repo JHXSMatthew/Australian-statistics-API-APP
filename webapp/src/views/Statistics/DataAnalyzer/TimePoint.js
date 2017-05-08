@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {ModalFooter, ModalBody, ModalHeader,Modal, Button, ListGroup,ListGroupItem,Label,FormGroup,Input,CardColumns,CardHeader, Card, CardText, CardBlock,Row, Col,Container} from 'reactstrap';
+import {ModalFooter, ModalBody, ModalHeader,Modal, Button, ListGroup,ListGroupItem,Label,Col,Card,CardHeader,Input} from 'reactstrap';
 import ReactTable from 'react-table'
 import {CATEGORY_RT} from './DataAnalyzer.js';
 import {CATEGORY_ME} from './DataAnalyzer.js';
@@ -111,7 +111,7 @@ function labelToTopics(array,label){
       for(var i = 0 ; i < array.length ; i ++){
         if(array[i].topics){
           for(var j = 0; j < array[i].topics.length ; j ++){
-            if(returnValue.indexOf(array[i].topics[j]) == -1){
+            if(returnValue.indexOf(array[i].topics[j]) === -1){
               returnValue.push(array[i].topics[j]);
             }
           }
@@ -292,7 +292,7 @@ function labelToInstruments(array,label){
       for(var i = 0 ; i < array.length ; i ++){
         if(array[i].instruments){
           for(var j = 0; j < array[i].instruments.length ; j ++){
-            if(returnValue.indexOf(array[i].instruments[j]) == -1){
+            if(returnValue.indexOf(array[i].instruments[j]) === -1){
               returnValue.push(array[i].instruments[j]);
             }
           }

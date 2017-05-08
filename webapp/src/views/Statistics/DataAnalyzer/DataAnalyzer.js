@@ -6,7 +6,7 @@ import {Row, Col,Container} from 'reactstrap';
 
 
 export const STATE = [
-{ label: 'Australian', value: 'AUS' },
+{ label: 'All Australian Regions', value: 'AUS' },
 { label: 'New South Wales', value: 'NSW' },
 { label: 'Victoria', value: 'VIC' },
 { label: 'Queensland', value: 'QLD' },

@@ -255,7 +255,7 @@ class DataAnalyzer extends Component {
             <div className="animated fadeIn">
               <Container>
                 <Row>
-                  <Col sm={{ size: 6, push: 2, pull: 2, offset: 3 }}>
+                  <Col style={{padding: 10}} sm={{ size: 6, push: 2, pull: 2, offset: 3 }}>
                     {this.state.dataType &&
                       <div>
                         <ButtonGroup>
@@ -272,7 +272,9 @@ class DataAnalyzer extends Component {
                   </Col>
                 </Row>
               </Container>
-              {this.state.rSelected == 2 && this.state.dataType && <ResultPanel data={this.state.data} dataType={this.state.dataType}></ResultPanel>}
+              <div style={{padding: 20}}>
+                {this.state.rSelected == 2 && this.state.dataType && <ResultPanel data={this.state.data} dataType={this.state.dataType}></ResultPanel>}
+              </div>
             </div>
         )
   }

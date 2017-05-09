@@ -3,6 +3,7 @@ import {ModalFooter, ModalBody, ModalHeader,Modal, Button, ListGroup,ListGroupIt
 import ReactTable from 'react-table'
 import {CATEGORY_RT} from './DataAnalyzer.js';
 import {CATEGORY_ME} from './DataAnalyzer.js';
+import TimePointChart from './TimePointChart.js';
 
 
 class TimePoint extends Component{
@@ -14,7 +15,8 @@ class TimePoint extends Component{
       up: 5,
       low: 5,
       canUpdate: false,
-      update: false
+      update: false,
+      data: null
     };
     this.setUp = this.setUp.bind(this);
     this.setLow = this.setLow.bind(this);
@@ -22,6 +24,8 @@ class TimePoint extends Component{
     this.getEnd = this.getEnd.bind(this);
     this.getDate = this.getDate.bind(this);
     this.update = this.update.bind(this);
+    this.setDayOfMonth = this.setDayOfMonth.bind(this);
+    this.setData = this.setData.bind(this);
   }
 
   update(event){
@@ -29,23 +33,38 @@ class TimePoint extends Component{
       canUpdate: false,
       update: true
     });
-    console.log("update clicked.");
   }
+
   setUp(event){
     var v = event.target.value;
     this.setState({
-      update: false,
       up: v,
-      canUpdate: true
+      canUpdate: true,
+      update: false
+    });
+  }
+
+  setDayOfMonth(event){
+    var str = this.state.time.split("-");
+    if(event.target.value){
+      str[2] = event.target.value;
+    }
+    if(event.target.value < 0 || event.target.value > daysInMonth(this.state.time.split("-")[1],this.state.time.split("-")[0])){
+      return;
+    }
+    this.setState({
+      time: getDateString(new Date(str[0],str[1],str[2])),
+      canUpdate: true,
+      update: false
     });
   }
 
   setLow(event){
     var v = event.target.value;
     this.setState({
+      low: v,
       canUpdate: true,
-      update: false,
-      low: v
+      update: false
     });
   }
 
@@ -64,6 +83,12 @@ class TimePoint extends Component{
     return date.setDate(date.getDate() + this.state.up);
   }
 
+  setData(d){
+    this.setState({
+      data:d,
+      update: false
+    });
+  }
 
 
   render(){
@@ -74,25 +99,31 @@ class TimePoint extends Component{
           </CardHeader>
               <ListGroup>
                 <ListGroupItem>
-                  <Col  md="5" xs="5">
+                  <Col  md="3" xs="3">
+                    <Label>Day of the Month</Label>
+                    <Input type="number" value={parseInt(this.state.time.split("-")[2])} size="sm" placeholder="Days of the month" onChange={this.setDayOfMonth} />
+                  </Col>
+                  <Col  md="3" xs="3">
                     <Label>Days Before</Label>
                     <Input type="number" defaultValue="5" size="sm" placeholder="Days Before Time Point" onChange={this.setLow} />
                   </Col>
-                  <Col md="5" xs="5">
+                  <Col md="3" xs="3">
                     <Label>Days After</Label>
                     <Input type="number" defaultValue="5" size="sm" placeholder="Days After Time Point" onChange={this.setUp} />
                   </Col>
                   <Col md="2" xs="2">
-                    <Label>Click To Update
+                    <Label>Click To Update Data
                     </Label>
                     <Button outline color="info" disabled={!this.state.canUpdate} onClick={this.update} >
                        Update
                     </Button>
                   </Col>
                 </ListGroupItem>
-
                 <ListGroupItem>
-                  <CompanyReturn category={this.props.category} date={this.getDate} up={this.state.up} low={this.state.low} update={this.state.update} dataType={this.props.dataType}/>
+                  <TimePointChart data={this.state.data} update={this.state.update} />
+                </ListGroupItem>
+                <ListGroupItem>
+                  <CompanyReturn category={this.props.category} date={this.getDate} up={this.state.up} low={this.state.low} update={this.state.update} dataType={this.props.dataType} setData={this.setData}/>
                 </ListGroupItem>
                 <ListGroupItem>
                     <News category={this.props.category} starting={this.getStarting} ending={this.getEnd} update={this.state.update} dataType={this.props.dataType}/>
@@ -103,6 +134,9 @@ class TimePoint extends Component{
   }
 }
 
+function daysInMonth(month,year) {
+    return new Date(year, month, 0).getDate();
+}
 
 function labelToTopics(array,label){
     var returnValue = null;
@@ -129,7 +163,186 @@ function labelToTopics(array,label){
 
 function getDateString(d){
   d = new Date(d);
-  return d.getFullYear() + '-' +('0' + (d.getMonth())).slice(-2) + '-' + ('0'+ (d.getDate()+1)).slice(-2);
+  return d.getFullYear() + '-' +('0' + (d.getMonth())).slice(-2) + '-' + ('0'+ (d.getDate())).slice(-2);
+}
+
+
+
+
+function labelToInstruments(array,label){
+    var returnValue = null;
+    if(label === 'All categories'){
+      returnValue = [];
+      for(var i = 0 ; i < array.length ; i ++){
+        if(array[i].instruments){
+          for(var j = 0; j < array[i].instruments.length ; j ++){
+            if(!returnValue.indexOf(array[i].instruments[j])>= 0){
+              returnValue.push(array[i].instruments[j]);
+            }
+          }
+        }
+      }
+    }else{
+      for(i = 0 ; i < array.length ; i ++){
+        if(array[i].label === label){
+          return array[i].instruments;
+        }
+      }
+    }
+    return returnValue;
+}
+
+
+class CompanyReturn extends Component{
+  constructor(props){
+    super(props);
+    this.state = {
+      table: []
+    }
+  }
+
+  componentWillMount(){
+    this.fetch(false,this.props.dataType);
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(!nextProps.update){
+      return;
+    }
+    this.setState({table: []});
+    this.fetch(false,nextProps.dataType);
+  }
+
+  fetch(a,dataType){
+
+    var that = this;
+    var instruments = null;
+    if(dataType === "Export" ){
+      instruments = labelToInstruments(CATEGORY_ME,this.props.category);
+    }else if(dataType === "Retail"){
+      instruments = labelToInstruments(CATEGORY_RT,this.props.category);
+    }
+
+
+    var ids = [];
+    var names = [];
+    for(var i = 0 ; i < instruments.length ; i ++){
+      ids.push(instruments[i].id);
+      names.push(instruments[i].name);
+    }
+
+    var proxy = "https://cors-anywhere.herokuapp.com/";
+
+   //Alvin's frined's API,
+    var url  = "http://174.138.67.207/InstrumentID/"+ ids.join()
+        +  "/DateOfInterest/"+ getDateString(this.props.date())
+       +  "/List_of_Var/CM_Return,AV_Return/Upper_window/"+ this.props.up
+      +  "/Lower_window/" + this.props.low;
+    if(a){
+       // seesharp's API
+      url = "http://128.199.255.9/v3/id="+ ids.join(";")
+           +  "&dateOfInterest="+ getDateString(this.props.date())
+           +  "&listOfVars=AV_Return;CM_Return&upperWindow="+ this.props.up
+           +  "&lowerWindow=" + this.props.low;
+    }
+    console.log("company return True URL:" + url);
+    try{
+      fetch(proxy + url,{
+        method: 'GET',
+
+      })
+      .then(function(response) {
+        if (response.status >= 400) {
+          alert("CompanyReturns API down, check console.");
+          if(!a){
+            that.fetch(true,dataType);
+          }
+          return;
+        }
+        return response.json().then(function (json) {
+          json = json.CompanyReturns;
+          for(var i = 0 ; i < json.length ; i++ ){
+            json[i].name = names[ids.indexOf(json[i].InstrumentID)];
+            var av = 0;
+            for(var j = 0 ; j < json[i].Data.length ; j ++){
+              av += json[i].Data[j].AV_Return;
+              json[i].Data[j].AV_Return *= 100 ;
+              json[i].Data[j].AV_Return = parseFloat(json[i].Data[j].AV_Return).toFixed(7);
+
+              json[i].Data[j].CM_Return *= 100 ;
+              json[i].Data[j].CM_Return = parseFloat(json[i].Data[j].CM_Return).toFixed(7);
+
+              json[i].Data[j].Return *= 100 ;
+              json[i].Data[j].Return = parseFloat(json[i].Data[j].Return).toFixed(7);
+            }
+            json[i].AV_Return = parseFloat(av/json[i].Data.length * 100).toFixed(7) ;
+
+          }
+          that.setState({
+            table: json
+          });
+          that.props.setData(json);
+        })
+      }).then(function(something){
+        if(!a){
+          that.fetch(true,dataType);
+      }});
+
+    }catch(e){
+      if(!a){
+        that.fetch(true,dataType);
+      }
+    }
+  }
+
+  render(){
+      const compnayName = [{
+        header: 'Company',
+        accessor: 'name' // String-based value accessors!
+      }, {
+        header: 'InstrumentID',
+        accessor: 'InstrumentID',
+      }, {
+        header: 'Average Return (%)',
+        accessor: 'AV_Return',
+      }];
+      const compnayDetail = [{
+        header: 'Date',
+        accessor: 'Date' // String-based value accessors!
+      },{
+       header: 'Return',
+       accessor: 'Return',
+      }, {
+        header: 'Average Return (%)',
+        accessor: 'AV_Return',
+      }, {
+        header: ' Cumulative Return (%)',
+        accessor: 'CM_Return',
+      }
+    ];
+    return(
+        <Col md="12" xs="12">
+          <ReactTable
+            data={this.state.table}
+            showPagination={false}
+            columns={compnayName}
+            defaultPageSize={5}
+            noDataText='Loading...'
+            pageSize={(this.state.table &&  this.state.table.length) ?  this.state.table.length : 7}
+            SubComponent={(row) => {
+              return(
+                <ReactTable
+                  data={row.row.Data}
+                  columns={compnayDetail}
+                  defaultPageSize={10}
+                />
+              )
+            }}
+          />
+      </Col>
+    )
+  }
+
 }
 
 
@@ -287,184 +500,6 @@ class NewsArticle extends Component{
     );
   }
 }
-
-
-function labelToInstruments(array,label){
-    var returnValue = null;
-    if(label === 'All categories'){
-      returnValue = [];
-      for(var i = 0 ; i < array.length ; i ++){
-        if(array[i].instruments){
-          for(var j = 0; j < array[i].instruments.length ; j ++){
-            if(!returnValue.indexOf(array[i].instruments[j])>= 0){
-              returnValue.push(array[i].instruments[j]);
-            }
-          }
-        }
-      }
-    }else{
-      for(i = 0 ; i < array.length ; i ++){
-        if(array[i].label === label){
-          return array[i].instruments;
-        }
-      }
-    }
-    return returnValue;
-}
-
-
-class CompanyReturn extends Component{
-  constructor(props){
-    super(props);
-    this.state = {
-      table: []
-    }
-  }
-
-  componentWillMount(){
-    this.fetch(false,this.props.dataType);
-  }
-
-  componentWillReceiveProps(nextProps){
-    if(!nextProps.update){
-      return;
-    }
-    this.setState({table: []});
-    this.fetch(false,nextProps.dataType);
-  }
-
-  fetch(a,dataType){
-
-    var that = this;
-    var instruments = null;
-    if(dataType === "Export" ){
-      instruments = labelToInstruments(CATEGORY_ME,this.props.category);
-    }else if(dataType === "Retail"){
-      instruments = labelToInstruments(CATEGORY_RT,this.props.category);
-    }
-
-
-    var ids = [];
-    var names = [];
-    for(var i = 0 ; i < instruments.length ; i ++){
-      ids.push(instruments[i].id);
-      names.push(instruments[i].name);
-    }
-
-    var proxy = "https://cors-anywhere.herokuapp.com/";
-
-   //Alvin's frined's API,
-    var url  = "http://174.138.67.207/InstrumentID/"+ ids.join()
-        +  "/DateOfInterest/"+ getDateString(this.props.date())
-       +  "/List_of_Var/CM_Return,AV_Return/Upper_window/"+ this.props.up
-      +  "/Lower_window/" + this.props.low;
-    if(a){
-       // seesharp's API
-      url = "http://128.199.255.9/v3/id="+ ids.join(";")
-           +  "&dateOfInterest="+ getDateString(this.props.date())
-           +  "&listOfVars=AV_Return;CM_Return&upperWindow="+ this.props.up
-           +  "&lowerWindow=" + this.props.low;
-    }
-    console.log("company return True URL:" + url);
-    try{
-      fetch(proxy + url,{
-        method: 'GET',
-
-      })
-      .then(function(response) {
-        if (response.status >= 400) {
-          alert("CompanyReturns API down, check console.");
-          if(!a){
-            that.fetch(true,dataType);
-          }
-          return;
-        }
-        return response.json().then(function (json) {
-          json = json.CompanyReturns;
-          for(var i = 0 ; i < json.length ; i++ ){
-            json[i].name = names[ids.indexOf(json[i].InstrumentID)];
-            var av = 0;
-            for(var j = 0 ; j < json[i].Data.length ; j ++){
-              av += json[i].Data[j].AV_Return;
-              json[i].Data[j].AV_Return *= 100 ;
-              json[i].Data[j].AV_Return = parseFloat(json[i].Data[j].AV_Return).toFixed(7);
-
-              json[i].Data[j].CM_Return *= 100 ;
-              json[i].Data[j].CM_Return = parseFloat(json[i].Data[j].CM_Return).toFixed(7);
-
-              json[i].Data[j].Return *= 100 ;
-              json[i].Data[j].Return = parseFloat(json[i].Data[j].Return).toFixed(7);
-            }
-            json[i].AV_Return = parseFloat(av/json[i].Data.length * 100).toFixed(7) ;
-
-          }
-          that.setState({
-            table: json
-          });
-        })
-      }).then(function(something){
-        if(!a){
-          that.fetch(true,dataType);
-      }});
-
-    }catch(e){
-      if(!a){
-        that.fetch(true,dataType);
-      }
-    }
-  }
-
-  render(){
-      const compnayName = [{
-        header: 'Company',
-        accessor: 'name' // String-based value accessors!
-      }, {
-        header: 'InstrumentID',
-        accessor: 'InstrumentID',
-      }, {
-        header: 'Average Return (%)',
-        accessor: 'AV_Return',
-      }];
-      const compnayDetail = [{
-        header: 'Date',
-        accessor: 'Date' // String-based value accessors!
-      },{
-       header: 'Return',
-       accessor: 'Return',
-      }, {
-        header: 'Average Return (%)',
-        accessor: 'AV_Return',
-      }, {
-        header: ' Cumulative Return (%)',
-        accessor: 'CM_Return',
-      }
-    ];
-    return(
-        <Col md="12" xs="12">
-          <ReactTable
-            data={this.state.table}
-            columns={compnayName}
-            defaultPageSize={5}
-            noDataText='Loading...'
-            pageSize={(this.state.table &&  this.state.table.length) ?  this.state.table.length : 7}
-            SubComponent={(row) => {
-              return(
-                <ReactTable
-                  data={row.row.Data}
-                  columns={compnayDetail}
-                  defaultPageSize={10}
-                  showPagination={false}
-                />
-              )
-            }}
-          />
-      </Col>
-    )
-  }
-
-}
-
-
 
 
 

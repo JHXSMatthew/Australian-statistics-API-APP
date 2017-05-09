@@ -92,10 +92,10 @@ class TimePoint extends Component{
                 </ListGroupItem>
 
                 <ListGroupItem>
-                  <CompanyReturn category={this.props.category} date={this.getDate} up={this.state.up} low={this.state.low} update={this.state.update}/>
+                  <CompanyReturn category={this.props.category} date={this.getDate} up={this.state.up} low={this.state.low} update={this.state.update} dataType={this.props.dataType}/>
                 </ListGroupItem>
                 <ListGroupItem>
-                    <News category={this.props.category} starting={this.getStarting} ending={this.getEnd}  update={this.state.update}/>
+                    <News category={this.props.category} starting={this.getStarting} ending={this.getEnd} update={this.state.update} dataType={this.props.dataType}/>
                 </ListGroupItem>
               </ListGroup>
         </Card>
@@ -143,7 +143,7 @@ class News extends Component{
 
   }
   componentWillMount(){
-    this.fetch();
+    this.fetch(this.props.dataType);
   }
 
   componentWillReceiveProps(nextProps){
@@ -151,16 +151,21 @@ class News extends Component{
       return;
     }
     this.setState({table: []});
-    this.fetch();
+    this.fetch(nextProps.dataType);
   }
 
-  fetch(){
+  fetch(dataType){
     var that = this;
   //http://174.138.67.207/InstrumentID/ABP.AX,AAPL/DateOfInterest/2012-12-10/List_of_Var/CM_Return,AV_Return/Upper_window/5/Lower_window/3
-    var topics = labelToTopics(CATEGORY_RT,this.props.category);
-    if(!topics){
+    var topics = null;
+
+    if(dataType === "Export" ){
       topics = labelToTopics(CATEGORY_ME,this.props.category);
-    }/*
+    }else if(dataType === "Retail"){
+      topics = labelToTopics(CATEGORY_RT,this.props.category);
+    }
+
+    /*
     var instruments = labelToInstruments(CATEGORY_RT,this.props.category);
     if(!instruments){
       instruments = labelToInstruments(CATEGORY_ME,this.props.category);
@@ -292,7 +297,7 @@ function labelToInstruments(array,label){
       for(var i = 0 ; i < array.length ; i ++){
         if(array[i].instruments){
           for(var j = 0; j < array[i].instruments.length ; j ++){
-            if(returnValue.indexOf(array[i].instruments[j]) === -1){
+            if(!returnValue.indexOf(array[i].instruments[j])>= 0){
               returnValue.push(array[i].instruments[j]);
             }
           }
@@ -315,11 +320,10 @@ class CompanyReturn extends Component{
     this.state = {
       table: []
     }
-
   }
 
   componentWillMount(){
-    this.fetch();
+    this.fetch(false,this.props.dataType);
   }
 
   componentWillReceiveProps(nextProps){
@@ -327,16 +331,20 @@ class CompanyReturn extends Component{
       return;
     }
     this.setState({table: []});
-    this.fetch();
+    this.fetch(false,nextProps.dataType);
   }
 
-  fetch(a){
+  fetch(a,dataType){
 
     var that = this;
-    var instruments = labelToInstruments(CATEGORY_RT,this.props.category);
-    if(!instruments){
+    var instruments = null;
+    if(dataType === "Export" ){
       instruments = labelToInstruments(CATEGORY_ME,this.props.category);
+    }else if(dataType === "Retail"){
+      instruments = labelToInstruments(CATEGORY_RT,this.props.category);
     }
+
+
     var ids = [];
     var names = [];
     for(var i = 0 ; i < instruments.length ; i ++){
@@ -368,7 +376,7 @@ class CompanyReturn extends Component{
         if (response.status >= 400) {
           alert("CompanyReturns API down, check console.");
           if(!a){
-            that.fetch(true);
+            that.fetch(true,dataType);
           }
           return;
         }
@@ -397,12 +405,12 @@ class CompanyReturn extends Component{
         })
       }).then(function(something){
         if(!a){
-          that.fetch(true);
+          that.fetch(true,dataType);
       }});
 
     }catch(e){
       if(!a){
-        that.fetch(true);
+        that.fetch(true,dataType);
       }
     }
   }

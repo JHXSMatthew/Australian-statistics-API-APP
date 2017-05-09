@@ -32,7 +32,7 @@ class Charts extends Component {
           return;
         }
       }
-      tp.unshift(<TimePoint key={date+this.state.navs[this.state.tabIndex].key} time={date} category={this.state.navs[this.state.tabIndex].key} />)
+      tp.unshift(<TimePoint key={date+this.state.navs[this.state.tabIndex].key} time={date} category={this.state.navs[this.state.tabIndex].key} dataType={this.props.dataType}/>)
       this.setState({
         timePoints: tp,
       });
@@ -198,7 +198,7 @@ class Charts extends Component {
 
           <Row>
             <Col md="12" xs="12">
-              <TimePointsPanel ref={(panel) =>{this.pointPanel = panel;}}timePoints={this.state.timePoints}/>
+              <TimePointsPanel ref={(panel) =>{this.pointPanel = panel;}} timePoints={this.state.timePoints}/>
             </Col>
           </Row>
         </div>

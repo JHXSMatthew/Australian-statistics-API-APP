@@ -1,4 +1,4 @@
-package test;
+package com.teamrocket.seng3011;
 
 /**
  * Created by JHXSMatthew on 25/4/17.

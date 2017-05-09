@@ -1,16 +1,12 @@
 import React, {Component} from 'react';
-import Select from 'react-select';
-import Picker from 'react-month-picker';
-import ReactTable from 'react-table';
+import DataFetcher from './DataFetcher.js';
+import ResultPanel from './ResultPanel.js';
 import 'react-table/react-table.css';
-import { PopoverTitle, PopoverContent,Popover,Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import CopyToClipboard from 'react-copy-to-clipboard';
-import { Bar, Doughnut, Line, Pie, Polar, Radar } from 'react-chartjs-2';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import {ButtonGroup,Button,Row, Col,Container} from 'reactstrap';
 
 
-const STATE = [
-{ label: 'Australian', value: 'AUS' },
+export const STATE = [
+{ label: 'All Australian Regions', value: 'AUS' },
 { label: 'New South Wales', value: 'NSW' },
 { label: 'Victoria', value: 'VIC' },
 { label: 'Queensland', value: 'QLD' },
@@ -21,36 +17,121 @@ const STATE = [
 { label: 'Australian Capital Territory', value: 'ACT' },
 ];
 
-const AREA = [
+
+export const AREA = [
 { label: 'Merchandise Exports', value: 'MerchandiseExports' },
 { label: 'Retail', value: 'Retail' },
 ];
 
-const CATEGORY_ME = [
-  { label: 'All categories', value: 'Total' },
-  { label: 'Food And Live Animals', value: 'FoodAndLiveAnimals' },
-  { label: 'Beverages And Tobacco', value: 'BeveragesAndTobacco' },
-  { label: 'Crud Material And Inedible', value: 'CrudMaterialAndInedible' },
-  { label: 'Mineral Fuel Lubricent And related material', value: 'MineralFuelLubricentAndRelatedMaterial' },
-  { label: 'Animal and vegitable oil fat and waxes', value: 'AnimalAndVegitableOilFatAndWaxes' },
-  { label: 'Chemicals And Related Products', value: 'ChemicalsAndRelatedProducts' },
-  { label: 'Manufacture Goods', value: 'ManufacturedGoods' },
-  { label: 'Machinery And Transport Equipments', value: 'MachineryAndTransportEquipments' },
-  { label: 'Other Manufactured Articles', value: 'OtherManufacturedArticles' },
-  { label: 'Unclassified', value: 'Unclassified' },
+export const CATEGORY_ME = [
+  { label: 'All categories',
+    value: 'Total' ,
+  },
+  { label: 'Food and Live Animals', value: 'FoodAndLiveAnimals',
+    topics:["RETA"],
+    instruments: [{name:"Australian Agricultural Company", id:"AAC.AX"},{name:"Elders Ltd",id:"ELD.AX"},
+      {name:"Graincorp Ltd",id:"GNC.AX"},{name: "Ridley Corporation Ltd",id:"RIC.AX"},
+      {name:"Tassal Group Limited",id:"TGR.AX"},{name:"Webster Ltd",id:"WBA.AX"}]
+   },
+  { label: 'Beverages and Tobacco', value: 'BeveragesAndTobacco',
+    topics: ['RETA'],
+    instruments: [{name:"Coca Cola",id:"CCL.AX"}, {name:"Australian Whiskey Holdings",id:"AWY.AX"}]
+  },
+  { label: 'Crud Material and Inedibles',
+    value: 'CrudMaterialAndInedible',
+    topics: ['RETA'],
+    instruments: [{name:"Alicanto Minerals Limited",id:"AQI.AX"}, {name:"Alara Resources Limited",id:"AUQ.AX"},
+      {name:"Atc Alloys Ltd",id:"ATA.AX"}, {name:"Woollongong Coal Limited",id:"WLC.AX"}]
+
+  },
+  { label: 'Mineral, Fuel, Lubricant and Related Material',
+    value: 'MineralFuelLubricentAndRelatedMaterial',
+    topics:['RETA'],
+    instruments: [{name:"Ceramic Fuel Cells Limited",id:"CFU.AX"}, {name:"Antilles Oil And Gas",id:"AZZ.AX"},
+      {name:"Austex Oil Limited",id:"AOK.AX"}, {name:"Freedom Oil And Gas Limited",id:"FDM.AX"}, {name:"BHP Billiton Limited",id:"BHP.AX"}]
+   },
+  { label: 'Animal and Vegetable Oil, Fat and Waxes',
+    value: 'AnimalAndVegitableOilFatAndWaxes',
+    topics:['RETA'],
+    instruments: [{name:"Australian Agricultural Company", id:"AAC.AX"},{name:"Elders Ltd",id:"ELD.AX"},
+      {name:"Graincorp Ltd",id:"GNC.AX"},{name: "Ridley Corporation Ltd",id:"RIC.AX"},{name:"Tassal Group Limited",id:"TGR.AX"},{name:"Webster Ltd",id:"WBA.AX"}]
+  },
+  { label: 'Chemicals and Related Products',
+    value: 'ChemicalsAndRelatedProducts',
+    topics:['RETA'],
+    instruments: [{name:"Acrux Limited",id:"ACR.AX"}, {name:"Bioxyne Limited",id:"BXN.AX"},
+      {name:"Living Cell Technologies",id:"LCT.AX"}, {name:"Suda Ltd",id:"SUD.AX"}]
+
+   },
+  { label: 'Manufactured Goods',
+    value: 'ManufacturedGoods' ,
+    topics:['RETA'],
+    instruments: [{name:"Ookami Limited",id:"OOK.AX"}, {name:"Advanced Braking Technology",id:"ABV.AX"},
+      {name:"Bluglass Limited",id:"BLG.AX"}]
+  },
+  { label: 'Machinery and Transport Equipments',
+    value: 'MachineryAndTransportEquipments',
+    topics:['RETA'],
+    instruments: [{name:"Traffic Technologies Limited",id:"TTI.AX"}, {name:"Macquarie Atlas Roads Group",id:"MQA.AX"},
+      {name:"Sydney Airport",id:"SYD.AX"}, {name:"Aurizon Holdings Limited",id:"AZJ.AX"}]
+  },
+  { label: 'Other Manufactured Articles',
+    value: 'OtherManufacturedArticles' ,
+    topics:['RETA'],
+    instruments: [{name:"Silex Systems Limited",id:"SLX.AX"}, {name:"Netcomm Wireless Limited",id:"NTC.AX"}]
+  },
+  { label: 'Unclassified',
+    value: 'Unclassified' ,
+    topics: ['RETA'],
+    instruments: [{name:"Coca Cola",id:"CCL.AX"}, {name:"Australian Whiskey Holdings",id:"AWY.AX"}]
+  },
 ];
 
-const CATEGORY_RT = [
-{ label: 'All categories', value: 'Total' },
-{ label: 'Food related category', value: 'Food' },
-{ label: 'HouseholdGood category', value: 'HouseholdGood' },
-{ label: 'Clothing Footware And Personal Accessory category', value: 'ClothingFootwareAndPersonalAccessory' },
-{ label: 'Stores', value: 'DepartmentStores' },
-{ label: 'Restaurants', value: 'CafesResturantsAndTakeawayFood' },
-{ label: 'others', value: 'Other' },
+export const CATEGORY_RT = [
+  { label: 'All categories',
+    value: 'Total'
+  },
+  { label: 'Foods',
+    value: 'Food' ,
+    topics: ['RET'],
+    instruments: [{name:"Freedom Foods",id:"FNP.AX"}, {name:"Tassal Group Limited",id:"TGR.AX"},
+    {name:"Seafarms Group Limited",id:"SFG.AX"},{name:"Woolsworths",id:"WOW.AX"}]
+  },
+  { label: 'Household Goods',
+    value: 'HouseholdGood' ,
+    topics: ['FOD'],
+    instruments: [{name:"Home Depot",id:"HD"}, {name:"Nick Scali",id:"NCK.AX"},
+      {name:"Harvey Norman",id:"HVN.AX"}, {name:"Ennis Inc",id:"EBF"},
+      {name:"Bed Bath And Beyond",id:"BBBY"}]
+  },
+  { label: 'Clothing, Footware and Personal Accessories',
+    value: 'ClothingFootwareAndPersonalAccessory',
+    topics:['TEX'],
+    instruments: [{name:"Gap Inc",id:"GPS"}, {name:"Footlocker",id:"FL"},
+      {name:"Billabong International",id:"BBG.AX"}]
+   },
+  { label: 'Stores',
+    value: 'DepartmentStores' ,
+    topics: ['WHO'],
+    instruments: [{name:"Walmart Stores",id:"WMT"}, {name:"Costco Wholesale Corporation",id:"COST"},
+      {name:"Myer Holdings",id:"MYR.AX"}, {name:"Nick Scali",id:"NCK.AX"},
+      {name:"Harvey Norman",id:"HVN.AX"}]
+  },
+  { label: 'Restaurants',
+    value: 'CafesResturantsAndTakeawayFood',
+    topics:['LEI'],
+    instruments: [{name:"Mcdonalds",id:"MCD"}, {name:"Ark Restaurants Corp",id:"ARKR"},
+      {name:"BJ Resutaurants Inc",id:"BJRI"}, {name:"Starbucks",id:"SBUX"}]
+   },
+  { label: 'Others',
+    value: 'Other' ,
+    topics:['RET'],
+    instruments: [{name:"Jb Hifi",id:"JBH.AX"}, {name:"Activistic Limited",id:"ACU.AX"},
+      {name:"Dropsuite Limited",id:"DSE.AX"}]
+  },
 ];
 
-function valueToLabel(array,value){
+export function valueToLabel(array,value){
   for(var i = 0 ; i < array.length ; i ++){
     if(array[i].value && array[i].value === value){
       return array[i].label;
@@ -59,10 +140,6 @@ function valueToLabel(array,value){
   return null;
 }
 
-const DATE_LANG = {
-       months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-       , from: 'From', to: 'To'
-   }
 
 
 class DataAnalyzer extends Component {
@@ -71,9 +148,15 @@ class DataAnalyzer extends Component {
     super(props);
     this.state = {
         data: [],
-        dataType: null
+        dataType: null,
+        rSelected: 1
     }
     this.addDataEntry = this.addDataEntry.bind(this);
+    this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
+  }
+
+  onRadioBtnClick(rSelected) {
+    this.setState({ rSelected });
   }
 
   addDataEntry(e){
@@ -107,8 +190,10 @@ class DataAnalyzer extends Component {
                 if(regional[j].State === "Australia"){
                   //don't add it. logically AU contains all states
                 }else{
-                  total += regionalTotal/regionalCount;
-                  count ++ ;
+                  if(!isNaN(regional[j].average)){
+                    total += regionalTotal/regionalCount;
+                    count ++ ;
+                  }
                 }
 
               }
@@ -145,8 +230,10 @@ class DataAnalyzer extends Component {
               if(regional[j].State === "Australia"){
                 //don't add it. logically AU contains all states
               }else{
-                total += regionalTotal/regionalCount;
-                count ++ ;
+                if(!isNaN(regional[j].average)){
+                  total += regionalTotal/regionalCount;
+                  count ++ ;
+                }
               }
             }
           }
@@ -157,618 +244,39 @@ class DataAnalyzer extends Component {
     this.setState(function (prevState, props) {
         return {
           data: data,
-          dataType: dataType
+          dataType: dataType,
+          rSelected: 2
         };
     });
-
   }
 
   render(){
-      return (
-        <div className="animated fadeIn">
-          <div className="row">
-            <div className="col-sm-6 col-md-8">
-              {this.state.dataType &&
-                <Charts data={this.state.data} dataType={this.state.dataType}/>
-              }
-          </div>
-          </div>
-          <div className="row">
-            <div className="col-sm-6">
-              <DataFetcher addDataEntry={this.addDataEntry} />
-            </div>
-            <div className="col-sm-6">
-              <DataTable data={this.state.data} dataType={this.state.dataType}/>
-            </div>
-          </div>
-        </div>
-      )
-
-  }
-}
-
-// chats components
-class Charts extends Component {
-  constructor(props){
-    super(props);
-    this.toggle = this.toggle.bind(this);
-    this.state = {
-      activeTab: '1'
-    };
-  }
-
-  toggle(tab) {
-    if (this.state.activeTab !== tab) {
-      console.log(tab);
-      this.setState({
-        activeTab: tab
-      });
-    }
-  }
-
-
-  componentWillMount(){
-    this.componentWillReceiveProps(this.props);
-  }
-
-  componentWillReceiveProps(nextProps){
-    const color=['rgba(75,192,192,1)','rgba(226,67,30,1)','rgba(231,113,27,1)',
-    'rgba(15,255,58,1)','rgba(111,150,84,1)','rgba(28,145,192,1)',
-    'rgba(67,69,157,1)','rgba(165,59,162,1)','rgba(47,252,150,1)'];
-
-    var data=nextProps.data;
-    if(data){
-      var labels=[];
-      var charts=[];
-      var navs=[];
-      var ylabel = null;
-      if(nextProps.dataType === "Export"){
-        ylabel = "Value ($ thousands)"
-      }else if(nextProps.dataType === "Retail"){
-        ylabel = "Value ($ millions)";
-      }
-      for(var i = 0; i < data.length ; i ++){
-        //for each category
-        var dataSet=[];
-        var regional = data[i].RegionalData;
-        if(regional){
-          for(var j = 0; j < regional.length; j++ ){
-            var line = {
-              pointBorderWidth: 1,
-              pointHoverRadius: 5,
-              pointHoverBorderWidth: 2,
-              pointRadius: 1,
-              pointHitRadius: 10,
-              borderDash: [],
-              borderDashOffset: 0.0,
-              pointBackgroundColor: '#fff',
-              borderJoinStyle: 'miter',
-              borderCapStyle: 'butt',
-              fill: false,
-              lineTension: 0.1,
-              pointHoverBorderColor: 'rgba(220,220,220,1)',
-            };
-            line.label = regional[j].State;
-            line.backgroundColor = color[j];
-            line.borderColor = color[j];
-            line.pointBorderColor = color[j];
-            line.pointHoverBackgroundColor = color[j];
-            line.data = [];
-
-            var dateData = regional[j].Data;
-            for(var k=0; k < dateData.length; k++){
-              line.data .push(dateData[k].Value);
-              var contain =false;
-              for(var m=0; m < labels.length; m++){
-                if(labels[m] === dateData[k].Date){
-                  contain = true;
-                  break;
-                }
-              }
-              if(!contain){
-                labels.push( dateData[k].Date);
-              }
-            }
-            dataSet.push(line);
-          }
-        }
-        navs.push(
-          <Tab key={data[i].Category}>
-              {data[i].Category}
-          </Tab>
-        );
-
-        charts.push(
-          <TabPanel key={data[i].Category}>
-            <div className="chart-wrapper">
-              <Line
-                data={{
-                  datasets: dataSet,
-                  labels: labels
-                }}
-                options={{
-                  maintainAspectRatio: true,
-                  responsive: true,
-                  scales: {
-                    xAxes: [{
-                        display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Date'
-                        }
-                    }],
-                    yAxes: [{
-                        display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: ylabel
-                        }
-                    }]
-                }
-                }}
-              />
-            </div>
-          </TabPanel>
-        );
-      }
-
-      this.setState(function (prevState, props) {
-        console.log("prev");
-
-        console.log(prevState);
-        console.log("props");
-        console.log(props);
-
-          return {
-            charts: charts,
-            navs: navs
-          };
-      });
-
-      console.log(this.state);
-    }
-  }
-
-
-  render(){
-
-
-    return (
-      <div className="card">
-        <div className="card-header">
-          <strong>Charts</strong>
-        </div>
-        <div className="card-block">
-          <div className="col-md-12 mb-12">
-            <Tabs
-              selectedIndex={0}
-            >
-              <TabList>
-                  {this.state.navs}
-              </TabList>
-
-              {this.state.charts}
-
-          </Tabs>
-          </div>
-        </div>
-      </div>
-    )
-  }
-}
-
-
-class DataTable extends Component {
-  constructor(props){
-    super(props);
-    this.toggle = this.toggle.bind(this);
-    this.toggle2 = this.toggle2.bind(this);
-    this.state ={
-      rawShowing: false,
-      popoverOpen: false
-    }
-  }
-
-  toggle() {
-    this.setState({
-      rawShowing: !this.state.rawShowing
-    });
-  }
-
-  toggle2() {
-  this.setState({
-    popoverOpen: !this.state.popoverOpen
-  });
-}
-
-  render() {
-    var data = this.props.data;
-    const categoryValue = [{
-      header: 'Category',
-      accessor: 'Category' // String-based value accessors!
-    }, {
-      header: 'Average',
-      accessor: 'average',
-    }]
-
-    const regionalData = [{
-      header: 'State',
-      accessor: 'State' // String-based value accessors!
-    }, {
-      header: 'Average',
-      accessor: 'average',
-    }]
-
-    const Datedata = [{
-      header: 'Date',
-      accessor: 'Date' // String-based value accessors!
-    }, {
-      header: 'Value',
-      accessor: 'Value',
-    }]
-    var unit = null;
-    if(this.props.dataType === "Export"){
-      unit = "($ thousands)"
-    }else if(this.props.dataType === "Retail"){
-      unit = "($ millions)";
-    }
-
-    return(
-      <div className="card">
-        <div className="card-header">
-          <strong>Data Set {unit} <span className="float-right"><i className="icon-question" id="Popover2" onClick={this.toggle2}></i></span></strong>
-        </div>
-        <Popover placement="left" isOpen={this.state.popoverOpen} target="Popover2" toggle={this.toggle2}>
-         <PopoverTitle>Data Set</PopoverTitle>
-         <PopoverContent>This table will initially list categories and display their corresponding average values fetched by the data fetcher. The table can expand the data set with the arrow on the left of the rows to show the averages of the value per state requested. it can further expand to display individual values for the months requested. </PopoverContent>
-       </Popover>
-        <div className="card-block">
-          <div className="row">
-            <div className="col-sm-12 col-md-12">
-              <ReactTable
-                data={data}
-                columns={categoryValue}
-                defaultPageSize={5}
-                noDataText='Use Data Fetcher to fetch data.'
-                pageSize={(data &&  data.length) ? data.length : 7}
-                SubComponent={(row) => {
-                  return(
-                    <ReactTable
-                      data={row.row.RegionalData}
-                      columns={regionalData}
-                      defaultPageSize={10}
-                      pageSize={row.row.RegionalData.length}
-                      showPagination={false}
-                      SubComponent={(row) => {
-                        return(
-                          <ReactTable
-                            data={row.row.Data}
-                            pageSize={row.row.Data.length}
-                            columns={Datedata}
-                            defaultPageSize={10}
-                            showPagination={false}
-                          />
-                        )
-                      }}
-                    />
-                  )
-                }}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="card-footer">
-          <button className="btn btn-sm btn-primary" onClick={this.toggle} disabled={(this.props.dataType) == null? true : false} ><i className="fa fa-dot-circle-o" ></i> Raw</button>
-        </div>
-        <Modal isOpen={this.state.rawShowing} toggle={this.toggle} className={'modal-lg '+ this.props.className}>
-          <ModalHeader toggle={this.toggle}>JSON</ModalHeader>
-          <ModalBody>
-            Click Copy to copy raw JSON into your clipboard. Only support IE6 and modern browser.
-          </ModalBody>
-          <ModalFooter>
-            <CopyToClipboard text={(this.props.data)?JSON.stringify(this.props.data,null,2):""}>
-              <Button color="primary" onClick={this.toggle}>Copy</Button>
-            </CopyToClipboard>
-            <Button color="secondary" onClick={this.toggle}>Close</Button>
-          </ModalFooter>
-        </Modal>
-      </div>
-
-
-
-    )
-  }
-
-}
-/*
-//data set componenets
-
-class DataSet extends Component {
-  constructor(props){
-    super(props);
-  }
-
-  render(){
-    return (
-      <div className="card">
-        <div className="card-header">
-          <strong>Data Set</strong>
-        </div>
-        <div className="card-block">
-          <div id="accordion" role="tablist" aria-multiselectable="true">
-            {this.props.entries}
-          </div>
-        </div>
-      </div>
-    )
-  }
-}
-
-class DataEntry extends Component{
-  constructor(props){
-    super(props);
-    this.state ={
-      json: this.props.json
-    }
-  }
-
-  render(){
-    return (
-
-    )
-  }
-
-}
-
-*/
-
-//data fetcher components
-
-class DataFetcher extends Component {
-
-  constructor(props){
-    super(props);
-    this.state = {
-      area: null,
-      region: [],
-      category: [],
-      mrange: {from: {year: 2016, month: 7}, to: {year: 2017, month: 2}},
-      count: 0,
-      popoverOpen: false
-    }
-    this.setArea = this.setArea.bind(this);
-    this.setCategory = this.setCategory.bind(this);
-    this.toggle = this.toggle.bind(this);
-    this.setRegion = this.setRegion.bind(this);
-    this.fetch = this.fetch.bind(this);
-    this.handleClickRangeBox = this.handleClickRangeBox.bind(this);
-    this.handleRangeDissmis = this.handleRangeDissmis.bind(this);
-  }
-
-  toggle() {
-      this.setState({
-        popoverOpen: !this.state.popoverOpen
-      });
-    }
-
-  setArea(a){
-    this.setState({
-      area: a,
-      category: []
-    })
-  }
-
-  setRegion(a){
-    this.setState({
-      region: a,
-    })
-  }
-
-  setCategory(a){
-    this.setState({
-      category: a
-    })
-  }
-
-  handleClickRangeBox(e) {
-      this.refs.pickRange.show()
-  }
-
-  handleRangeDissmis(value) {
-    this.setState( {mrange: value} )
-  }
-
-  fetch(e){
-    var that = this;
-    var url = 'http://45.76.114.158/api/'
-    fetch( url,{
-      method: 'POST',
-      headers: {
-       'Accept': 'application/json',
-       'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        StatisticsArea: this.state.area,
-        State: this.state.region,
-        Category: this.state.category,
-        startDate: this.state.mrange.from.year + "-" + this.state.mrange.from.month + "-01",
-        endDate: this.state.mrange.to.year + "-" + this.state.mrange.to.month + "-01"
-      }),
-    })
-    .then(function(response) {
-      if (response.status >= 400) {
-        alert("Our data source is down, please wait for a while and we'll fix it asap.")
-        return;
-      }
-      return response.json().then(function (json) {
-        //TODO: deal with empty data
-        that.props.addDataEntry(json,"Data Entry"+that.state.count++);
-      })
-
-    });
-  }
-
-  render(){
-    var button = (this.state.area && this.state.region && this.state.category && this.state.region.length > 0 && this.state.category.length > 0) ? false : true;
-
-    return (
-        <div className="card">
-          <div className="card-header">
-            <strong>Data fetcher</strong>
-            <span className="float-right"><i className="icon-question" id="Popover1" onClick={this.toggle}></i></span>
-          </div>
-          <Popover placement="bottom" isOpen={this.state.popoverOpen} target="Popover1" toggle={this.toggle}>
-             <PopoverTitle>Data Fetcher</PopoverTitle>
-             <PopoverContent>Fill all forms and click fetch to fetch data. All fetched data will be shown in Data Set and charts will be shown.</PopoverContent>
-           </Popover>
-          <div className="card-block">
-            <div className="row">
-              <div className="col-sm-12 col-md-12">
-                <div className="form-group">
-                  <label htmlFor="name">Statistics Area</label>
-                  <AreaSelector setArea={this.setArea}/>
-                </div>
+        return(
+            <div className="animated fadeIn">
+              <Container>
+                <Row>
+                  <Col style={{padding: 10}} sm={{ size: 6, push: 2, pull: 2, offset: 3 }}>
+                    {this.state.dataType &&
+                      <div>
+                        <ButtonGroup>
+                          <Button color="primary" onClick={() => this.onRadioBtnClick(1)} active={this.state.rSelected === 1}>Search</Button>
+                          <Button color="primary" onClick={() => this.onRadioBtnClick(2)} active={this.state.rSelected === 2}>Result</Button>
+                        </ButtonGroup>
+                      </div>
+                    }
+                  </Col>
+                </Row>
+                <Row>
+                  <Col sm={{ size: 6, push: 2, pull: 2, offset: 1 }}>
+                      {this.state.rSelected === 1 && <DataFetcher addDataEntry={this.addDataEntry} />}
+                  </Col>
+                </Row>
+              </Container>
+              <div style={{padding: 20}}>
+                {this.state.rSelected === 2 && this.state.dataType && <ResultPanel data={this.state.data} dataType={this.state.dataType}></ResultPanel>}
               </div>
             </div>
-            <div className="row">
-              <div className="col-sm-12 col-md-12">
-                <div className="form-group">
-                  <label htmlFor="regions">Regions</label>
-                  <StateSelector setRegion={this.setRegion}/>
-                </div>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-sm-12 col-md-12">
-                <div className="form-group">
-                  <label htmlFor="category">Category</label>
-                  <CategorySelector setCategory={this.setCategory} area={this.state.area} category={this.state.category}/>
-                </div>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-sm-12 col-md-12">
-                <div className="form-group">
-                  <label htmlFor="daterange">Date Range</label>
-                  <MonthBox value={this.state.mrange} ClickRangeBox={this.handleClickRangeBox} />
-                </div>
-              </div>
-            </div>
-
-              <Picker
-                  ref="pickRange"
-                  years={{min: 1995, max: 2017}}
-                  range={this.state.mrange}
-                  lang={DATE_LANG}
-                  theme="light"
-                  onChange={this.handleRangeChange}
-                  onDismiss={this.handleRangeDissmis}
-                  >
-              </Picker>
-          </div>
-          <div className="card-footer">
-            <button className="btn btn-sm btn-primary" onClick={this.fetch} disabled={button} ><i className="fa fa-dot-circle-o" ></i> Fetch</button>
-          </div>
-
-        </div>
-
-    )
-  }
-}
-
-
-class Switch_Text extends Component{
-
-  render(){
-    return (
-      <label className="switch switch-3d switch-primary">
-        <input type="checkbox" className="switch-input" defaultChecked/>
-        <span className="switch-label"></span>
-        <span className="switch-handle"></span>
-      </label>
-    )
-  }
-
-}
-
-class MonthBox extends Component {
-  constructor(props){
-      super(props);
-      this.handleClick = this.handleClick.bind(this);
-  }
-
-  handleClick(){
-    this.props.ClickRangeBox();
-  }
-
-  render(){
-    let makeText = m => {
-        if (m && m.year && m.month) return (DATE_LANG.months[m.month-1] + '. ' + m.year)
-        return '?'
-    }
-    return <div className="box" onClick={this.handleClick}>
-              <button type="button" className="btn btn-outline-secondary btn-block">{makeText(this.props.value.from) + ' ~ ' + makeText(this.props.value.to)}</button>
-            </div>
-  }
-
-}
-
-
-class AreaSelector extends Component{
-  constructor(prop){
-    super(prop)
-    this.state = {
-      disabled: false,
-      options: AREA,
-      value: '',
-    };
-    this.handleSelectChange = this.handleSelectChange.bind(this);
-  }
-
-  handleSelectChange(value) {
-  		this.setState({value});
-      this.props.setArea(value);
-  }
-
-  render(){
-    return <Select simpleValue value={this.state.value} placeholder="Select Statistics Area" options={this.state.options} onChange={this.handleSelectChange} />
-  }
-}
-
-class StateSelector extends Component{
-  constructor(prop){
-    super(prop)
-    this.state = {
-      disabled: false,
-      options: STATE,
-      value: [],
-    };
-    this.handleSelectChange = this.handleSelectChange.bind(this);
-  }
-
-  handleSelectChange(value) {
-  		this.setState({ value });
-      this.props.setRegion(value);
-  }
-
-  render(){
-    return <Select multi simpleValue value={this.state.value} placeholder="Select regions" options={this.state.options} onChange={this.handleSelectChange} />
-  }
-}
-
-
-class CategorySelector extends Component{
-  constructor(props){
-    super(props)
-    this.handleSelectChange = this.handleSelectChange.bind(this);
-  }
-
-  handleSelectChange(value) {
-      this.props.setCategory(value);
-  }
-
-  render(){
-    return <Select multi simpleValue disabled={(this.props.area) ? false : true} value={this.props.category} placeholder="Select Categories" options={this.props.area &&this.props.area === "Retail" ? CATEGORY_RT : CATEGORY_ME } onChange={this.handleSelectChange} />
+        )
   }
 }
 

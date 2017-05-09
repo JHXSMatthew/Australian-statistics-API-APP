@@ -14,7 +14,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.2.RELEASE</version>
+        <version>1.5.3.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -25,15 +25,6 @@
     </properties>
 
     <dependencies>
-
-        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <version>1.5.2.RELEASE</version>
-        </dependency>
-
-
         <!-- Web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -61,6 +52,10 @@
         </dependency>
         <!-- Need this to compile JSP -->
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.json/json -->
         <dependency>
@@ -74,8 +69,9 @@
             <artifactId>jedis</artifactId>
             <version>2.9.0</version>
             <type>jar</type>
-            <scope>compile</scope>
         </dependency>
+
+
     </dependencies>
 
     <build>

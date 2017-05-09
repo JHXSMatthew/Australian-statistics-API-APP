@@ -7,7 +7,7 @@ import com.teamrocket.seng3011.api.exceptions.CannotParseStatsTypeException;
 import com.teamrocket.seng3011.api.exceptions.KnownException;
 import com.teamrocket.seng3011.api.exceptions.NoDataAvailableException;
 import com.teamrocket.seng3011.utils.DateUtils;
-import org.springframework.boot.json.JsonJsonParser;
+import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.boot.json.JsonParser;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class DataParser {
 
 
     public DataParser(String json) {
-        parser = new JsonJsonParser();
+        parser = new JacksonJsonParser();
         root = parser.parseMap(json);
     }
 

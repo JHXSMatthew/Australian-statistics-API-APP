@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Dropdown, DropdownMenu, DropdownItem } from 'reactstrap';
 
 class Header extends Component {
 
@@ -35,24 +34,23 @@ class Header extends Component {
 
   render() {
     return (
-      <header className="app-header navbar">
-        <button className="navbar-toggler mobile-sidebar-toggler hidden-lg-up" onClick={this.mobileSidebarToggle} type="button">&#9776;</button>
-        <a className="navbar-brand" href="#"></a>
+      <header className="app-header navbar" style={{backgroundColor: '#263238'}}>
+        <a className="navbar-brand" href="#" style={{backgroundColor: '#263238'}}></a>
         <ul className="nav navbar-nav hidden-md-down">
-          <li className="nav-item">
-            <a className="nav-link navbar-toggler sidebar-toggler" onClick={this.sidebarToggle} href="#">&#9776;</a>
+          <li className="nav-item px-1">
+            <a className="nav-link" href="#/home" style={{color:'white'}}>Home</a>
           </li>
           <li className="nav-item px-1">
-            <a className="nav-link" href="#/home">Home</a>
+            <a className="nav-link" href="#/release" style={{color:'white'}}>Release</a>
           </li>
           <li className="nav-item px-1">
-            <a className="nav-link" href="#/release">Release</a>
+            <a className="nav-link" href="#/dataAnalyzer" style={{color:'white'}}>Analytics Platform</a>
           </li>
           <li className="nav-item px-1">
-            <a className="nav-link" href="#/documentation/gettingStarted">Documentation</a>
+            <a className="nav-link" href="#/documentation/DeveloperAPI" style={{color:'white'}}>Documentation</a>
           </li>
           <li className="nav-item px-1">
-            <a className="nav-link" href="#/about">About</a>
+            <a className="nav-link" href="#/about" style={{color:'white'}}>About</a>
           </li>
         </ul>
       </header>

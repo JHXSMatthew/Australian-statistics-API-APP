@@ -69,29 +69,24 @@ public class APIRequest {
         ThreadUtils.runTask(new Runnable() {
             @Override
             public void run() {
-                for(MonthlyDataEntry month : copy){
-                    for(RegionalDataEntry region : month.getEntries()){
-                        for(DateDataEntry entry : region.getEntry()){
+                try {
+                    CacheManager.getManager().cache(type.getCacheKey(),copy);
+                    Date actualEnding = ending;
+                    Date today = DateUtils.setTimeToMidnight(Calendar.getInstance().getTime());
+                    if(today.before(DateUtils.setTimeToMidnight(actualEnding)))
+                        actualEnding =today;
+
+                    for (HaveID c : categories) {
+                        for (State s : states) {
                             CacheManager.getManager().cache(type.getCacheKey(),
-                                    month.getId(),
-                                    region.getState().getId(),
-                                    entry.getDate(),
-                                    entry.getData());
+                                    c.getId(),
+                                    s.getId(),
+                                    starting,
+                                    actualEnding);
                         }
                     }
-                    try {
-                        for (HaveID c : categories) {
-                            for (State s : states) {
-                                CacheManager.getManager().cache(type.getCacheKey(),
-                                        c.getId(),
-                                        s.getId(),
-                                        starting,
-                                        ending);
-                            }
-                        }
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
             }
         });
@@ -103,18 +98,11 @@ public class APIRequest {
             if(this.cacheFlag){ //fast exit
                 return true;
             }
-            boolean b = true;
-            for(HaveID c : categories){
-                for(State s : states){
-                    b = CacheManager.getManager().isCached(type.getCacheKey(),
-                            c.getId(),s.getId(),starting,ending) && b;
-                    if(!b){
-                        return false;
-                    }
-                }
-            }
-            cacheFlag = b;
-            return b;
+            if(CacheManager.getManager() == null)
+                return false;
+
+            cacheFlag = CacheManager.getManager().isCached(type.getCacheKey(),categories,states,starting,ending);
+            return cacheFlag;
         }else{
             return false;
         }
@@ -124,19 +112,18 @@ public class APIRequest {
         if(isCached()){
             APIController.debugPrint("Cached request, read from cache.");
             List<MonthlyDataEntry> entries = new ArrayList<>();
-
             for(HaveID c : categories){
-                List<RegionalDataEntry> regions = new ArrayList<>();
-                for(State s : states){
+               List<RegionalDataEntry> regions = new ArrayList<>();
+               for(State s : states){
                     DateDataEntry[] dateData = CacheManager.getManager().getCache(type.getCacheKey(),
-                            c.getId(),
-                            s.getId(),
-                            starting,
-                            ending);
+                                    c.getId(),
+                                    s.getId(),
+                                    starting,
+                                    ending);
                     RegionalDataEntry region = EntryFactory.getFactory().getRegionalDataEntry(s,dateData);
                     regions.add(region);
                 }
-                entries.add(EntryFactory.getFactory().getMonthlyDataEntry(String.valueOf(c.getId()),regions,type));
+               entries.add(EntryFactory.getFactory().getMonthlyDataEntry(String.valueOf(c.getId()),regions,type));
             }
             switch (type){
                 case EXPORT:
@@ -148,6 +135,7 @@ public class APIRequest {
             }
 
         }else {
+
             DataParser container = new DataParser(fetchedCache);
             MonthlyDataEntry[] result = container.parse().getParsedEntries(type);
             if(APIConfiguration.cache)

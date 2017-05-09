@@ -72,7 +72,7 @@ public class TestDataGenerator {
                         .append(parameterSeparator);
             }
             builder.deleteCharAt(builder.length() -1);
-            writer.write(builder.toString());
+            writer.write(builder.toString().toLowerCase());
             writer.newLine();
             writer.flush();
         }

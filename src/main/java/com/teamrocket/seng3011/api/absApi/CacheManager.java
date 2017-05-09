@@ -2,8 +2,12 @@ package com.teamrocket.seng3011.api.absApi;
 
 import com.teamrocket.seng3011.api.APIConfiguration;
 import com.teamrocket.seng3011.api.APIController;
+import com.teamrocket.seng3011.api.HaveID;
+import com.teamrocket.seng3011.api.State;
 import com.teamrocket.seng3011.api.absApi.entries.DateDataEntry;
 import com.teamrocket.seng3011.api.absApi.entries.EntryType;
+import com.teamrocket.seng3011.api.absApi.entries.MonthlyDataEntry;
+import com.teamrocket.seng3011.api.absApi.entries.RegionalDataEntry;
 import com.teamrocket.seng3011.api.exceptions.CannotParseStatsTypeException;
 import com.teamrocket.seng3011.utils.DateRange;
 import com.teamrocket.seng3011.utils.DateRangeComparator;
@@ -17,32 +21,24 @@ import java.util.*;
  */
 public class CacheManager {
 
-    static {
-        getManager();
-    }
-
     private static CacheManager manager = null;
 
     private JedisPool pool;
 
 
 
-    public CacheManager(){
+    public CacheManager() throws Exception {
         manager = this;
         JedisPoolConfig config = new JedisPoolConfig();
-        config.setMaxTotal(1000); //TODO: change this while production
+        config.setMaxTotal(10000);
         config.setMaxWaitMillis(1000);
         try{
             pool = new JedisPool(config,"localhost",6379);
             APIConfiguration.cache = true;
+            pool.getResource().close();
             APIController.debugPrint("Cache enabled.");
-
         }catch (Exception e){
-            e.printStackTrace();
-            manager = null;
-            APIConfiguration.cache = false;
-            APIController.debugPrint("Redis connection failed, drop cache functionality..");
-
+           throw new Exception("cache cannot enable!");
         }
     }
 
@@ -59,6 +55,7 @@ public class CacheManager {
         });
     }
 
+    @Deprecated
     public boolean isCached(int area, int category, int region, Date start, Date end){
         String key = getKey(area,category,region);
         Jedis jedis = pool.getResource();
@@ -84,6 +81,53 @@ public class CacheManager {
         }
     }
 
+    public boolean isCached(int area, HaveID[] category, HaveID[] region, Date start, Date end){
+        Jedis jedis = pool.getResource();
+        Pipeline pipeline = jedis.pipelined();
+        List<Response<String>> resultList = new ArrayList<>();
+        Date actualEnding = end;
+        Date today = DateUtils.setTimeToMidnight(Calendar.getInstance().getTime());
+        if(today.before(DateUtils.setTimeToMidnight(actualEnding)))
+            actualEnding =today;
+        try {
+            for(HaveID c : category){
+                for(HaveID s : region){
+                    String key = getKey(area,c.getId(),s.getId());
+                    resultList.add(pipeline.hget(key, "range"));
+                }
+            }
+            pipeline.sync();
+
+            for(Response<String> response : resultList){
+                String responseString = response.get();
+                if(responseString == null) {
+                    APIController.debugPrint("[x] cache responseString null!");
+                    return false;
+                }
+
+                List<DateRange> ranges = DateUtils.stringToDataRange(response.get());
+                boolean b = false;
+                for (DateRange r : ranges) {
+                    if (r.isInRange(start) && r.isInRange(actualEnding)) {
+                        b = true;
+                        break;
+                    }
+                }
+                if(!b) {
+                    APIController.debugPrint("[x] cache not in range ");
+                    return false;
+
+                }
+
+            }
+        }finally {
+            jedis.close();
+        }
+        return true;
+    }
+
+
+
 
     /**
      *  cache the actual data
@@ -93,6 +137,7 @@ public class CacheManager {
      * @param date
      * @param data
      */
+    @Deprecated
     public void cache(int area, int category, int region, String date,String data){
         Jedis jedis = pool.getResource();
         try {
@@ -101,6 +146,29 @@ public class CacheManager {
             jedis.close();
 
         }
+    }
+
+    /**
+     * using Jedis pipeline (transaction related)
+     * @param type
+     * @param entries
+     */
+    public void cache(int type, MonthlyDataEntry[] entries){
+        Jedis jedis = pool.getResource();
+        try {
+            Pipeline pipeline = jedis.pipelined();
+            for (MonthlyDataEntry month : entries) {
+                for (RegionalDataEntry region : month.getEntries()) {
+                    for (DateDataEntry entry : region.getEntry()) {
+                        pipeline.hsetnx(getKey(type, month.getId(), region.getState().getId()), entry.getDate(), entry.getData());
+                    }
+                }
+            }
+            pipeline.sync();
+        }finally {
+            jedis.close();
+        }
+
     }
 
     /**
@@ -203,7 +271,14 @@ public class CacheManager {
 
     public static CacheManager getManager(){
         if(manager == null){
-            manager = new CacheManager();
+            try {
+                manager = new CacheManager();
+            }catch (Exception e){
+                manager = null;
+                APIConfiguration.cache = false;
+                APIController.debugPrint("Redis connection failed, drop cache functionality..");
+                return null;
+            }
         }
         return manager;
     }

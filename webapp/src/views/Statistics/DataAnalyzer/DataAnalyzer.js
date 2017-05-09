@@ -253,9 +253,6 @@ class DataAnalyzer extends Component {
   render(){
         return(
             <div className="animated fadeIn">
-
-
-
               <Container>
                 <Row>
                   <Col sm={{ size: 6, push: 2, pull: 2, offset: 3 }}>

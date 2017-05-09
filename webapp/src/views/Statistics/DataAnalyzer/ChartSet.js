@@ -26,7 +26,7 @@ class Charts extends Component {
       var element = e[0];
       var index = element._index;
       var date = element._xScale.ticks[index];
-      var tp = this.state.timePoints;
+      var tp = this.state.timePoints.slice();
       for(var i = 0 ; i < tp.length ; i ++){
         if(tp[i].key === date+this.state.navs[this.state.tabIndex].key){
           return;
@@ -36,14 +36,18 @@ class Charts extends Component {
       this.setState({
         timePoints: tp,
       });
-      const node = ReactDOM.findDOMNode(this.pointPanel);
-      node.scrollIntoView({behavior: "smooth"});
     }
-
   }
 
   componentWillMount(){
     this.componentWillReceiveProps(this.props);
+  }
+
+  componentDidUpdate(prevProps,prevState){
+    if(prevState.timePoints.length != this.state.timePoints.length){
+      const node = ReactDOM.findDOMNode(this.pointPanel);
+      node.scrollIntoView({behavior: "smooth"});
+    }
   }
 
   componentWillReceiveProps(nextProps){
@@ -175,8 +179,7 @@ class Charts extends Component {
 
 
     return (
-
-        <Col md="8" xs="8" >
+        <div>
           <Card>
             <CardHeader>
               <strong>Charts</strong>
@@ -192,12 +195,13 @@ class Charts extends Component {
               </Col>
             </CardBlock>
           </Card>
+
           <Row>
             <Col md="12" xs="12">
               <TimePointsPanel ref={(panel) =>{this.pointPanel = panel;}}timePoints={this.state.timePoints}/>
             </Col>
           </Row>
-        </Col>
+        </div>
     )
   }
 }

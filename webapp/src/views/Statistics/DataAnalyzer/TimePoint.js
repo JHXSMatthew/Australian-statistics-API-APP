@@ -420,8 +420,6 @@ class News extends Component{
         return;
       }
       return response.json().then(function (json) {
-        console.log(json);
-
         json = json.items;
         for(var i = 0 ; i < json.length ; i ++){
           json[i].button = <NewsArticle title={json[i].title} article={json[i].link} />

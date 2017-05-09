@@ -18,7 +18,7 @@ class ResultPanel extends Component{
               </Col>
             </Row>
           </Container>
-
+          
       )
     }
 }

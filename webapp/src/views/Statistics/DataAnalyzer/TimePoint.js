@@ -433,7 +433,7 @@ class CompanyReturn extends Component{
        header: 'Return',
        accessor: 'Return',
       }, {
-        header: 'Average Retrun (%)',
+        header: 'Average Return (%)',
         accessor: 'AV_Return',
       }, {
         header: ' Cumulative Return (%)',

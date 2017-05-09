@@ -182,7 +182,7 @@ class Charts extends Component {
         <div>
           <Card>
             <CardHeader>
-              <strong>Charts</strong>
+              <strong>Charts - Click on chart to add time points</strong>
             </CardHeader>
             <CardBlock>
               <Col md="12" xs="12">

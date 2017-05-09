@@ -70,7 +70,7 @@ class TimePoint extends Component{
 
   getDate(){
     var str = this.state.time.split("-");
-    return new Date(str[0],str[1],str[2]);
+    return new Date(str[0],str[1] -1 ,str[2] - 1);
   }
 
   getStarting(){
@@ -163,7 +163,7 @@ function labelToTopics(array,label){
 
 function getDateString(d){
   d = new Date(d);
-  return d.getFullYear() + '-' +('0' + (d.getMonth())).slice(-2) + '-' + ('0'+ (d.getDate())).slice(-2);
+  return d.getFullYear() + '-' +('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0'+ (d.getDate() + 1)).slice(-2);
 }
 
 
@@ -276,7 +276,6 @@ class CompanyReturn extends Component{
               json[i].Data[j].Return = parseFloat(json[i].Data[j].Return).toFixed(7);
             }
             json[i].AV_Return = parseFloat(av/json[i].Data.length * 100).toFixed(7) ;
-
           }
           that.setState({
             table: json
@@ -287,7 +286,6 @@ class CompanyReturn extends Component{
         if(!a){
           that.fetch(true,dataType);
       }});
-
     }catch(e){
       if(!a){
         that.fetch(true,dataType);

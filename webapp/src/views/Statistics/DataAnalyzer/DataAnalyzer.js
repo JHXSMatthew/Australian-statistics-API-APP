@@ -114,9 +114,9 @@ export const CATEGORY_RT = [
     value: 'DepartmentStores' ,
     topics: ['WHO'],
     instruments: [{name:"Walmart Stores",id:"WMT"}, {name:"Costco Wholesale Corporation",id:"COST"},
-      {name:"Myer Holdings",id:"MYR.AX"}, {name:"Nick Scali",id:"NCK.AX"},
+     {name:"Nick Scali",id:"NCK.AX"},
       {name:"Harvey Norman",id:"HVN.AX"}]
-  },
+  },  //{name:"Myer Holdings",id:"MYR.AX"}, BOOM, WTF is RIC this to seesharps api?
   { label: 'Restaurants',
     value: 'CafesResturantsAndTakeawayFood',
     topics:['LEI'],

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import DataFetcher from './DataFetcher.js';
 import ResultPanel from './ResultPanel.js';
 import 'react-table/react-table.css';
-import {ButtonGroup,Button,Collapse,Row, Col,Container} from 'reactstrap';
+import {ButtonGroup,Button,Row, Col,Container} from 'reactstrap';
 
 
 export const STATE = [
@@ -268,12 +268,12 @@ class DataAnalyzer extends Component {
                 </Row>
                 <Row>
                   <Col sm={{ size: 6, push: 2, pull: 2, offset: 1 }}>
-                      {this.state.rSelected == 1 && <DataFetcher addDataEntry={this.addDataEntry} />}
+                      {this.state.rSelected === 1 && <DataFetcher addDataEntry={this.addDataEntry} />}
                   </Col>
                 </Row>
               </Container>
               <div style={{padding: 20}}>
-                {this.state.rSelected == 2 && this.state.dataType && <ResultPanel data={this.state.data} dataType={this.state.dataType}></ResultPanel>}
+                {this.state.rSelected === 2 && this.state.dataType && <ResultPanel data={this.state.data} dataType={this.state.dataType}></ResultPanel>}
               </div>
             </div>
         )

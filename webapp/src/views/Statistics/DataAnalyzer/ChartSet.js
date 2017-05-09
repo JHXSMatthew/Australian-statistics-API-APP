@@ -44,7 +44,7 @@ class Charts extends Component {
   }
 
   componentDidUpdate(prevProps,prevState){
-    if(prevState.timePoints.length != this.state.timePoints.length){
+    if(prevState.timePoints.length !== this.state.timePoints.length){
       const node = ReactDOM.findDOMNode(this.pointPanel);
       node.scrollIntoView({behavior: "smooth"});
     }

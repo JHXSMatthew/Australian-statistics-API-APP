@@ -70,7 +70,7 @@ class TimePoint extends Component{
       return (
         <Card>
           <CardHeader>
-            Time Point at {this.state.time} for {this.props.category}
+            Time Point at {this.state.time} for {this.props.category} Category
           </CardHeader>
               <ListGroup>
                 <ListGroupItem>
@@ -129,7 +129,7 @@ function labelToTopics(array,label){
 
 function getDateString(d){
   d = new Date(d);
-  return d.getFullYear() + '-' +('0' + (d.getMonth()+1)).slice(-2) + '-' + ('0'+ (d.getDate()+1)).slice(-2);
+  return d.getFullYear() + '-' +('0' + (d.getMonth())).slice(-2) + '-' + ('0'+ (d.getDate()+1)).slice(-2);
 }
 
 
@@ -220,7 +220,6 @@ class News extends Component{
         that.setState({
           table: json
         });
-        console.log(json);
       })
 
     });

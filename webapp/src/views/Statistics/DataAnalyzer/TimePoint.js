@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {ModalFooter, ModalBody, ModalHeader,Modal, Button, ListGroup,ListGroupItem,Label,Col,Card,CardHeader,Input} from 'reactstrap';
+import {Container,ModalFooter, ModalBody, ModalHeader,Modal, Button, ListGroup,ListGroupItem,Label,Col,Card,CardHeader,Input} from 'reactstrap';
 import ReactTable from 'react-table'
 import {CATEGORY_RT} from './DataAnalyzer.js';
 import {CATEGORY_ME} from './DataAnalyzer.js';
@@ -16,7 +16,8 @@ class TimePoint extends Component{
       low: 5,
       canUpdate: false,
       update: false,
-      data: null
+      data: null,
+      currentNews: "all"
     };
     this.setUp = this.setUp.bind(this);
     this.setLow = this.setLow.bind(this);
@@ -26,6 +27,7 @@ class TimePoint extends Component{
     this.update = this.update.bind(this);
     this.setDayOfMonth = this.setDayOfMonth.bind(this);
     this.setData = this.setData.bind(this);
+    this.setCurrentNews = this.setCurrentNews.bind(this);
   }
 
   update(event){
@@ -90,6 +92,13 @@ class TimePoint extends Component{
     });
   }
 
+  setCurrentNews(id){
+    this.setState({
+      currentNews: id,
+      update: false
+    });
+  }
+
 
   render(){
       return (
@@ -123,10 +132,10 @@ class TimePoint extends Component{
                   <TimePointChart data={this.state.data} update={this.state.update} />
                 </ListGroupItem>
                 <ListGroupItem>
-                  <CompanyReturn category={this.props.category} date={this.getDate} up={this.state.up} low={this.state.low} update={this.state.update} dataType={this.props.dataType} setData={this.setData}/>
+                  <CompanyReturn category={this.props.category} setCurrentNews={this.setCurrentNews} date={this.getDate} up={this.state.up} low={this.state.low} update={this.state.update} dataType={this.props.dataType} setData={this.setData}/>
                 </ListGroupItem>
                 <ListGroupItem>
-                    <News category={this.props.category} starting={this.getStarting} ending={this.getEnd} update={this.state.update} dataType={this.props.dataType}/>
+                    <News category={this.props.category} starting={this.getStarting} ending={this.getEnd} update={this.state.update} dataType={this.props.dataType} current={this.state.currentNews}/>
                 </ListGroupItem>
               </ListGroup>
         </Card>
@@ -276,16 +285,14 @@ class CompanyReturn extends Component{
               json[i].Data[j].Return = parseFloat(json[i].Data[j].Return).toFixed(7);
             }
             json[i].AV_Return = parseFloat(av/json[i].Data.length * 100).toFixed(7) ;
+            json[i].Get = <NewsFilter id={json[i].InstrumentID} setCurrentNews={that.props.setCurrentNews}/>
           }
           that.setState({
             table: json
           });
           that.props.setData(json);
         })
-      }).then(function(something){
-        if(!a){
-          that.fetch(true,dataType);
-      }});
+      });
     }catch(e){
       if(!a){
         that.fetch(true,dataType);
@@ -303,12 +310,17 @@ class CompanyReturn extends Component{
       }, {
         header: 'Average Return (%)',
         accessor: 'AV_Return',
-      }];
+      },{
+        header: 'News',
+        accessor: 'Get',
+        maxWidth: 100
+      }
+    ];
       const compnayDetail = [{
         header: 'Date',
         accessor: 'Date' // String-based value accessors!
       },{
-       header: 'Return',
+       header: 'Return (%)',
        accessor: 'Return',
       }, {
         header: 'Average Return (%)',
@@ -344,6 +356,26 @@ class CompanyReturn extends Component{
 }
 
 
+
+class NewsFilter extends Component{
+  constructor(props) {
+    super(props);
+    this.toggle = this.toggle.bind(this);
+  }
+
+  toggle() {
+    this.props.setCurrentNews(this.props.id);
+  }
+
+  render() {
+    return (
+        <Button color="info" onClick={this.toggle}>Get</Button>
+    );
+  }
+}
+
+
+
 class News extends Component{
 
   constructor(props){
@@ -354,80 +386,47 @@ class News extends Component{
 
   }
   componentWillMount(){
-    this.fetch(this.props.dataType);
+    this.fetch(this.props.current);
   }
 
   componentWillReceiveProps(nextProps){
-    if(!nextProps.update){
+    if(nextProps.current === this.props.current){
       return;
     }
     this.setState({table: []});
-    this.fetch(nextProps.dataType);
+    this.fetch(nextProps.current);
   }
 
-  fetch(dataType){
+  fetch(id){
     var that = this;
   //http://174.138.67.207/InstrumentID/ABP.AX,AAPL/DateOfInterest/2012-12-10/List_of_Var/CM_Return,AV_Return/Upper_window/5/Lower_window/3
     var topics = null;
 
-    if(dataType === "Export" ){
-      topics = labelToTopics(CATEGORY_ME,this.props.category);
-    }else if(dataType === "Retail"){
-      topics = labelToTopics(CATEGORY_RT,this.props.category);
-    }
-
-    /*
-    var instruments = labelToInstruments(CATEGORY_RT,this.props.category);
-    if(!instruments){
-      instruments = labelToInstruments(CATEGORY_ME,this.props.category);
-    }
-    var ids = [];
-    var names = [];
-    for(var i = 0 ; i < instruments.length ; i ++){
-      ids.push(instruments[i].id);
-      names.push(instruments[i].name);
-    }
 
 
-        var urlIns = 'https://nickr.xyz/coolbananas/api/?=InstrumentIDs='+ ids.join() +'&StartDate='
-        + getDateString(this.props.starting()) +'T00:00:00.000Z&EndDate='+ getDateString(this.props.ending()) +'T00:00:00.000Z';
-        console.log("News True URL: " + urlIns);
-
-        fetch( proxy + urlIns,{
-          method: 'GET',
-        })
-        .then(function(response) {
-          if (response.status >= 400) {
-            alert("news API data source is down, check console for details.")
-            return;
-          }
-          return response.json().then(function (json) {
-            console.log(json);
-          })
-
-        });
-    */
-
-    var proxy = "https://cors-anywhere.herokuapp.com/";
+    var proxy = "https://api.rss2json.com/v1/api.json?api_key=avgsmuavpridvqg25b9tfq3yxmpvsihy7tevv0b5&rss_url=";
     //Cool banananananan's news API
     //var urlTopics = 'https://nickr.xyz/coolbananas/api/?TopicCodes='+ topics.join() +'&StartDate='
     //+ getDateString(this.props.starting()) +'T00:00:00.000Z&EndDate='+ getDateString(this.props.ending()) +'T00:00:00.000Z';
-    var urlTopics = "https://nickr.xyz/coolbananas/api/?InstrumentIDs=BHP.AX,BLT.L&TopicCodes=AMERS,COM&StartDate=2015-10-01T00:00:00.000Z&EndDate=2015-10-10T00:00:00.000Z";
-    console.log("News True URL: " + urlTopics);
+    //var urlTopics = "https://nickr.xyz/coolbananas/api/?InstrumentIDs=BHP.AX,BLT.L&TopicCodes=AMERS,COM&StartDate=2015-10-01T00:00:00.000Z&EndDate=2015-10-10T00:00:00.000Z";
+    var url = "http://finance.yahoo.com/rss/headline?s=" + id
+    console.log("News True URL: " + url);
 
-    fetch( proxy + urlTopics,{
+    fetch( proxy + url,{
       method: 'GET',
     })
     .then(function(response) {
       if (response.status >= 400) {
-        alert("news API data source is down, check console for details.")
         return;
       }
       return response.json().then(function (json) {
-        json = json.NewsDataSet;
+        console.log(json);
+
+        json = json.items;
         for(var i = 0 ; i < json.length ; i ++){
-          json[i].button = <NewsArticle title={json[i].Headline} article={json[i].NewsText} />
+          json[i].button = <NewsArticle title={json[i].title} article={json[i].link} />
         }
+
         that.setState({
           table: json
         });
@@ -442,8 +441,12 @@ class News extends Component{
   render(){
     const newsTable = [{
       header: 'News Title',
-      accessor: 'Headline' // String-based value accessors!
-    }, {
+      accessor: 'title' // String-based value accessors!
+    },{
+      header: 'Time',
+      accessor: 'pubDate', // String-based value accessors!
+      maxWidth: 200
+    },{
       header: 'Article',
       accessor: 'button',
       maxWidth: 100
@@ -455,7 +458,6 @@ class News extends Component{
             columns={newsTable}
             defaultPageSize={5}
             noDataText='Loading...'
-            pageSize={(this.state.table &&  this.state.table.length) ?  this.state.table.length : 7}
           />
       </Col>
     );
@@ -467,33 +469,17 @@ class News extends Component{
 class NewsArticle extends Component{
   constructor(props) {
     super(props);
-    this.state = {
-      modal: false
-    }
     this.toggle = this.toggle.bind(this);
   }
 
   toggle() {
-    this.setState({
-      modal: !this.state.modal
-    });
+    window.open(this.props.article);
   }
 
   render() {
     return (
       <div>
         <Button color="info" onClick={this.toggle}>View</Button>
-        <Modal size="modal-lg" isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-          <ModalHeader toggle={this.toggle}>{this.props.title}</ModalHeader>
-          <ModalBody>
-            {this.props.article.split("\n").map(i => {
-              return <div key={i} >{i}</div>;
-            })}
-          </ModalBody>
-          <ModalFooter>
-            <Button color="secondary" onClick={this.toggle}>Close</Button>
-          </ModalFooter>
-        </Modal>
       </div>
     );
   }

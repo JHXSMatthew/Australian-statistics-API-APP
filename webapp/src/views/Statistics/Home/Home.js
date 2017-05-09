@@ -21,7 +21,6 @@ class Home extends Component {
     return (
 
       <div className="animated fadeIn">
-
         <div style={{height: '450px'}}>
           <Parallax bgImage={homeBackground} strength={200} style={{height: '500px'}}>
             <h1 style={{textAlign: 'center', color: 'white', textShadow: "2px 2px 20px black", fontFamily: "signPainter", fontSize: '80px'}}>

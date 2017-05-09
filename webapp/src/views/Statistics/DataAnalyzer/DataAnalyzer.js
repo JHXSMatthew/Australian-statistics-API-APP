@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import DataFetcher from './DataFetcher.js';
 import ResultPanel from './ResultPanel.js';
 import 'react-table/react-table.css';
-import {Row, Col,Container} from 'reactstrap';
+import {ButtonGroup,Button,Collapse,Row, Col,Container} from 'reactstrap';
 
 
 export const STATE = [
@@ -148,9 +148,15 @@ class DataAnalyzer extends Component {
     super(props);
     this.state = {
         data: [],
-        dataType: null
+        dataType: null,
+        rSelected: 1
     }
     this.addDataEntry = this.addDataEntry.bind(this);
+    this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
+  }
+
+  onRadioBtnClick(rSelected) {
+    this.setState({ rSelected });
   }
 
   addDataEntry(e){
@@ -238,34 +244,40 @@ class DataAnalyzer extends Component {
     this.setState(function (prevState, props) {
         return {
           data: data,
-          dataType: dataType
+          dataType: dataType,
+          rSelected: 2
         };
     });
   }
 
   render(){
-      if(this.state.dataType){
-        return (
-          <div className="animated fadeIn">
-            <ResultPanel data={this.state.data} dataType={this.state.dataType}></ResultPanel>
-          </div>
-        )
-      }else{
         return(
             <div className="animated fadeIn">
-                <Container>
-                  <Row>
-                    <Col sm={{ size: 6, push: 2, pull: 2, offset: 1 }}>
-                        <DataFetcher addDataEntry={this.addDataEntry} />
-                    </Col>
-                  </Row>
-                </Container>
+
+
+
+              <Container>
+                <Row>
+                  <Col sm={{ size: 6, push: 2, pull: 2, offset: 3 }}>
+                    {this.state.dataType &&
+                      <div>
+                        <ButtonGroup>
+                          <Button color="primary" onClick={() => this.onRadioBtnClick(1)} active={this.state.rSelected === 1}>Search</Button>
+                          <Button color="primary" onClick={() => this.onRadioBtnClick(2)} active={this.state.rSelected === 2}>Result</Button>
+                        </ButtonGroup>
+                      </div>
+                    }
+                  </Col>
+                </Row>
+                <Row>
+                  <Col sm={{ size: 6, push: 2, pull: 2, offset: 1 }}>
+                      {this.state.rSelected == 1 && <DataFetcher addDataEntry={this.addDataEntry} />}
+                  </Col>
+                </Row>
+              </Container>
+              {this.state.rSelected == 2 && this.state.dataType && <ResultPanel data={this.state.data} dataType={this.state.dataType}></ResultPanel>}
             </div>
         )
-
-      }
-
-
   }
 }
 

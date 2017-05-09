@@ -1035,7 +1035,7 @@ class Introduction extends Component {
                         <br/>
                         where <b style={{color:'red'}}>requestID</b> is the request number of the specific API call, available through the requestNumber parameter.
                         <br/><br/><br/>
-                      <h5>Log Query Parameters</h5>
+                      <h5>Log Query Terms</h5>
                       <div className="row">
                         <div className="col align-items-center">
                           <div className="card">
@@ -1092,7 +1092,7 @@ class Introduction extends Component {
                                   <td>parameters</td>
                                   <td>Success and Fail</td>
                                   <td>Parameters sent to the API through the request.</td>
-                                </tr>                                
+                                </tr>
                               </tbody>
                             </table>
                           </div>

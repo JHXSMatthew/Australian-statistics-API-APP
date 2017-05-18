@@ -36,7 +36,23 @@ class DataTable extends Component {
     }, {
       header: 'Average',
       accessor: 'average',
-    }]
+    }, {
+      header: 'Minimum',
+      accessor: 'minimum',
+    }, {
+      header: 'Firat Quartile',
+      accessor: 'fq',
+    }, {
+      header: 'Median',
+      accessor: 'median',
+    }, {
+      header: 'Third Quartile',
+      accessor: 'tq',
+    }, {
+      header: 'Maximum',
+      accessor: 'maximum',
+    }
+  ]
 
     const regionalData = [{
       header: 'State',
@@ -44,6 +60,21 @@ class DataTable extends Component {
     }, {
       header: 'Average',
       accessor: 'average',
+    }, {
+      header: 'Minimum',
+      accessor: 'minimum',
+    }, {
+      header: 'Firat Quartile',
+      accessor: 'fq',
+    }, {
+      header: 'Median',
+      accessor: 'median',
+    }, {
+      header: 'Third Quartile',
+      accessor: 'tq',
+    }, {
+      header: 'Maximum',
+      accessor: 'maximum',
     }]
 
     const Datedata = [{

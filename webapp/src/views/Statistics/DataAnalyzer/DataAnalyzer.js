@@ -209,14 +209,11 @@ class DataAnalyzer extends Component {
                     count ++ ;
                   }
                 }
-
               }
             }
           }
-
           data[i].average = parseFloat(total/count).toFixed(4);
         }
-
       }else if(data.MonthlyRetailData){
         dataType = "Retail";
         data = data.MonthlyRetailData;
@@ -259,7 +256,48 @@ class DataAnalyzer extends Component {
           data[i].average = parseFloat(total/count).toFixed(4);
         }
       }
+
+      for(var i = 0 ; i < data.length; i++){
+        var re = data[i].RegionalData;
+        var totalValues = [];
+        if(re){
+          for(var j = 0 ; j < re.length ; j++){
+            var dateData = re[j].Data;
+            var values = [];
+            for(var k = 0; k < dateData.length ; k ++){
+              values.push(parseFloat(dateData[k].Value).toFixed(4));
+            }
+            values.sort(function(a, b){return a-b});
+            re[j].minimum = values[0];
+            re[j].maximum = values[values.length -1];
+            re[j].fq = values[Math.floor(0.25 * values.length)];
+            if(values.length%2 == 0){
+              re[j].median = values[Math.floor(values.length/2)];
+            }else{
+              re[j].median = (values[Math.floor(values.length/2)] + values[Math.floor(values.length/2) + 1])/2;
+            }
+            re[j].tq =values[Math.floor(0.75 * values.length)];
+            totalValues.push(re[j].total);
+          }
+        }
+        totalValues.sort(function(a, b){return a-b});
+        for(var m = 0 ; m < totalValues.length ; m ++){
+          totalValues[m] = parseFloat(totalValues[m]).toFixed(4);
+        }
+        data[i].minimum = totalValues[0];
+        data[i].maximum = totalValues[totalValues.length -1];
+        data[i].fq = totalValues[Math.floor(0.25 * totalValues.length)];
+        if(totalValues.length%2 == 0){
+          data[i].median = totalValues[totalValues.length/2];
+        }else{
+          data[i].median = (totalValues[Math.floor(totalValues.length/2)] + totalValues[Math.floor(totalValues.length/2 + 1)])/2;
+        }
+        data[i].tq =totalValues[Math.floor(0.75 * totalValues.length)];
+      }
     }
+
+
+
     this.setState(function (prevState, props) {
         return {
           data: data,
@@ -275,7 +313,7 @@ class DataAnalyzer extends Component {
             <div className="animated fadeIn">
               <Container>
                 <Row>
-                  <Col style={{padding: 10}} md={{ size: 6, push: 2, pull: 2, offset: 3 }}>
+                  <Col style={{padding: 10}} md={{ size: 6, push: 2, pull: 2, offset: 2 }}>
                     {this.state.dataType &&
                       <div>
                         <ButtonGroup>
@@ -288,7 +326,7 @@ class DataAnalyzer extends Component {
                   </Col>
                 </Row>
                 <Row>
-                  <Col sm={{ size: 6, push: 2, pull: 2}}>
+                  <Col sm={{ size: 6, push: 2, pull: 2,  offset: 1}}>
                       {this.state.rSelected === 1 && <DataFetcher addDataEntry={this.addDataEntry} />}
                   </Col>
                 </Row>

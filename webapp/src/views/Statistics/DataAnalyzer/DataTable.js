@@ -75,9 +75,13 @@ class DataTable extends Component {
     }, {
       header: 'Maximum',
       accessor: 'maximum',
+    }, {
+      header: 'Total',
+      accessor: 'total',
     }]
 
     const Datedata = [{
+      sortFunction: 'Date',
       header: 'Date',
       accessor: 'Date' // String-based value accessors!
     }, {

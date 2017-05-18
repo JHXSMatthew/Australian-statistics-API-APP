@@ -195,6 +195,7 @@ class DataAnalyzer extends Component {
               if(regional[j].Data){
                 var dateData = regional[j].Data;
                 for(var k = 0; k < dateData.length ; k ++){
+                  dateData[k].Value = parseFloat(dateData[k].Value);
                   total += dateData[k].Value;
                   regionalTotal += dateData[k].Value;
                   regionalCount++;
@@ -212,7 +213,7 @@ class DataAnalyzer extends Component {
               }
             }
           }
-          data[i].average = parseFloat(total/count).toFixed(4);
+          data[i].average = parseFloat(parseFloat(total/count).toFixed(4));
         }
       }else if(data.MonthlyRetailData){
         dataType = "Retail";
@@ -236,7 +237,7 @@ class DataAnalyzer extends Component {
               if(regional[j].Data){
                 dateData = regional[j].Data;
                 for(k = 0; k < dateData.length ; k ++){
-                  dateData[k].Value = dateData[k].Turnover;
+                  dateData[k].Value = parseFloat(dateData[k].Turnover);
                   regionalTotal += dateData[k].Value;
                   regionalCount++;
                 }
@@ -253,7 +254,7 @@ class DataAnalyzer extends Component {
               }
             }
           }
-          data[i].average = parseFloat(total/count).toFixed(4);
+          data[i].average = parseFloat(parseFloat(total/count).toFixed(4));
         }
       }
 
@@ -265,10 +266,10 @@ class DataAnalyzer extends Component {
             var dateData = re[j].Data;
             var values = [];
             for(var k = 0; k < dateData.length ; k ++){
-              values.push(parseFloat(dateData[k].Value).toFixed(4));
+              values.push(parseFloat(parseFloat(dateData[k].Value).toFixed(4)));
             }
             values.sort(function(a, b){return a-b});
-            re[j].minimum = values[0];
+            re[j].minimum = parseFloat(values[0]);
             re[j].maximum = values[values.length -1];
             re[j].fq = values[Math.floor(0.25 * values.length)];
             if(values.length%2 == 0){
@@ -277,12 +278,14 @@ class DataAnalyzer extends Component {
               re[j].median = (values[Math.floor(values.length/2)] + values[Math.floor(values.length/2) + 1])/2;
             }
             re[j].tq =values[Math.floor(0.75 * values.length)];
-            totalValues.push(re[j].total);
+            if(re[j].total){
+              totalValues.push(re[j].total);
+            }
           }
         }
         totalValues.sort(function(a, b){return a-b});
         for(var m = 0 ; m < totalValues.length ; m ++){
-          totalValues[m] = parseFloat(totalValues[m]).toFixed(4);
+          totalValues[m] = parseFloat(parseFloat(totalValues[m]).toFixed(4));
         }
         data[i].minimum = totalValues[0];
         data[i].maximum = totalValues[totalValues.length -1];

@@ -40,7 +40,7 @@ class DataTable extends Component {
       header: 'Minimum',
       accessor: 'minimum',
     }, {
-      header: 'Firat Quartile',
+      header: 'First Quartile',
       accessor: 'fq',
     }, {
       header: 'Median',
@@ -64,7 +64,7 @@ class DataTable extends Component {
       header: 'Minimum',
       accessor: 'minimum',
     }, {
-      header: 'Firat Quartile',
+      header: 'First Quartile',
       accessor: 'fq',
     }, {
       header: 'Median',

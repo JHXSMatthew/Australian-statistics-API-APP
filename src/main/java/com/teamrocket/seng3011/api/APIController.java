@@ -188,7 +188,7 @@ public class APIController {
         return states;
     }
 
-    private HaveID[] parseCategory(String[] category, String area) throws CannotParseCategoryException {
+    public static HaveID[] parseCategory(String[] category, String area) throws CannotParseCategoryException {
         HaveID[] returnValue = null;
         try {
             Class<? extends Enum> clazz = (Class<? extends Enum>)

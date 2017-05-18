@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import DataFetcher from './DataFetcher.js';
-import ResultPanel from './ResultPanel.js';
+import ComparisonView from './ComparisonView.js';
 import 'react-table/react-table.css';
 import {ButtonGroup,Button,Row, Col,Container} from 'reactstrap';
 
@@ -149,18 +149,27 @@ class DataAnalyzer extends Component {
     this.state = {
         data: [],
         dataType: null,
-        rSelected: 1
+        rSelected: 1,
+        category: null
     }
     this.addDataEntry = this.addDataEntry.bind(this);
     this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
+    this.setCategory = this.setCategory.bind(this);
   }
 
   onRadioBtnClick(rSelected) {
     this.setState({ rSelected });
   }
 
+  setCategory(c){
+    this.setState({Category: c})
+  }
+
+
+
   addDataEntry(e){
     var data = e.data;
+    var firstCategory = null;
     if(data){
       var dataType = null;
       if(data.MonthlyCommodityExportData){
@@ -169,7 +178,11 @@ class DataAnalyzer extends Component {
         for(var i = 0 ; i < data.length; i++){
           var total = 0;
           var count = 0;
+          var trueTotal = 0;
           if(data[i].Commodity){
+            if(!firstCategory){
+              firstCategory = data[i].Commodity;
+            }
             data[i].Category = valueToLabel(CATEGORY_ME,data[i].Commodity);
           }
           if(data[i].RegionalData){
@@ -186,6 +199,7 @@ class DataAnalyzer extends Component {
                   regionalTotal += dateData[k].Value;
                   regionalCount++;
                 }
+                regional[j].total = regionalTotal;
                 regional[j].average = parseFloat(regionalTotal/regionalCount).toFixed(4);
                 if(regional[j].State === "Australia"){
                   //don't add it. logically AU contains all states
@@ -199,6 +213,7 @@ class DataAnalyzer extends Component {
               }
             }
           }
+
           data[i].average = parseFloat(total/count).toFixed(4);
         }
 
@@ -209,6 +224,9 @@ class DataAnalyzer extends Component {
           total = 0;
           count = 0;
           if(data[i].RetailIndustry){
+            if(!firstCategory){
+              firstCategory = data[i].RetailIndustry;
+            }
             data[i].Category = valueToLabel(CATEGORY_RT,data[i].RetailIndustry);
           }
           if(data[i].RegionalData){
@@ -226,6 +244,7 @@ class DataAnalyzer extends Component {
                   regionalCount++;
                 }
               }
+              regional[j].total = regionalTotal;
               regional[j].average = parseFloat(regionalTotal/regionalCount).toFixed(4);
               if(regional[j].State === "Australia"){
                 //don't add it. logically AU contains all states
@@ -245,7 +264,8 @@ class DataAnalyzer extends Component {
         return {
           data: data,
           dataType: dataType,
-          rSelected: 2
+          rSelected: 2,
+          category: firstCategory
         };
     });
   }
@@ -260,20 +280,22 @@ class DataAnalyzer extends Component {
                       <div>
                         <ButtonGroup>
                           <Button color="primary" onClick={() => this.onRadioBtnClick(1)} active={this.state.rSelected === 1}>Search</Button>
-                          <Button color="primary" onClick={() => this.onRadioBtnClick(2)} active={this.state.rSelected === 2}>Result</Button>
+                          <Button color="primary" onClick={() => this.onRadioBtnClick(2)} active={this.state.rSelected === 2}>Comparison</Button>
+                          <Button color="primary" onClick={() => this.onRadioBtnClick(3)} active={this.state.rSelected === 3}>Analytics</Button>
                         </ButtonGroup>
                       </div>
                     }
                   </Col>
                 </Row>
                 <Row>
-                  <Col sm={{ size: 6, push: 2, pull: 2, offset: 1 }}>
+                  <Col sm={{ size: 6, push: 2, pull: 2}}>
                       {this.state.rSelected === 1 && <DataFetcher addDataEntry={this.addDataEntry} />}
                   </Col>
                 </Row>
               </Container>
               <div style={{padding: 20}}>
-                {this.state.rSelected === 2 && this.state.dataType && <ResultPanel data={this.state.data} dataType={this.state.dataType}></ResultPanel>}
+                {this.state.rSelected === 2 && this.state.dataType && <ComparisonView data={this.state.data} dataType={this.state.dataType}></ComparisonView>}
+                {this.state.rSelected === 3 && this.state.dataType && <ComparisonView data={this.state.data} dataType={this.state.dataType}></ComparisonView>}
               </div>
             </div>
         )

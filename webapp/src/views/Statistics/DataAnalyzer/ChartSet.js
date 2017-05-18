@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import { Line } from 'react-chartjs-2';
+import { Pie,Line } from 'react-chartjs-2';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import TimePoint from './TimePoint.js';
 import TimePointsPanel from './TimePointPanel.js';
@@ -9,7 +9,7 @@ import {Card,CardHeader,CardBlock,Row, Col} from 'reactstrap';
 import 'chartjs-plugin-zoom/chartjs-plugin-zoom.js';
 
 // chats components
-class Charts extends Component {
+class ChartSet extends Component {
   constructor(props){
     super(props);
     this.handleClick = this.handleClick.bind(this);
@@ -22,21 +22,21 @@ class Charts extends Component {
 
 
   handleClick(e,c){
-    if(e && e[0]){
-      var element = e[0];
-      var index = element._index;
-      var date = element._xScale.ticks[index];
-      var tp = this.state.timePoints.slice();
-      for(var i = 0 ; i < tp.length ; i ++){
-        if(tp[i].key === date+this.state.navs[this.state.tabIndex].key){
-          return;
-        }
-      }
-      tp.unshift(<TimePoint key={date+this.state.navs[this.state.tabIndex].key} time={date} category={this.state.navs[this.state.tabIndex].key} dataType={this.props.dataType}/>)
-      this.setState({
-        timePoints: tp,
-      });
-    }
+  //  if(e && e[0]){
+  //    var element = e[0];
+  //    var index = element._index;
+  //    var date = element._xScale.ticks[index];
+  //    var tp = this.state.timePoints.slice();
+  //    for(var i = 0 ; i < tp.length ; i ++){
+  //      if(tp[i].key === date+this.state.navs[this.state.tabIndex].key){
+  //        return;
+  //      }
+  //    }
+  //    tp.unshift(<TimePoint key={date+this.state.navs[this.state.tabIndex].key} time={date} category={this.state.navs[this.state.tabIndex].key} dataType={this.props.dataType}/>)
+  //    this.setState({
+  //      timePoints: tp,
+  //    });
+  //  }
   }
 
   componentWillMount(){
@@ -59,6 +59,7 @@ class Charts extends Component {
     if(data){
       var labels=[];
       var charts=[];
+      var pieLabels=[];
       var navs=[];
       var ylabel = null;
       if(nextProps.dataType === "Export"){
@@ -69,6 +70,7 @@ class Charts extends Component {
       for(var i = 0; i < data.length ; i ++){
         //for each category
         var dataSet=[];
+        var pieDataSet = [];
         var regional = data[i].RegionalData;
         if(regional){
           for(var j = 0; j < regional.length; j++ ){
@@ -87,6 +89,9 @@ class Charts extends Component {
               lineTension: 0.1,
               pointHoverBorderColor: 'rgba(220,220,220,1)',
             };
+            if(pieLabels.indexOf(regional[j].State) == -1){
+              pieLabels.push(regional[j].State);
+            }
             line.label = regional[j].State;
             line.backgroundColor = color[j];
             line.borderColor = color[j];
@@ -108,9 +113,12 @@ class Charts extends Component {
                 labels.push(dateData[k].Date);
               }
             }
+
             dataSet.push(line);
+            pieDataSet.push(regional[j].total);
           }
         }
+
         navs.push(
           <Tab key={data[i].Category}>
               {data[i].Category}
@@ -118,50 +126,61 @@ class Charts extends Component {
         );
         charts.push(
           <TabPanel key={data[i].Category}>
-            <div className="chart-wrapper">
-              <Line
-                data={{
-                  datasets: dataSet,
-                  labels: labels
-                }}
-                getElementAtEvent={this.handleClick}
+            <Row>
+              <Col md="8" xs="8">
+                <Line
+                  data={{
+                    datasets: dataSet,
+                    labels: labels
+                  }}
+                  getElementAtEvent={this.handleClick}
+                  options={{
+                    responsive: true,
+                    scales: {
+                      xAxes: [{
+                          display: true,
+                          scaleLabel: {
+                              display: true,
+                              labelString: 'Date'
+                          },
+                          ticks:{
+                            min:labels[0],
+                            max:labels[labels.length -1]
+                          }
 
-                options={{
-                  responsive: true,
-                  scales: {
-                    xAxes: [{
-                        display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Date'
-                        },
-                        ticks:{
-                          min:labels[0],
-                          max:labels[labels.length -1]
-                        }
-
-                    }],
-                    yAxes: [{
-                        display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: ylabel
-                        }
-                    }]
-                },
-                pan: {
-      						enabled: true,
-      						mode: 'x'
-      					},
-                zoom: {
-        					enabled: true,
-        					drag: false,
-        					mode: 'x',
-        				}
-                }}
-              />
-            </div>
-          </TabPanel>
+                      }],
+                      yAxes: [{
+                          display: true,
+                          scaleLabel: {
+                              display: true,
+                              labelString: ylabel
+                          }
+                      }]
+                  },
+                  pan: {
+        						enabled: true,
+        						mode: 'x'
+        					},
+                  zoom: {
+          					enabled: true,
+          					drag: true,
+          					mode: 'x',
+          				}
+                  }}
+                />
+            </Col>
+            <Col md="4" xs="4">
+              <Pie data={{
+                datasets: [{
+                  data: pieDataSet,
+                  backgroundColor: color.slice(0,pieDataSet.length),
+                  hoverBackgroundColor: color.slice(0,pieDataSet.length)
+                }],
+                labels: pieLabels
+              }}/>
+            </Col>
+          </Row>
+        </TabPanel>
         );
       }
 
@@ -181,30 +200,27 @@ class Charts extends Component {
     return (
         <div>
           <Card>
-            <CardHeader>
-              <strong>Charts - Click on chart to add time points</strong>
-            </CardHeader>
             <CardBlock>
-              <Col md="12" xs="12">
-                <Tabs selectedIndex={this.state.tabIndex} onSelect={tabIndex => this.setState({ tabIndex })}>
-                  <TabList>
-                      {this.state.navs}
-                  </TabList>
-                  {this.state.charts}
-                </Tabs>
-              </Col>
+              <Tabs selectedIndex={this.state.tabIndex} onSelect={tabIndex => this.setState({ tabIndex })}>
+                <TabList>
+                    {this.state.navs}
+                </TabList>
+                {this.state.charts}
+              </Tabs>
             </CardBlock>
           </Card>
-
-          <Row>
-            <Col md="12" xs="12">
-              <TimePointsPanel ref={(panel) =>{this.pointPanel = panel;}} timePoints={this.state.timePoints}/>
-            </Col>
-          </Row>
         </div>
     )
   }
 }
 
 
-export default Charts;
+
+//<Row>
+//  <Col md="12" xs="12">
+//    <TimePointsPanel ref={(panel) =>{this.pointPanel = panel;}} timePoints={this.state.timePoints}/>
+//  </Col>
+//</Row>
+
+
+export default ChartSet;

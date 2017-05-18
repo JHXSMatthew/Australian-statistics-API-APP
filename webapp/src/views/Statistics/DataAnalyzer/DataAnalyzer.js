@@ -201,7 +201,7 @@ class DataAnalyzer extends Component {
                   regionalCount++;
                 }
                 regional[j].total = regionalTotal;
-                regional[j].average = parseFloat(regionalTotal/regionalCount).toFixed(4);
+                regional[j].average = parseFloat(parseFloat(regionalTotal/regionalCount).toFixed(4));
                 if(regional[j].State === "Australia"){
                   //don't add it. logically AU contains all states
                 }else{
@@ -243,7 +243,7 @@ class DataAnalyzer extends Component {
                 }
               }
               regional[j].total = regionalTotal;
-              regional[j].average = parseFloat(regionalTotal/regionalCount).toFixed(4);
+              regional[j].average = parseFloat(parseFloat(regionalTotal/regionalCount).toFixed(4));
               if(regional[j].State === "Australia"){
                 //don't add it. logically AU contains all states
               }else{

@@ -15,7 +15,7 @@ class ChartSet extends Component {
     this.handleClick = this.handleClick.bind(this);
     this.state = {
       timePoints: [],
-      tabIndex: this.props.comparisonSelected,
+      tabIndex: 0,
       tabIndexMap: []
     };
   }
@@ -190,7 +190,8 @@ class ChartSet extends Component {
           return {
             charts: charts,
             navs: navs,
-            tabIndexMap: tabIndexMap
+            tabIndexMap: tabIndexMap,
+            tabIndex: prevState.tabIndex < charts.length ? prevState.tabIndex :0
           };
       });
     }

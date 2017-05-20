@@ -33,7 +33,6 @@ class DataTable extends Component {
   }
 
   render() {
-    console.log("re-render.");
     var data = this.props.data;
     const categoryValue = [{
       header: 'Category',

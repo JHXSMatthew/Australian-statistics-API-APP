@@ -309,7 +309,6 @@ class DataAnalyzer extends Component {
           dataType: dataType,
           rSelected: 2,
           category: firstCategory,
-          comparisonSelected: 0
         };
     });
   }
@@ -341,7 +340,7 @@ class DataAnalyzer extends Component {
               </Container>
               <div style={{padding: 20}}>
                 <div style={this.state.rSelected === 2 && this.state.dataType ?  {display: 'inline'} : {display: 'none'}}>
-                  <ComparisonView data={this.state.data} comparisonSelected={this.state.comparisonSelected} dataType={this.state.dataType} setCategory={this.setCategory}></ComparisonView>
+                  <ComparisonView data={this.state.data} dataType={this.state.dataType} setCategory={this.setCategory}></ComparisonView>
                 </div>
                 {this.state.rSelected === 3 && this.state.dataType && <ComparisonView data={this.state.data} dataType={this.state.dataType}></ComparisonView>}
               </div>

@@ -51,4 +51,8 @@ public enum RetailCategory implements HaveID {
     public int getId() {
         return this.id;
     }
+
+    public String getName(){
+        return toString();
+    }
 }

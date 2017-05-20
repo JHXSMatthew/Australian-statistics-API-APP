@@ -15,7 +15,8 @@ class ChartSet extends Component {
     this.handleClick = this.handleClick.bind(this);
     this.state = {
       timePoints: [],
-      tabIndex: 0
+      tabIndex: this.props.comparisonSelected,
+      tabIndexMap: []
     };
   }
 
@@ -62,6 +63,7 @@ class ChartSet extends Component {
       var pieLabels=[];
       var navs=[];
       var ylabel = null;
+      var tabIndexMap = [];
       if(nextProps.dataType === "Export"){
         ylabel = "Value ($ thousands)"
       }else if(nextProps.dataType === "Retail"){
@@ -119,6 +121,7 @@ class ChartSet extends Component {
           }
         }
 
+        tabIndexMap.push(data[i].Category);
         navs.push(
           <Tab key={data[i].Category}>
               {data[i].Category}
@@ -183,11 +186,11 @@ class ChartSet extends Component {
         </TabPanel>
         );
       }
-
       this.setState(function (prevState, props) {
           return {
             charts: charts,
-            navs: navs
+            navs: navs,
+            tabIndexMap: tabIndexMap
           };
       });
     }
@@ -201,7 +204,7 @@ class ChartSet extends Component {
         <div>
           <Card>
             <CardBlock>
-              <Tabs selectedIndex={this.state.tabIndex} onSelect={tabIndex => this.setState({ tabIndex })}>
+              <Tabs selectedIndex={this.state.tabIndex} onSelect={tabIndex => {this.setState({ tabIndex }); this.props.setCategory(this.state.tabIndexMap[tabIndex],tabIndex);}}>
                 <TabList>
                     {this.state.navs}
                 </TabList>

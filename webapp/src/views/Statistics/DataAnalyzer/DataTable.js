@@ -23,12 +23,17 @@ class DataTable extends Component {
   }
 
   toggle2() {
-  this.setState({
-    popoverOpen: !this.state.popoverOpen
-  });
-}
+    this.setState({
+      popoverOpen: !this.state.popoverOpen
+    });
+  }
+
+  shouldComponentUpdate(nextProps, nextState){
+    return JSON.stringify(nextProps) !== JSON.stringify(this.props) || JSON.stringify(nextState) !== JSON.stringify(this.state);
+  }
 
   render() {
+    console.log("re-render.");
     var data = this.props.data;
     const categoryValue = [{
       header: 'Category',

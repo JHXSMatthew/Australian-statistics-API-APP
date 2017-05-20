@@ -42,6 +42,10 @@ public class CacheManager {
         }
     }
 
+    public Jedis getResource(){
+        return pool.getResource();
+    }
+
 
     private String getKey(int area,int category, int region){
         return area+":"+category+":"+region;

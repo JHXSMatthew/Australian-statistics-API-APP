@@ -150,6 +150,7 @@ class DataAnalyzer extends Component {
         data: [],
         dataType: null,
         rSelected: 1,
+        comparisonSelected: 0,
         category: null
     }
     this.addDataEntry = this.addDataEntry.bind(this);
@@ -161,8 +162,9 @@ class DataAnalyzer extends Component {
     this.setState({ rSelected });
   }
 
-  setCategory(c){
-    this.setState({Category: c})
+  setCategory(c,id){
+    console.log(c);
+    this.setState({Category: c, comparisonSelected: id})
   }
 
 
@@ -306,7 +308,8 @@ class DataAnalyzer extends Component {
           data: data,
           dataType: dataType,
           rSelected: 2,
-          category: firstCategory
+          category: firstCategory,
+          comparisonSelected: 0
         };
     });
   }
@@ -330,12 +333,16 @@ class DataAnalyzer extends Component {
                 </Row>
                 <Row>
                   <Col sm={{ size: 6, push: 2, pull: 2,  offset: 1}}>
-                      {this.state.rSelected === 1 && <DataFetcher addDataEntry={this.addDataEntry} />}
+                    <div style={this.state.rSelected === 1 ?  {display: 'inline'} : {display: 'none'}}>
+                      <DataFetcher addDataEntry={this.addDataEntry} />
+                    </div>
                   </Col>
                 </Row>
               </Container>
               <div style={{padding: 20}}>
-                {this.state.rSelected === 2 && this.state.dataType && <ComparisonView data={this.state.data} dataType={this.state.dataType}></ComparisonView>}
+                <div style={this.state.rSelected === 2 && this.state.dataType ?  {display: 'inline'} : {display: 'none'}}>
+                  <ComparisonView data={this.state.data} comparisonSelected={this.state.comparisonSelected} dataType={this.state.dataType} setCategory={this.setCategory}></ComparisonView>
+                </div>
                 {this.state.rSelected === 3 && this.state.dataType && <ComparisonView data={this.state.data} dataType={this.state.dataType}></ComparisonView>}
               </div>
             </div>

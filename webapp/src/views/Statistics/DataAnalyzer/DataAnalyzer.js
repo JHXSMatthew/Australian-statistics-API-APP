@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import DataFetcher from './DataFetcher.js';
 import ComparisonView from './ComparisonView.js';
 import 'react-table/react-table.css';
+import AnalyticsView from './AnalyticsView.js';
 import {ButtonGroup,Button,Row, Col,Container} from 'reactstrap';
 
 
@@ -151,11 +152,13 @@ class DataAnalyzer extends Component {
         dataType: null,
         rSelected: 1,
         comparisonSelected: 0,
-        category: null
+        category: null,
+        focusDate: null
     }
     this.addDataEntry = this.addDataEntry.bind(this);
     this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
     this.setCategory = this.setCategory.bind(this);
+    this.setFocusDate = this.setFocusDate.bind(this);
   }
 
   onRadioBtnClick(rSelected) {
@@ -163,8 +166,11 @@ class DataAnalyzer extends Component {
   }
 
   setCategory(c,id){
-    console.log(c);
     this.setState({Category: c, comparisonSelected: id})
+  }
+
+  setFocusDate(date){
+    this.setState({focusDate: date});
   }
 
 
@@ -340,9 +346,12 @@ class DataAnalyzer extends Component {
               </Container>
               <div style={{padding: 20}}>
                 <div style={this.state.rSelected === 2 && this.state.dataType ?  {display: 'inline'} : {display: 'none'}}>
-                  <ComparisonView data={this.state.data} dataType={this.state.dataType} setCategory={this.setCategory}></ComparisonView>
+                  <ComparisonView data={this.state.data} dataType={this.state.dataType} setFocusDate={this.setFocusDate} setCategory={this.setCategory}></ComparisonView>
                 </div>
-                {this.state.rSelected === 3 && this.state.dataType && <ComparisonView data={this.state.data} dataType={this.state.dataType}></ComparisonView>}
+                <div style={this.state.rSelected === 3 && this.state.dataType && this.state.focusDate ?  {display: 'inline'} : {display: 'none'}}>
+                  {this.state.focusDate && <AnalyticsView  date={this.state.focusDate} dataType={this.state.dataType} category={this.category}/>}
+                </div>
+
               </div>
             </div>
         )

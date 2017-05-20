@@ -13,6 +13,7 @@ class ChartSet extends Component {
   constructor(props){
     super(props);
     this.handleClick = this.handleClick.bind(this);
+
     this.state = {
       timePoints: [],
       tabIndex: 0,
@@ -38,6 +39,12 @@ class ChartSet extends Component {
   //      timePoints: tp,
   //    });
   //  }
+    if(e && e[0]){
+      var element = e[0];
+      var index = element._index;
+      var date = element._xScale.ticks[index];
+      this.props.setFocusDate(date);
+    }
   }
 
   componentWillMount(){

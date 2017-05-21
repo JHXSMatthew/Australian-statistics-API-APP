@@ -5,7 +5,6 @@ import com.teamrocket.seng3011.analysisPlatform.models.CategoryCompanyRelation;
 import com.teamrocket.seng3011.analysisPlatform.models.Company;
 import com.teamrocket.seng3011.api.APIController;
 import com.teamrocket.seng3011.api.HaveID;
-import com.teamrocket.seng3011.api.absApi.CacheManager;
 import com.teamrocket.seng3011.api.absApi.entries.EntryType;
 import com.teamrocket.seng3011.api.exceptions.CannotParseCategoryException;
 import com.teamrocket.seng3011.api.exceptions.CannotParseStatsTypeException;

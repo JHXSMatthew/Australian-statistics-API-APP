@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
  * Created by JHXSMatthew on 17/05/2017.
  */
 @RestController
+@CrossOrigin
+//TODO: test usage, remove CrossOrigin  after testing.
 public class AnalysisPlatformController {
 
     @RequestMapping(value = "app/category", produces = "application/json")

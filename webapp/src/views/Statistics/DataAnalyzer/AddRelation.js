@@ -36,10 +36,6 @@ class AddRelation extends Component{
     var url = 'http://45.76.114.158/api/app/category/set'
     fetch( url,{
       method: 'POST',
-      headers: {
-       'Accept': 'application/json',
-       'Content-Type': 'application/json',
-      },
       body: JSON.stringify({
         area: this.state.area,
         category: this.state.category,

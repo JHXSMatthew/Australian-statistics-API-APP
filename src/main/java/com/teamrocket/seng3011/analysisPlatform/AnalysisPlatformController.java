@@ -4,6 +4,7 @@ import com.teamrocket.seng3011.analysisPlatform.models.Company;
 import com.teamrocket.seng3011.api.exceptions.CannotParseCategoryException;
 import com.teamrocket.seng3011.api.exceptions.CannotParseJSONException;
 import com.teamrocket.seng3011.api.exceptions.CannotParseStatsTypeException;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -14,12 +15,12 @@ import org.springframework.web.bind.annotation.*;
 //TODO: test usage, remove CrossOrigin  after testing.
 public class AnalysisPlatformController {
 
-    @RequestMapping(value = "app/category/set", produces = "application/json")
+    @RequestMapping(value = "app/category/set", consumes = MediaType.APPLICATION_JSON_VALUE,produces = "application/json")
     public String onCategoryQuerySet(@RequestBody CategoryQuery query) throws Exception {
         return query.set();
     }
 
-    @RequestMapping(value = "app/category/get", produces = "application/json")
+    @RequestMapping(value = "app/category/get", consumes = MediaType.APPLICATION_JSON_VALUE, produces = "application/json")
     public String onCategoryQueryGet(@RequestBody CategoryQuery query) throws Exception {
         return query.get();
     }

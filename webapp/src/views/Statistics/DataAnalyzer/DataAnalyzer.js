@@ -170,7 +170,8 @@ class DataAnalyzer extends Component {
   }
 
   setFocusDate(date){
-    this.setState({focusDate: date});
+    this.setState({focusDate: date,rSelected:3});
+
   }
 
 
@@ -189,7 +190,7 @@ class DataAnalyzer extends Component {
           var trueTotal = 0;
           if(data[i].Commodity){
             if(!firstCategory){
-              firstCategory = data[i].Commodity;
+              firstCategory = valueToLabel(CATEGORY_ME,data[i].Commodity);
             }
             data[i].Category = valueToLabel(CATEGORY_ME,data[i].Commodity);
           }
@@ -231,7 +232,7 @@ class DataAnalyzer extends Component {
           count = 0;
           if(data[i].RetailIndustry){
             if(!firstCategory){
-              firstCategory = data[i].RetailIndustry;
+              firstCategory = valueToLabel(CATEGORY_RT,data[i].RetailIndustry);
             }
             data[i].Category = valueToLabel(CATEGORY_RT,data[i].RetailIndustry);
           }
@@ -308,16 +309,17 @@ class DataAnalyzer extends Component {
     }
 
 
-
     this.setState(function (prevState, props) {
         return {
           data: data,
           dataType: dataType,
           rSelected: 2,
-          category: valueToLabel(firstCategory),
+          category: firstCategory,
         };
     });
   }
+
+
 
   render(){
         return(
@@ -330,7 +332,7 @@ class DataAnalyzer extends Component {
                         <ButtonGroup>
                           <Button color="primary" onClick={() => this.onRadioBtnClick(1)} active={this.state.rSelected === 1}>Search</Button>
                           <Button color="primary" onClick={() => this.onRadioBtnClick(2)} active={this.state.rSelected === 2}>Comparison</Button>
-                          <Button color="primary" onClick={() => this.onRadioBtnClick(3)} active={this.state.rSelected === 3}>Analytics</Button>
+                          {this.state.focusDate && <Button color="primary" onClick={() => this.onRadioBtnClick(3)} active={this.state.rSelected === 3}>Analytics</Button>}
                         </ButtonGroup>
                       </div>
                     }

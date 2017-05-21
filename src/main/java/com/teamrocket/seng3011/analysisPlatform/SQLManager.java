@@ -76,8 +76,6 @@ public class SQLManager {
         return CacheManager.getManager().getResource();
     }
 
-
-
     public static SQLManager getManager(){
         if(manager == null){
             manager = new SQLManager();

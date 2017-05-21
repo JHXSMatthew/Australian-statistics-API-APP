@@ -53,7 +53,8 @@ class AddRelation extends Component{
       }
       return response.json().then(function (json) {
         //TODO: deal with empty data
-        console.log(json);
+        alert("New category relation added!");
+        that.setArea(that.state.area);
       })
 
     });

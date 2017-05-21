@@ -14,20 +14,16 @@ import org.springframework.web.bind.annotation.*;
 //TODO: test usage, remove CrossOrigin  after testing.
 public class AnalysisPlatformController {
 
-    @RequestMapping(value = "app/category", produces = "application/json")
-    public String onCategoryQuery(@RequestParam(value = "action") String action ,
-                                @RequestParam(value = "area") String area ,
-                                @RequestParam(value = "category", required = false) String[] category,
-                                @RequestParam(value = "company", required = false) Company[] company
-                                ) throws Exception {
-        CategoryQuery query = new CategoryQuery(area,category,company);
-        if(action.toLowerCase().equals("get")){
-            return query.get();
-        }else if(action.toLowerCase().equals("set")) {
-            return query.set();
-        }
-        throw new CannotParseJSONException("error input action");
+    @RequestMapping(value = "app/category/set", produces = "application/json")
+    public String onCategoryQuerySet(@RequestBody CategoryQuery query) throws Exception {
+        return query.set();
     }
+
+    @RequestMapping(value = "app/category/get", produces = "application/json")
+    public String onCategoryQueryGet(@RequestBody CategoryQuery query) throws Exception {
+        return query.get();
+    }
+
 
     //Should be a function handles fetch each categories/states/area here instead of hard coding in the view.
     // but I am lazy (no)

@@ -16,7 +16,7 @@ class ControlView extends Component{
         <Container>
           <Row>
             <Col md="6" xs="6" >
-              <DataFetcher addDataEntry={this.addDataEntry} />
+              <DataFetcher addDataEntry={this.props.addDataEntry} />
             </Col>
             <Col md="6" xs="6" >
               <AddRelation />

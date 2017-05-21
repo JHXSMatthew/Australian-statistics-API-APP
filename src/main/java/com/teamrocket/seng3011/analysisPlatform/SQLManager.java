@@ -53,21 +53,14 @@ public class SQLManager {
         }
     }
 
-    public boolean setRelation(EntryType area, HaveID[] categories , Company[] companies){
+    public boolean setRelation(EntryType area, HaveID[] categories , Company companies){
         Jedis jedis = getResource();
         try {
             Pipeline pipeline = jedis.pipelined();
             ObjectMapper mapper = new ObjectMapper();
             Arrays.stream(categories).forEach(c -> {
                 try {
-                    pipeline.sadd(getRelationKey(area, c), mapper.writeValueAsString(Arrays.stream(companies).map(cc -> {
-                        try {
-                            return mapper.writeValueAsString(cc);
-                        } catch (JsonProcessingException e) {
-                            e.printStackTrace();
-                        }
-                        return "";
-                    }).toArray(String[]::new)));
+                    pipeline.sadd(getRelationKey(area, c), mapper.writeValueAsString(companies));
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }

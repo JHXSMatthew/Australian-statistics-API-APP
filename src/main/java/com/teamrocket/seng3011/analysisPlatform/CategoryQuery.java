@@ -19,10 +19,10 @@ public class CategoryQuery {
 
     private EntryType area;
     private HaveID[] categories;
-    private Company[] companies;
+    private Company companies;
 
 
-    public CategoryQuery(String area,String[] categories, Company[] companies) throws CannotParseStatsTypeException, CannotParseCategoryException {
+    public CategoryQuery(String area,String[] categories, Company companies) throws CannotParseStatsTypeException, CannotParseCategoryException {
         this.companies = companies;
         this.area = EntryType.parseType(area);
         this.categories=  APIController.parseCategory(categories,area);

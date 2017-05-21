@@ -166,7 +166,7 @@ class DataAnalyzer extends Component {
   }
 
   setCategory(c,id){
-    this.setState({Category: c, comparisonSelected: id})
+    this.setState({category: c, comparisonSelected: id})
   }
 
   setFocusDate(date){
@@ -314,7 +314,7 @@ class DataAnalyzer extends Component {
           data: data,
           dataType: dataType,
           rSelected: 2,
-          category: firstCategory,
+          category: valueToLabel(firstCategory),
         };
     });
   }
@@ -349,7 +349,7 @@ class DataAnalyzer extends Component {
                   <ComparisonView data={this.state.data} dataType={this.state.dataType} setFocusDate={this.setFocusDate} setCategory={this.setCategory}></ComparisonView>
                 </div>
                 <div style={this.state.rSelected === 3 && this.state.dataType && this.state.focusDate ?  {display: 'inline'} : {display: 'none'}}>
-                  {this.state.focusDate && <AnalyticsView  date={this.state.focusDate} dataType={this.state.dataType} category={this.category}/>}
+                  {this.state.focusDate && <AnalyticsView  date={this.state.focusDate} dataType={this.state.dataType} category={this.state.category}/>}
                 </div>
 
               </div>

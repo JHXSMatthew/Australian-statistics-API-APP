@@ -18,11 +18,9 @@ class AnalyticsView extends Component{
 
 
     render(){
+      console.log(this.props);
       return(
-        <div>
-          NOT YET!
-        </div>
-
+        <TimePoint time={this.props.date} category={this.props.category} dataType={this.props.dataType}/>
       )
     }
 

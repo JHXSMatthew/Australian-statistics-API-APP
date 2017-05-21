@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class AnalysisPlatformController {
 
-    @RequestMapping(value = "app/category",method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "app/category", produces = "application/json")
     public String onCategoryQuery(@RequestParam(value = "action") String action ,
                                 @RequestParam(value = "area") String area ,
                                 @RequestParam(value = "category", required = false) String[] category,

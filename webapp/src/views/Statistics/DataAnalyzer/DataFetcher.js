@@ -103,10 +103,9 @@ class DataFetcher extends Component {
     var button = (this.state.area && this.state.region && this.state.category && this.state.region.length > 0 && this.state.category.length > 0) ? false : true;
 
     return (
-        <div style={{padding: 20}}>
           <div className="card">
             <div className="card-header">
-              <strong>Data fetcher</strong>
+              <strong>Advanced Search</strong>
               <span className="float-right"><i className="icon-question" id="Popover1" onClick={this.toggle}></i></span>
             </div>
             <Popover placement="bottom" isOpen={this.state.popoverOpen} target="Popover1" toggle={this.toggle}>
@@ -163,7 +162,7 @@ class DataFetcher extends Component {
             </div>
 
           </div>
-        </div>
+
 
     )
   }
@@ -194,7 +193,7 @@ class MonthBox extends Component {
 }
 
 
-class AreaSelector extends Component{
+export class AreaSelector extends Component{
   constructor(prop){
     super(prop)
     this.state = {
@@ -237,7 +236,7 @@ class StateSelector extends Component{
 }
 
 
-class CategorySelector extends Component{
+export class CategorySelector extends Component{
   constructor(props){
     super(props)
     this.handleSelectChange = this.handleSelectChange.bind(this);

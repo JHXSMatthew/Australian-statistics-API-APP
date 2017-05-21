@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import TimePoint from './TimePoint.js';
+import { Row, Container} from 'reactstrap';
 
 
 class AnalyticsView extends Component{
@@ -20,7 +21,9 @@ class AnalyticsView extends Component{
     render(){
       console.log(this.props);
       return(
-        <TimePoint time={this.props.date} category={this.props.category} dataType={this.props.dataType}/>
+
+          <TimePoint time={this.props.date} category={this.props.category} dataType={this.props.dataType}/>
+
       )
     }
 

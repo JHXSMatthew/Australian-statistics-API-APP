@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import DataFetcher from './DataFetcher.js';
-import ComparisonView from './ComparisonView.js';
 import 'react-table/react-table.css';
+import ControlView from './ControlView.js';
+import ComparisonView from './ComparisonView.js';
 import AnalyticsView from './AnalyticsView.js';
 import {ButtonGroup,Button,Row, Col,Container} from 'reactstrap';
 
@@ -337,11 +337,9 @@ class DataAnalyzer extends Component {
                   </Col>
                 </Row>
                 <Row>
-                  <Col sm={{ size: 6, push: 2, pull: 2,  offset: 1}}>
-                    <div style={this.state.rSelected === 1 ?  {display: 'inline'} : {display: 'none'}}>
-                      <DataFetcher addDataEntry={this.addDataEntry} />
-                    </div>
-                  </Col>
+                  <div style={this.state.rSelected === 1 ?  {display: 'inline'} : {display: 'none'}}>
+                    <ControlView addDataEntry={this.addDataEntry} ></ControlView>
+                  </div>
                 </Row>
               </Container>
               <div style={{padding: 20}}>

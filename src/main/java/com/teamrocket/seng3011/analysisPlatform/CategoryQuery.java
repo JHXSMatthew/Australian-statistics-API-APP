@@ -26,11 +26,12 @@ public class CategoryQuery {
 
     @JsonCreator
     public CategoryQuery(@JsonProperty("area")String area,
-                         @JsonProperty("category")String[] categories,
+                         @JsonProperty("category")String categories,
                          @JsonProperty("company") Company companies) throws CannotParseStatsTypeException, CannotParseCategoryException {
         this.companies = companies;
         this.area = EntryType.parseType(area);
-        this.categories=  APIController.parseCategory(categories,area);
+        System.out.println(categories);
+        this.categories=  APIController.parseCategory(categories.split(","),area);
     }
 
 

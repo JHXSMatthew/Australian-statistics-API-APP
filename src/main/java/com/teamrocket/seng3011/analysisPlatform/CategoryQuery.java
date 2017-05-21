@@ -1,5 +1,6 @@
 package com.teamrocket.seng3011.analysisPlatform;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teamrocket.seng3011.analysisPlatform.models.CategoryCompanyRelation;
 import com.teamrocket.seng3011.analysisPlatform.models.Company;
@@ -22,6 +23,7 @@ public class CategoryQuery {
     private Company companies;
 
 
+    @JsonCreator
     public CategoryQuery(String area,String[] categories, Company companies) throws CannotParseStatsTypeException, CannotParseCategoryException {
         this.companies = companies;
         this.area = EntryType.parseType(area);

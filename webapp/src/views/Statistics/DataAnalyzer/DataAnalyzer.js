@@ -5,8 +5,8 @@ import ComparisonView from './ComparisonView.js';
 import AnalyticsView from './AnalyticsView.js';
 import WelcomeView from './WelcomeView.js';
 import ControlMenu from './ControlMenu.js';
+import SiderBarWrapper from './SiderBarWrapper.js';
 import {ButtonGroup,Button,Row, Col,Container} from 'reactstrap';
-
 
 export const STATE = [
 { label: 'All Australian Regions', value: 'AUS' },
@@ -190,12 +190,27 @@ class DataAnalyzer extends Component {
         comparisonSelected: 0,
         category: null,
         focusDate: null,
+        sidebarOpen: false,
+        expert: false
     }
+
+    this.toggleExpert = this.toggleExpert.bind(this);
     this.addDataEntry = this.addDataEntry.bind(this);
     this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
     this.setCategory = this.setCategory.bind(this);
     this.setFocusDate = this.setFocusDate.bind(this);
+    this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
+
   }
+
+  onSetSidebarOpen(open){
+    if(open == true || open == false){
+      this.setState({sidebarOpen: open});
+    }else{
+      this.setState({sidebarOpen: !this.state.sidebarOpen});
+    }
+ }
+
 
   onRadioBtnClick(rSelected) {
     this.setState({ rSelected });
@@ -209,38 +224,117 @@ class DataAnalyzer extends Component {
     this.setState({focusDate: date,rSelected:3});
   }
 
-  addDataEntry(e,b,c){
-    var data = e.data;
-    var firstCategory = null;
-    if(data){
-      var dataType = null;
-      if(data.MonthlyCommodityExportData){
-        dataType = getArea("MerchandiseExports");
-        data = data.MonthlyCommodityExportData;
-        for(var i = 0 ; i < data.length; i++){
-          var total = 0;
-          var count = 0;
-          var trueTotal = 0;
-          if(data[i].Commodity){
-            if(!firstCategory){
-              firstCategory = data[i].Commodity;
+  toggleExpert(){
+    this.setState({
+      expert: !this.state.expert
+    });
+  }
+
+  render(){
+    return(
+        <div className="animated fadeIn">
+          <Container fluid={true}>
+            {this.state.expert && <SiderBarWrapper addDataEntry={this.addDataEntry} expert={this.state.expert} toggleExpert={this.toggleExpert} sidebarOpen={this.state.sidebarOpen} onSetSidebarOpen={this.onSetSidebarOpen} />}
+            <Container>
+              <Row>
+                <Col style={{padding: 10}}>
+                    <ControlMenu expert={this.state.expert} onSetSidebarOpen={this.onSetSidebarOpen} onRadioBtnClick={this.onRadioBtnClick}/>
+                </Col>
+              </Row>
+              <Row>
+                <div style={this.state.rSelected === 1 ?  {display: 'inline'} : {display: 'none'}}>
+                  <ControlView expert={this.state.expert} toggleExpert={this.toggleExpert} dataType={this.state.dateType} rSelected={this.state.rSelected} addDataEntry={this.addDataEntry} ></ControlView>
+                </div>
+              </Row>
+            </Container>
+            <div style={{padding: 20}}>
+              <div style={this.state.rSelected === 2 && this.state.dataType ?  {display: 'inline'} : {display: 'none'}}>
+                <ComparisonView data={this.state.data} dataType={this.state.dataType} setFocusDate={this.setFocusDate} setCategory={this.setCategory}></ComparisonView>
+              </div>
+              <div style={this.state.rSelected === 3 && this.state.dataType && this.state.focusDate ?  {display: 'inline'} : {display: 'none'}}>
+                {this.state.focusDate && <AnalyticsView  date={this.state.focusDate} dataType={this.state.dataType} category={this.state.category}/>}
+              </div>
+            </div>
+          </Container>
+        </div>
+    )
+  }
+
+
+    addDataEntry(e,b,c){
+      var data = e.data;
+      var firstCategory = null;
+      if(data){
+        var dataType = null;
+        if(data.MonthlyCommodityExportData){
+          dataType = getArea("MerchandiseExports");
+          data = data.MonthlyCommodityExportData;
+          for(var i = 0 ; i < data.length; i++){
+            var total = 0;
+            var count = 0;
+            var trueTotal = 0;
+            if(data[i].Commodity){
+              if(!firstCategory){
+                firstCategory = data[i].Commodity;
+              }
+              data[i].Category = getCategory(dataType,data[i].Commodity);
             }
-            data[i].Category = getCategory(dataType,data[i].Commodity);
+            if(data[i].RegionalData){
+              var regional = data[i].RegionalData;
+              for(var j = 0 ; j < regional.length ; j ++){
+                //state and data
+                var regionalTotal = 0;
+                var regionalCount = 0;
+                regional[j].State = valueToLabel(STATE,regional[j].State);
+                if(regional[j].Data){
+                  var dateData = regional[j].Data;
+                  for(var k = 0; k < dateData.length ; k ++){
+                    dateData[k].Value = parseFloat(dateData[k].Value);
+                    total += dateData[k].Value;
+                    regionalTotal += dateData[k].Value;
+                    regionalCount++;
+                  }
+                  regional[j].total = regionalTotal;
+                  regional[j].average = parseFloat(parseFloat(regionalTotal/regionalCount).toFixed(4));
+                  if(regional[j].State === "Australia"){
+                    //don't add it. logically AU contains all states
+                  }else{
+                    if(!isNaN(regional[j].average)){
+                      total += regionalTotal/regionalCount;
+                      count ++ ;
+                    }
+                  }
+                }
+              }
+            }
+            data[i].average = parseFloat(parseFloat(total/count).toFixed(4));
           }
-          if(data[i].RegionalData){
-            var regional = data[i].RegionalData;
-            for(var j = 0 ; j < regional.length ; j ++){
-              //state and data
-              var regionalTotal = 0;
-              var regionalCount = 0;
-              regional[j].State = valueToLabel(STATE,regional[j].State);
-              if(regional[j].Data){
-                var dateData = regional[j].Data;
-                for(var k = 0; k < dateData.length ; k ++){
-                  dateData[k].Value = parseFloat(dateData[k].Value);
-                  total += dateData[k].Value;
-                  regionalTotal += dateData[k].Value;
-                  regionalCount++;
+        }else if(data.MonthlyRetailData){
+          dataType = getArea("Retail");
+          data = data.MonthlyRetailData;
+          for( i = 0 ; i < data.length; i++){
+            total = 0;
+            count = 0;
+            if(data[i].RetailIndustry){
+              if(!firstCategory){
+                firstCategory = data[i].RetailIndustry;
+              }
+              data[i].Category = getCategory(dataType,data[i].RetailIndustry);
+            }
+            if(data[i].RegionalData){
+              regional = data[i].RegionalData;
+              for( j = 0 ; j < regional.length ; j ++){
+                //state and data
+                regionalTotal = 0;
+                regionalCount = 0;
+                regional[j].State = valueToLabel(STATE,regional[j].State);
+                if(regional[j].Data){
+                  dateData = regional[j].Data;
+                  for(k = 0; k < dateData.length ; k ++){
+                    dateData[k].Value = parseFloat(dateData[k].Turnover);
+                    regionalTotal += dateData[k].Value;
+                    regionalCount++;
+                  }
                 }
                 regional[j].total = regionalTotal;
                 regional[j].average = parseFloat(parseFloat(regionalTotal/regionalCount).toFixed(4));
@@ -254,136 +348,62 @@ class DataAnalyzer extends Component {
                 }
               }
             }
+            data[i].average = parseFloat(parseFloat(total/count).toFixed(4));
           }
-          data[i].average = parseFloat(parseFloat(total/count).toFixed(4));
         }
-      }else if(data.MonthlyRetailData){
-        dataType = getArea("Retail");
-        data = data.MonthlyRetailData;
-        for( i = 0 ; i < data.length; i++){
-          total = 0;
-          count = 0;
-          if(data[i].RetailIndustry){
-            if(!firstCategory){
-              firstCategory = data[i].RetailIndustry;
-            }
-            data[i].Category = getCategory(dataType,data[i].RetailIndustry);
-          }
-          if(data[i].RegionalData){
-            regional = data[i].RegionalData;
-            for( j = 0 ; j < regional.length ; j ++){
-              //state and data
-              regionalTotal = 0;
-              regionalCount = 0;
-              regional[j].State = valueToLabel(STATE,regional[j].State);
-              if(regional[j].Data){
-                dateData = regional[j].Data;
-                for(k = 0; k < dateData.length ; k ++){
-                  dateData[k].Value = parseFloat(dateData[k].Turnover);
-                  regionalTotal += dateData[k].Value;
-                  regionalCount++;
-                }
+
+        for(var i = 0 ; i < data.length; i++){
+          var re = data[i].RegionalData;
+          var totalValues = [];
+          if(re){
+            for(var j = 0 ; j < re.length ; j++){
+              var dateData = re[j].Data;
+              var values = [];
+              for(var k = 0; k < dateData.length ; k ++){
+                values.push(parseFloat(parseFloat(dateData[k].Value).toFixed(4)));
               }
-              regional[j].total = regionalTotal;
-              regional[j].average = parseFloat(parseFloat(regionalTotal/regionalCount).toFixed(4));
-              if(regional[j].State === "Australia"){
-                //don't add it. logically AU contains all states
+              values.sort(function(a, b){return a-b});
+              re[j].minimum = parseFloat(values[0]);
+              re[j].maximum = values[values.length -1];
+              re[j].fq = values[Math.floor(0.25 * values.length)];
+              if(values.length%2 == 0){
+                re[j].median = values[Math.floor(values.length/2)];
               }else{
-                if(!isNaN(regional[j].average)){
-                  total += regionalTotal/regionalCount;
-                  count ++ ;
-                }
+                re[j].median = (values[Math.floor(values.length/2)] + values[Math.floor(values.length/2) + 1])/2;
+              }
+              re[j].tq =values[Math.floor(0.75 * values.length)];
+              if(re[j].total){
+                totalValues.push(re[j].total);
               }
             }
           }
-          data[i].average = parseFloat(parseFloat(total/count).toFixed(4));
-        }
-      }
-
-      for(var i = 0 ; i < data.length; i++){
-        var re = data[i].RegionalData;
-        var totalValues = [];
-        if(re){
-          for(var j = 0 ; j < re.length ; j++){
-            var dateData = re[j].Data;
-            var values = [];
-            for(var k = 0; k < dateData.length ; k ++){
-              values.push(parseFloat(parseFloat(dateData[k].Value).toFixed(4)));
-            }
-            values.sort(function(a, b){return a-b});
-            re[j].minimum = parseFloat(values[0]);
-            re[j].maximum = values[values.length -1];
-            re[j].fq = values[Math.floor(0.25 * values.length)];
-            if(values.length%2 == 0){
-              re[j].median = values[Math.floor(values.length/2)];
-            }else{
-              re[j].median = (values[Math.floor(values.length/2)] + values[Math.floor(values.length/2) + 1])/2;
-            }
-            re[j].tq =values[Math.floor(0.75 * values.length)];
-            if(re[j].total){
-              totalValues.push(re[j].total);
-            }
+          totalValues.sort(function(a, b){return a-b});
+          for(var m = 0 ; m < totalValues.length ; m ++){
+            totalValues[m] = parseFloat(parseFloat(totalValues[m]).toFixed(4));
           }
+          data[i].minimum = totalValues[0];
+          data[i].maximum = totalValues[totalValues.length -1];
+          data[i].fq = totalValues[Math.floor(0.25 * totalValues.length)];
+          if(totalValues.length%2 == 0){
+            data[i].median = totalValues[totalValues.length/2];
+          }else{
+            data[i].median = (totalValues[Math.floor(totalValues.length/2)] + totalValues[Math.floor(totalValues.length/2 + 1)])/2;
+          }
+          data[i].tq =totalValues[Math.floor(0.75 * totalValues.length)];
         }
-        totalValues.sort(function(a, b){return a-b});
-        for(var m = 0 ; m < totalValues.length ; m ++){
-          totalValues[m] = parseFloat(parseFloat(totalValues[m]).toFixed(4));
-        }
-        data[i].minimum = totalValues[0];
-        data[i].maximum = totalValues[totalValues.length -1];
-        data[i].fq = totalValues[Math.floor(0.25 * totalValues.length)];
-        if(totalValues.length%2 == 0){
-          data[i].median = totalValues[totalValues.length/2];
-        }else{
-          data[i].median = (totalValues[Math.floor(totalValues.length/2)] + totalValues[Math.floor(totalValues.length/2 + 1)])/2;
-        }
-        data[i].tq =totalValues[Math.floor(0.75 * totalValues.length)];
       }
+
+
+      this.setState(function (prevState, props) {
+          return {
+            data: data,
+            dataType: dataType,
+            rSelected: 2,
+            category: getCategory(dataType,firstCategory),
+            focusDate: c
+          };
+      });
     }
-
-
-    this.setState(function (prevState, props) {
-        return {
-          data: data,
-          dataType: dataType,
-          rSelected: 2,
-          category: getCategory(dataType,firstCategory),
-          focusDate: c
-        };
-    });
-  }
-
-
-
-  render(){
-    return(
-        <div className="animated fadeIn">
-          <Container>
-            <Row>
-              <Col style={{padding: 10}}>
-                {this.state.dataType &&
-                  <ControlMenu onRadioBtnClick={this.onRadioBtnClick}/>
-                }
-              </Col>
-            </Row>
-            <Row>
-              <div style={this.state.rSelected === 1 ?  {display: 'inline'} : {display: 'none'}}>
-                <ControlView dataType={this.state.dateType} rSelected={this.state.rSelected} addDataEntry={this.addDataEntry} ></ControlView>
-              </div>
-            </Row>
-          </Container>
-          <div style={{padding: 20}}>
-            <div style={this.state.rSelected === 2 && this.state.dataType ?  {display: 'inline'} : {display: 'none'}}>
-              <ComparisonView data={this.state.data} dataType={this.state.dataType} setFocusDate={this.setFocusDate} setCategory={this.setCategory}></ComparisonView>
-            </div>
-            <div style={this.state.rSelected === 3 && this.state.dataType && this.state.focusDate ?  {display: 'inline'} : {display: 'none'}}>
-              {this.state.focusDate && <AnalyticsView  date={this.state.focusDate} dataType={this.state.dataType} category={this.state.category}/>}
-            </div>
-
-          </div>
-        </div>
-    )
-  }
 }
 
 export default DataAnalyzer;

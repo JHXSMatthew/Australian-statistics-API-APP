@@ -37,6 +37,31 @@ class DataFetcher extends Component {
   }
 
 
+  componentWillReceiveProps(nextProps){
+    if(!nextProps.expert){
+      var categoryStrs = [];
+      var regionStrs = [];
+      var temp = [];
+      var a = this.state.area;
+      if(a==="MerchandiseExports"){
+        temp = CATEGORY_ME;
+      }else if(a==="Retail"){
+        temp = CATEGORY_RT;
+      }else{
+        return;
+      }
+      for(var i = 0 ; i < temp.length ; i ++){
+        categoryStrs.push(temp[i].value);
+      }
+      for(i = 0 ; i < STATE.length ; i ++){
+        regionStrs.push(STATE[i].value);
+      }
+      this.setState({
+        category: categoryStrs.join(),
+        region: regionStrs.join()
+      })
+    }
+  }
 
   toggle() {
       this.setState({
@@ -54,7 +79,6 @@ class DataFetcher extends Component {
       var categoryStrs = [];
       var regionStrs = [];
       var temp = [];
-      console.log(a);
       if(a==="MerchandiseExports"){
         temp = CATEGORY_ME;
       }else if(a==="Retail"){
@@ -66,8 +90,6 @@ class DataFetcher extends Component {
       for(i = 0 ; i < STATE.length ; i ++){
         regionStrs.push(STATE[i].value);
       }
-      console.log(categoryStrs);
-      console.log(regionStrs);
       this.setState({
         area: a,
         category: categoryStrs.join(),

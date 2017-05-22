@@ -492,6 +492,7 @@ class News extends Component{
       }
       return response.json().then(function (json) {
         json = json.items;
+        console.log(json);
         for(var i = 0 ; i < json.length ; i ++){
           json[i].button = <NewsArticle title={json[i].title} article={json[i].link} />
         }
@@ -510,7 +511,8 @@ class News extends Component{
   render(){
     const newsTable = [{
       header: 'News Title',
-      accessor: 'title' // String-based value accessors!
+      accessor: 'title',
+      Cell: props=><span> {props.value} </span>
     },{
       header: 'Time',
       accessor: 'pubDate', // String-based value accessors!
@@ -532,6 +534,21 @@ class News extends Component{
     );
 
   }
+}
+
+class NewsAbstraction extends Component{
+  constructor(props){
+    super(props);
+  }
+
+  render(){
+    return(
+      <div>
+
+      </div>
+    );
+  }
+
 
 }
 

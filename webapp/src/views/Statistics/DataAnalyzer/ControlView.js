@@ -7,28 +7,21 @@ class ControlView extends Component{
 
   constructor(props){
     super(props);
-    this.state = {
-      expert: false
-    }
-    this.toggleExpert = this.toggleExpert.bind(this);
+
   }
 
-  toggleExpert(){
-    this.setState({
-      expert: !this.state.expert
-    });
-  }
+
 
   render(){
     return(
       <div style={{padding: 20}}>
         <Container>
           <Row>
-             <Col md={this.state.expert ? "6" : "12"} >
-              <DataFetcher expert={this.state.expert} toggleExpert={this.toggleExpert} addDataEntry={this.props.addDataEntry} />
+             <Col md={this.props.expert ? "6" : "12"} >
+              <DataFetcher expert={this.props.expert} toggleExpert={this.props.toggleExpert} addDataEntry={this.props.addDataEntry} />
             </Col>
             <Col md="6" xs="6" >
-              {this.state.expert &&<AddRelation />}
+              {this.props.expert &&<AddRelation />}
             </Col>
           </Row>
         </Container>

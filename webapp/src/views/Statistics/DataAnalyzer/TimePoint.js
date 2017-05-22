@@ -2,7 +2,8 @@ import React,{Component} from 'react';
 import {Container,ModalFooter, ModalBody, ModalHeader,Modal, Button, ListGroup,ListGroupItem,Label,Col,Card,CardHeader,Input} from 'reactstrap';
 import ReactTable from 'react-table'
 import {CATEGORY_RT} from './DataAnalyzer.js';
-import {AREA,CATEGORY_ME,LabelToValue} from './DataAnalyzer.js';
+import {CATEGORY_ME} from './DataAnalyzer.js';
+import {getCategory} from './DataAnalyzer.js';
 import TimePointChart from './TimePointChart.js';
 
 
@@ -17,7 +18,8 @@ class TimePoint extends Component{
       canUpdate: false,
       update: false,
       data: null,
-      currentNews: "all"
+      currentNews: "all",
+      companies: []
     };
     this.setUp = this.setUp.bind(this);
     this.setLow = this.setLow.bind(this);
@@ -36,7 +38,6 @@ class TimePoint extends Component{
   }
 
   componentWillReceiveProps(nextProps){
-    console.log(nextProps);
     var that = this;
     var url = 'http://45.76.114.158/api/app/category/get'
     fetch( url,{
@@ -57,12 +58,23 @@ class TimePoint extends Component{
       }
       return response.json().then(function (json) {
         //TODO: deal with empty data
-        console.log(json);
+        var a = [];
+        if(json.length > 0){
+          for(var i = 0 ; i < json.length ; i ++){
+            if(json[i].category === nextProps.category.value){
+              a = a.concat(json[i].companies);
+            }
+          }
+        }
+
+        that.setState({
+          companies: a,
+          update: true
+        })
       })
 
     });
   }
-
 
   update(event){
     this.setState({
@@ -140,7 +152,38 @@ class TimePoint extends Component{
           <CardHeader>
             Time Point at {this.state.time} for {this.props.category.label} Category
           </CardHeader>
-
+            <ListGroup>
+              <ListGroupItem>
+                <Col  md="3" xs="3">
+                  <Label>Day of the Month</Label>
+                  <Input type="number" value={parseInt(this.state.time.split("-")[2])} size="sm" placeholder="Days of the month" onChange={this.setDayOfMonth} />
+                </Col>
+                <Col  md="3" xs="3">
+                  <Label>Days Before</Label>
+                  <Input type="number" defaultValue="5" size="sm" placeholder="Days Before Time Point" onChange={this.setLow} />
+                </Col>
+                <Col md="3" xs="3">
+                  <Label>Days After</Label>
+                  <Input type="number" defaultValue="5" size="sm" placeholder="Days After Time Point" onChange={this.setUp} />
+                </Col>
+                <Col md="2" xs="2">
+                  <Label>Click To Update Data
+                  </Label>
+                  <Button outline color="info" disabled={!this.state.canUpdate} onClick={this.update} >
+                     Update
+                  </Button>
+                </Col>
+              </ListGroupItem>
+              <ListGroupItem>
+                <TimePointChart data={this.state.data} update={this.state.update} />
+              </ListGroupItem>
+              <ListGroupItem>
+                <CompanyReturn companies={this.state.companies} category={this.props.category} setCurrentNews={this.setCurrentNews} date={this.getDate} up={this.state.up} low={this.state.low} update={this.state.update} dataType={this.props.dataType} setData={this.setData}/>
+              </ListGroupItem>
+              <ListGroupItem>
+                  <News category={this.props.category} starting={this.getStarting} ending={this.getEnd} update={this.state.update} dataType={this.props.dataType} current={this.state.currentNews}/>
+              </ListGroupItem>
+            </ListGroup>
         </Card>
       )
   }
@@ -212,35 +255,28 @@ class CompanyReturn extends Component{
       table: []
     }
   }
-
+/*
   componentWillMount(){
-    this.fetch(false,this.props.dataType);
+    this.fetch(true,this.props.dataType,this.props.companies);
   }
-
+*/
   componentWillReceiveProps(nextProps){
     if(!nextProps.update){
       return;
     }
     this.setState({table: []});
-    this.fetch(false,nextProps.dataType);
+    this.fetch(false,nextProps.dataType,nextProps.companies);
   }
 
-  fetch(a,dataType){
+  fetch(a,dataType,companies){
 
     var that = this;
-    var instruments = null;
-    if(dataType === "Export" ){
-      instruments = labelToInstruments(CATEGORY_ME,this.props.category);
-    }else if(dataType === "Retail"){
-      instruments = labelToInstruments(CATEGORY_RT,this.props.category);
-    }
-
-
     var ids = [];
     var names = [];
-    for(var i = 0 ; i < instruments.length ; i ++){
-      ids.push(instruments[i].id);
-      names.push(instruments[i].name);
+
+    for(var i = 0 ; i < companies.length ; i ++){
+      ids.push(companies[i].instrumentId);
+      names.push(companies[i].name);
     }
 
     var proxy = "https://cors-anywhere.herokuapp.com/";
@@ -265,7 +301,7 @@ class CompanyReturn extends Component{
       })
       .then(function(response) {
         if (response.status >= 400) {
-          alert("CompanyReturns API down, check console.");
+          alert("CompanyReturns API does not have such data. ");
           if(!a){
             that.fetch(true,dataType);
           }

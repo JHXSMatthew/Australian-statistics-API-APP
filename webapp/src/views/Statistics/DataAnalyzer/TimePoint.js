@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {Container,ModalFooter, ModalBody, ModalHeader,Modal, Button, ListGroup,ListGroupItem,Label,Col,Card,CardHeader,Input} from 'reactstrap';
+import {Container,ModalFooter, ModalBody, ModalHeader,Modal, Button, ListGroup,ListGroupItem,Label,Row,Col,Card,CardHeader,Input} from 'reactstrap';
 import ReactTable from 'react-table'
 import {CATEGORY_RT} from './DataAnalyzer.js';
 import {CATEGORY_ME} from './DataAnalyzer.js';
@@ -45,6 +45,7 @@ class TimePoint extends Component{
 
   componentWillReceiveProps(nextProps){
     if(this.state.companies.length != 0 && JSON.stringify(nextProps) === JSON.stringify(this.props)){
+      console.log("return");
       return;
     }
     var that = this;
@@ -70,8 +71,10 @@ class TimePoint extends Component{
         var a = [];
         if(json.length > 0){
           for(var i = 0 ; i < json.length ; i ++){
-            if(json[i].category === nextProps.category.value){
-              a = a.concat(json[i].companies);
+            if(json[i]){
+              if(json[i].category === nextProps.category.value){
+                a = a.concat(json[i].companies);
+              }
             }
           }
         }
@@ -157,43 +160,58 @@ class TimePoint extends Component{
 
   render(){
       return (
-        <Card>
-          <CardHeader>
-            Time Point at {this.state.time} for {this.props.category.label} Category
-          </CardHeader>
-            <ListGroup>
-              <ListGroupItem>
-                <Col  md="3" xs="3">
-                  <Label>Day of the Month</Label>
-                  <Input type="number" value={parseInt(this.state.time.split("-")[2])} size="sm" placeholder="Days of the month" onChange={this.setDayOfMonth} />
-                </Col>
-                <Col  md="3" xs="3">
-                  <Label>Days Before</Label>
-                  <Input type="number" defaultValue="5" size="sm" placeholder="Days Before Time Point" onChange={this.setLow} />
-                </Col>
-                <Col md="3" xs="3">
-                  <Label>Days After</Label>
-                  <Input type="number" defaultValue="5" size="sm" placeholder="Days After Time Point" onChange={this.setUp} />
-                </Col>
-                <Col md="2" xs="2">
-                  <Label>Click To Update Data
-                  </Label>
-                  <Button outline color="info" disabled={!this.state.canUpdate} onClick={this.update} >
-                     Update
-                  </Button>
-                </Col>
-              </ListGroupItem>
-              <ListGroupItem>
-                <TimePointChart data={this.state.data} update={this.state.update} />
-              </ListGroupItem>
-              <ListGroupItem>
-                <CompanyReturn companies={this.state.companies} category={this.props.category} setCurrentNews={this.setCurrentNews} date={this.getDate} up={this.state.up} low={this.state.low} update={this.state.update} dataType={this.props.dataType} setData={this.setData}/>
-              </ListGroupItem>
-              <ListGroupItem>
-                  <News category={this.props.category} starting={this.getStarting} ending={this.getEnd} update={this.state.update} dataType={this.props.dataType} current={this.state.currentNews}/>
-              </ListGroupItem>
-            </ListGroup>
-        </Card>
+        <Container fluid={true}>
+          <Row>
+            <Col>
+              <Card>
+                <CardHeader>
+                 {this.props.category.label} Related Companies. At {this.state.time}
+                </CardHeader>
+                  <Row>
+                    <Col>
+                      <ListGroup>
+                        <ListGroupItem>
+                          <Col  md="3" xs="3">
+                            <Label>Day of the Month</Label>
+                            <Input type="number" value={parseInt(this.state.time.split("-")[2])} size="sm" placeholder="Days of the month" onChange={this.setDayOfMonth} />
+                          </Col>
+                          <Col  md="3" xs="3">
+                            <Label>Days Before</Label>
+                            <Input type="number" defaultValue="5" size="sm" placeholder="Days Before Time Point" onChange={this.setLow} />
+                          </Col>
+                          <Col md="3" xs="3">
+                            <Label>Days After</Label>
+                            <Input type="number" defaultValue="5" size="sm" placeholder="Days After Time Point" onChange={this.setUp} />
+                          </Col>
+                          <Col md="2" xs="2">
+                            <Label>Click To Update
+                            </Label>
+                            <Button outline color="info" disabled={!this.state.canUpdate} onClick={this.update} >
+                               Update
+                            </Button>
+                          </Col>
+                        </ListGroupItem>
+                        <ListGroupItem>
+                          <TimePointChart data={this.state.data} update={this.state.update} />
+                        </ListGroupItem>
+                      </ListGroup>
+                    </Col>
+                    <Col>
+                      <ListGroupItem>
+                          <News category={this.props.category} starting={this.getStarting} ending={this.getEnd} update={this.state.update} dataType={this.props.dataType} current={this.state.currentNews}/>
+                      </ListGroupItem>
+                    </Col>
+                </Row>
+              </Card>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+
+              <CompanyReturn companies={this.state.companies} category={this.props.category} setCurrentNews={this.setCurrentNews} date={this.getDate} up={this.state.up} low={this.state.low} update={this.state.update} dataType={this.props.dataType} setData={this.setData}/>
+            </Col>
+          </Row>
+        </Container>
       )
   }
 }
@@ -380,26 +398,31 @@ class CompanyReturn extends Component{
         accessor: 'CM_Return',
       }
     ];
+    //              showPagination={false}
     return(
-        <Col md="12" xs="12">
-          <ReactTable
-            data={this.state.table}
-            showPagination={false}
-            columns={compnayName}
-            defaultPageSize={5}
-            noDataText='Loading...'
-            pageSize={(this.state.table &&  this.state.table.length) ?  this.state.table.length : 7}
-            SubComponent={(row) => {
-              return(
-                <ReactTable
-                  data={row.row.Data}
-                  columns={compnayDetail}
-                  defaultPageSize={10}
-                />
-              )
-            }}
-          />
-      </Col>
+      <Card>
+        <CardHeader>
+          Data Set
+        </CardHeader>
+          <Col md="12" xs="12">
+            <ReactTable
+              data={this.state.table}
+              columns={compnayName}
+              defaultPageSize={5}
+              noDataText='Loading...'
+              pageSize={(this.state.table &&  this.state.table.length) ?  this.state.table.length : 7}
+              SubComponent={(row) => {
+                return(
+                  <ReactTable
+                    data={row.row.Data}
+                    columns={compnayDetail}
+                    defaultPageSize={10}
+                  />
+                )
+              }}
+            />
+          </Col>
+      </Card>
     )
   }
 
@@ -504,7 +527,7 @@ class News extends Component{
           <ReactTable
             data={this.state.table}
             columns={newsTable}
-            defaultPageSize={5}
+            defaultPageSize={7}
             noDataText='Loading...'
           />
       </Col>

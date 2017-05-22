@@ -23,7 +23,6 @@ class TimePointChart extends Component{
       if(!data){
         return;
       }
-      console.log(data);
       var lines = [];
       var labels = [];
       var label_set = false;
@@ -101,7 +100,7 @@ class TimePointChart extends Component{
           },
           zoom: {
             enabled: true,
-            drag: false,
+            drag: true,
             mode: 'x',
           }
           }}

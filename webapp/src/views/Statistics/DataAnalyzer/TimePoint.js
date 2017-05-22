@@ -37,7 +37,16 @@ class TimePoint extends Component{
     this.componentWillReceiveProps(this.props);
   }
 
+  shouldComponentUpdate(nextProps, nextState){
+    return JSON.stringify(nextProps) !== JSON.stringify(this.props) || JSON.stringify(nextState) !== JSON.stringify(this.state);
+  }
+
+
+
   componentWillReceiveProps(nextProps){
+    if(this.state.companies.length != 0 && JSON.stringify(nextProps) === JSON.stringify(this.props)){
+      return;
+    }
     var that = this;
     var url = 'http://45.76.114.158/api/app/category/get'
     fetch( url,{
@@ -264,34 +273,36 @@ class CompanyReturn extends Component{
     if(!nextProps.update){
       return;
     }
-    this.setState({table: []});
-    this.fetch(false,nextProps.dataType,nextProps.companies);
+    this.setState(function (prevState, props) {
+      return {
+          table: []
+      };
+    });
+    for(var i = 0 ; i < nextProps.companies.length ; i ++){
+      this.fetch(false,nextProps.dataType,nextProps.companies[i]);
+    }
   }
 
+
   fetch(a,dataType,companies){
-
     var that = this;
-    var ids = [];
-    var names = [];
-
-    for(var i = 0 ; i < companies.length ; i ++){
-      ids.push(companies[i].instrumentId);
-      names.push(companies[i].name);
-    }
+    var id = companies.instrumentId;
+    var name = companies.name;
 
     var proxy = "https://cors-anywhere.herokuapp.com/";
 
    //Alvin's frined's API,
-    var url  = "http://174.138.67.207/InstrumentID/"+ ids.join()
-        +  "/DateOfInterest/"+ getDateString(this.props.date())
-       +  "/List_of_Var/CM_Return,AV_Return/Upper_window/"+ this.props.up
-      +  "/Lower_window/" + this.props.low;
+   url = "http://128.199.197.216:3000/v5/id="+ id
+        +  "&dateOfInterest="+ getDateString(this.props.date())
+        +  "&listOfVars=AV_Return;CM_Return&upperWindow="+ this.props.up
+        +  "&lowerWindow=" + this.props.low;
+
     if(a){
        // seesharp's API
-      url = "http://128.199.255.9/v3/id="+ ids.join(";")
-           +  "&dateOfInterest="+ getDateString(this.props.date())
-           +  "&listOfVars=AV_Return;CM_Return&upperWindow="+ this.props.up
-           +  "&lowerWindow=" + this.props.low;
+       var url  = "http://174.138.67.207/InstrumentID/"+ id
+           +  "/DateOfInterest/"+ getDateString(this.props.date())
+          +  "/List_of_Var/CM_Return,AV_Return/Upper_window/"+ this.props.up
+         +  "/Lower_window/" + this.props.low;
     }
     console.log("company return True URL:" + url);
     try{
@@ -301,16 +312,15 @@ class CompanyReturn extends Component{
       })
       .then(function(response) {
         if (response.status >= 400) {
-          alert("CompanyReturns API does not have such data. ");
           if(!a){
-            that.fetch(true,dataType);
+            that.fetch(true,dataType,companies);
           }
           return;
         }
         return response.json().then(function (json) {
           json = json.CompanyReturns;
           for(var i = 0 ; i < json.length ; i++ ){
-            json[i].name = names[ids.indexOf(json[i].InstrumentID)];
+            json[i].name = name;
             var av = 0;
             for(var j = 0 ; j < json[i].Data.length ; j ++){
               av += json[i].Data[j].AV_Return;
@@ -326,6 +336,7 @@ class CompanyReturn extends Component{
             json[i].AV_Return = parseFloat(av/json[i].Data.length * 100).toFixed(7) ;
             json[i].Get = <NewsFilter id={json[i].InstrumentID} setCurrentNews={that.props.setCurrentNews}/>
           }
+          json = that.state.table.concat(json);
           that.setState({
             table: json
           });
@@ -334,7 +345,7 @@ class CompanyReturn extends Component{
       });
     }catch(e){
       if(!a){
-        that.fetch(true,dataType);
+        that.fetch(true,dataType,companies);
       }
     }
   }
@@ -449,7 +460,7 @@ class News extends Component{
     //+ getDateString(this.props.starting()) +'T00:00:00.000Z&EndDate='+ getDateString(this.props.ending()) +'T00:00:00.000Z';
     //var urlTopics = "https://nickr.xyz/coolbananas/api/?InstrumentIDs=BHP.AX,BLT.L&TopicCodes=AMERS,COM&StartDate=2015-10-01T00:00:00.000Z&EndDate=2015-10-10T00:00:00.000Z";
     var url = "http://finance.yahoo.com/rss/headline?s=" + id
-    console.log("News True URL: " + url);
+    //console.log("News True URL: " + url);
 
     fetch( proxy + url,{
       method: 'GET',

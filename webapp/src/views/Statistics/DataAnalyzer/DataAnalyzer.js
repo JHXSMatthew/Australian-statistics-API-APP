@@ -3,6 +3,8 @@ import 'react-table/react-table.css';
 import ControlView from './ControlView.js';
 import ComparisonView from './ComparisonView.js';
 import AnalyticsView from './AnalyticsView.js';
+import WelcomeView from './WelcomeView.js';
+import ControlMenu from './ControlMenu.js';
 import {ButtonGroup,Button,Row, Col,Container} from 'reactstrap';
 
 
@@ -187,7 +189,7 @@ class DataAnalyzer extends Component {
         rSelected: 1,
         comparisonSelected: 0,
         category: null,
-        focusDate: null
+        focusDate: null,
     }
     this.addDataEntry = this.addDataEntry.bind(this);
     this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
@@ -205,12 +207,9 @@ class DataAnalyzer extends Component {
 
   setFocusDate(date){
     this.setState({focusDate: date,rSelected:3});
-
   }
 
-
-
-  addDataEntry(e){
+  addDataEntry(e,b,c){
     var data = e.data;
     var firstCategory = null;
     if(data){
@@ -349,6 +348,7 @@ class DataAnalyzer extends Component {
           dataType: dataType,
           rSelected: 2,
           category: getCategory(dataType,firstCategory),
+          focusDate: c
         };
     });
   }
@@ -356,39 +356,33 @@ class DataAnalyzer extends Component {
 
 
   render(){
-        return(
-            <div className="animated fadeIn">
-              <Container>
-                <Row>
-                  <Col style={{padding: 10}} md={{ size: 6, push: 2, pull: 2, offset: 2 }}>
-                    {this.state.dataType &&
-                      <div>
-                        <ButtonGroup>
-                          <Button color="primary" onClick={() => this.onRadioBtnClick(1)} active={this.state.rSelected === 1}>Search</Button>
-                          <Button color="primary" onClick={() => this.onRadioBtnClick(2)} active={this.state.rSelected === 2}>Comparison</Button>
-                          {this.state.focusDate && <Button color="primary" onClick={() => this.onRadioBtnClick(3)} active={this.state.rSelected === 3}>Analytics</Button>}
-                        </ButtonGroup>
-                      </div>
-                    }
-                  </Col>
-                </Row>
-                <Row>
-                  <div style={this.state.rSelected === 1 ?  {display: 'inline'} : {display: 'none'}}>
-                    <ControlView addDataEntry={this.addDataEntry} ></ControlView>
-                  </div>
-                </Row>
-              </Container>
-              <div style={{padding: 20}}>
-                <div style={this.state.rSelected === 2 && this.state.dataType ?  {display: 'inline'} : {display: 'none'}}>
-                  <ComparisonView data={this.state.data} dataType={this.state.dataType} setFocusDate={this.setFocusDate} setCategory={this.setCategory}></ComparisonView>
-                </div>
-                <div style={this.state.rSelected === 3 && this.state.dataType && this.state.focusDate ?  {display: 'inline'} : {display: 'none'}}>
-                  {this.state.focusDate && <AnalyticsView  date={this.state.focusDate} dataType={this.state.dataType} category={this.state.category}/>}
-                </div>
-
+    return(
+        <div className="animated fadeIn">
+          <Container>
+            <Row>
+              <Col style={{padding: 10}}>
+                {this.state.dataType &&
+                  <ControlMenu onRadioBtnClick={this.onRadioBtnClick}/>
+                }
+              </Col>
+            </Row>
+            <Row>
+              <div style={this.state.rSelected === 1 ?  {display: 'inline'} : {display: 'none'}}>
+                <ControlView dataType={this.state.dateType} rSelected={this.state.rSelected} addDataEntry={this.addDataEntry} ></ControlView>
               </div>
+            </Row>
+          </Container>
+          <div style={{padding: 20}}>
+            <div style={this.state.rSelected === 2 && this.state.dataType ?  {display: 'inline'} : {display: 'none'}}>
+              <ComparisonView data={this.state.data} dataType={this.state.dataType} setFocusDate={this.setFocusDate} setCategory={this.setCategory}></ComparisonView>
             </div>
-        )
+            <div style={this.state.rSelected === 3 && this.state.dataType && this.state.focusDate ?  {display: 'inline'} : {display: 'none'}}>
+              {this.state.focusDate && <AnalyticsView  date={this.state.focusDate} dataType={this.state.dataType} category={this.state.category}/>}
+            </div>
+
+          </div>
+        </div>
+    )
   }
 }
 

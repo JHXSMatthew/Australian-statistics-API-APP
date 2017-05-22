@@ -41,11 +41,8 @@ class TimePoint extends Component{
     return JSON.stringify(nextProps) !== JSON.stringify(this.props) || JSON.stringify(nextState) !== JSON.stringify(this.state);
   }
 
-
-
   componentWillReceiveProps(nextProps){
     if(this.state.companies.length != 0 && JSON.stringify(nextProps) === JSON.stringify(this.props)){
-      console.log("return");
       return;
     }
     var that = this;
@@ -81,7 +78,8 @@ class TimePoint extends Component{
 
         that.setState({
           companies: a,
-          update: true
+          update: true,
+          time: that.props.time
         })
       })
 
@@ -130,7 +128,7 @@ class TimePoint extends Component{
 
   getDate(){
     var str = this.state.time.split("-");
-    return new Date(str[0],str[1] -1 ,str[2] - 1);
+    return new Date(str[0],str[1] ,str[2]);
   }
 
   getStarting(){
@@ -245,7 +243,7 @@ function labelToTopics(array,label){
 
 function getDateString(d){
   d = new Date(d);
-  return d.getFullYear() + '-' +('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0'+ (d.getDate() + 1)).slice(-2);
+  return d.getFullYear() + '-' +('0' + (d.getMonth() )).slice(-2) + '-' + ('0'+ (d.getDate() )).slice(-2);
 }
 
 

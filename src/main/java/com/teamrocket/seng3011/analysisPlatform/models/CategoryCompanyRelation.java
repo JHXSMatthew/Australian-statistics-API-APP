@@ -1,27 +1,27 @@
 package com.teamrocket.seng3011.analysisPlatform.models;
 
 
-import com.teamrocket.seng3011.api.absApi.entries.EntryType;
+import com.teamrocket.seng3011.api.HaveID;
 
 /**
  * Created by JHXSMatthew on 20/05/2017.
  */
 public class CategoryCompanyRelation {
 
-    private EntryType category;
+    private HaveID category;
     private Company[] companies;
 
 
-    public CategoryCompanyRelation(EntryType category,Company[] companies){
+    public CategoryCompanyRelation(HaveID category,Company[] companies){
         this.category = category;
         this.companies = companies;
     }
 
     public String getCategory() {
-        return category.getTypeString();
+        return category.getName();
     }
 
-    public void setCategory(EntryType category) {
+    public void setCategory(HaveID category) {
         this.category = category;
     }
 

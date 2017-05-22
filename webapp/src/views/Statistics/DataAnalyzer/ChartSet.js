@@ -71,10 +71,8 @@ class ChartSet extends Component {
       var navs=[];
       var ylabel = null;
       var tabIndexMap = [];
-      if(nextProps.dataType === "Export"){
-        ylabel = "Value ($ thousands)"
-      }else if(nextProps.dataType === "Retail"){
-        ylabel = "Value ($ millions)";
+      if(nextProps.dataType){
+        ylabel = "Value " + nextProps.dataType.unit
       }
       for(var i = 0; i < data.length ; i ++){
         //for each category
@@ -130,12 +128,12 @@ class ChartSet extends Component {
 
         tabIndexMap.push(data[i].Category);
         navs.push(
-          <Tab key={data[i].Category}>
-              {data[i].Category}
+          <Tab key={data[i].Category.label}>
+              {data[i].Category.label}
           </Tab>
         );
         charts.push(
-          <TabPanel key={data[i].Category}>
+          <TabPanel key={data[i].Category.label}>
             <Row>
               <Col md="8" xs="8">
                 <Line

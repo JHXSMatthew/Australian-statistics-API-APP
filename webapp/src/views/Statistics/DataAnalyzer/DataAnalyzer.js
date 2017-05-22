@@ -20,8 +20,8 @@ export const STATE = [
 
 
 export const AREA = [
-{ label: 'Merchandise Exports', value: 'MerchandiseExports' },
-{ label: 'Retail', value: 'Retail' },
+{ label: 'Merchandise Exports', value: 'MerchandiseExports', unit: "($ thousands)" },
+{ label: 'Retail', value: 'Retail' , unit:  "($ millions)"},
 ];
 
 export const CATEGORY_ME = [
@@ -141,6 +141,40 @@ export function valueToLabel(array,value){
   return null;
 }
 
+export function LabelToValue(array,value){
+  for(var i = 0 ; i < array.length ; i ++){
+    if(array[i].label && array[i].label === value){
+      return array[i].value;
+    }
+  }
+  return null;
+}
+
+function getArea(str){
+  for(var i = 0 ; i < AREA.length ; i ++){
+    if(AREA[i].value && AREA[i].value === str){
+      return AREA[i];
+    }
+  }
+  return null;
+}
+
+
+function getCategory(area,str){
+  var array = null;
+  if(area.value === "MerchandiseExports"){
+    array = CATEGORY_ME;
+  }else if(area.value === "Retail"){
+    array = CATEGORY_RT;
+  }
+  for(var i = 0 ; i < array.length ; i ++){
+    if(array[i].value && array[i].value === str){
+      return array[i];
+    }
+  }
+  return null;
+}
+
 
 
 class DataAnalyzer extends Component {
@@ -182,7 +216,7 @@ class DataAnalyzer extends Component {
     if(data){
       var dataType = null;
       if(data.MonthlyCommodityExportData){
-        dataType = "Export";
+        dataType = getArea("MerchandiseExports");
         data = data.MonthlyCommodityExportData;
         for(var i = 0 ; i < data.length; i++){
           var total = 0;
@@ -190,9 +224,9 @@ class DataAnalyzer extends Component {
           var trueTotal = 0;
           if(data[i].Commodity){
             if(!firstCategory){
-              firstCategory = valueToLabel(CATEGORY_ME,data[i].Commodity);
+              firstCategory = data[i].Commodity;
             }
-            data[i].Category = valueToLabel(CATEGORY_ME,data[i].Commodity);
+            data[i].Category = getCategory(dataType,data[i].Commodity);
           }
           if(data[i].RegionalData){
             var regional = data[i].RegionalData;
@@ -225,16 +259,16 @@ class DataAnalyzer extends Component {
           data[i].average = parseFloat(parseFloat(total/count).toFixed(4));
         }
       }else if(data.MonthlyRetailData){
-        dataType = "Retail";
+        dataType = getArea("Retail");
         data = data.MonthlyRetailData;
         for( i = 0 ; i < data.length; i++){
           total = 0;
           count = 0;
           if(data[i].RetailIndustry){
             if(!firstCategory){
-              firstCategory = valueToLabel(CATEGORY_RT,data[i].RetailIndustry);
+              firstCategory = data[i].RetailIndustry;
             }
-            data[i].Category = valueToLabel(CATEGORY_RT,data[i].RetailIndustry);
+            data[i].Category = getCategory(dataType,data[i].RetailIndustry);
           }
           if(data[i].RegionalData){
             regional = data[i].RegionalData;
@@ -314,7 +348,7 @@ class DataAnalyzer extends Component {
           data: data,
           dataType: dataType,
           rSelected: 2,
-          category: firstCategory,
+          category: getCategory(dataType,firstCategory),
         };
     });
   }

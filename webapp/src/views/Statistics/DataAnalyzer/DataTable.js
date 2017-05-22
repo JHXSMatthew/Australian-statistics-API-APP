@@ -36,7 +36,7 @@ class DataTable extends Component {
     var data = this.props.data;
     const categoryValue = [{
       header: 'Category',
-      accessor: 'Category' // String-based value accessors!
+      accessor: 'Category.label' // String-based value accessors!
     }, {
       header: 'Average',
       accessor: 'average',
@@ -92,11 +92,9 @@ class DataTable extends Component {
       header: 'Value',
       accessor: 'Value',
     }]
-    var unit = null;
-    if(this.props.dataType === "Export"){
-      unit = "($ thousands)"
-    }else if(this.props.dataType === "Retail"){
-      unit = "($ millions)";
+      var unit = null;
+    if(this.props.dataType){
+      unit = this.props.dataType.unit;
     }
 
     return(

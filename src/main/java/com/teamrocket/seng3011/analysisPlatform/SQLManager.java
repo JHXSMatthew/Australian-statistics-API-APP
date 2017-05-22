@@ -45,7 +45,7 @@ public class SQLManager {
                 for (String s : relations) {
                     companies[i++] = mapper.readValue(s, Company.class);
                 }
-                return new CategoryCompanyRelation(area, companies);
+                return new CategoryCompanyRelation(category, companies);
             }
             return null;
         }finally {

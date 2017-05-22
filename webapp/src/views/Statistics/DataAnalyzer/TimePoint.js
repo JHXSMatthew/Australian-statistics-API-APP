@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import {Container,ModalFooter, ModalBody, ModalHeader,Modal, Button, ListGroup,ListGroupItem,Label,Col,Card,CardHeader,Input} from 'reactstrap';
 import ReactTable from 'react-table'
 import {CATEGORY_RT} from './DataAnalyzer.js';
-import {CATEGORY_ME} from './DataAnalyzer.js';
+import {AREA,CATEGORY_ME,LabelToValue} from './DataAnalyzer.js';
 import TimePointChart from './TimePointChart.js';
 
 
@@ -29,6 +29,40 @@ class TimePoint extends Component{
     this.setData = this.setData.bind(this);
     this.setCurrentNews = this.setCurrentNews.bind(this);
   }
+
+
+  componentWillMount(){
+    this.componentWillReceiveProps(this.props);
+  }
+
+  componentWillReceiveProps(nextProps){
+    console.log(nextProps);
+    var that = this;
+    var url = 'http://45.76.114.158/api/app/category/get'
+    fetch( url,{
+      method: 'POST',
+      headers: {
+       'Accept': 'application/json',
+       'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        area: nextProps.dataType.value,
+        category: nextProps.category.value,
+      }),
+    })
+    .then(function(response) {
+      if (response.status >= 400) {
+        alert("Our data source is down, please wait for a while and we'll fix it asap.")
+        return;
+      }
+      return response.json().then(function (json) {
+        //TODO: deal with empty data
+        console.log(json);
+      })
+
+    });
+  }
+
 
   update(event){
     this.setState({
@@ -104,40 +138,9 @@ class TimePoint extends Component{
       return (
         <Card>
           <CardHeader>
-            Time Point at {this.state.time} for {this.props.category} Category
+            Time Point at {this.state.time} for {this.props.category.label} Category
           </CardHeader>
-              <ListGroup>
-                <ListGroupItem>
-                  <Col  md="3" xs="3">
-                    <Label>Day of the Month</Label>
-                    <Input type="number" value={parseInt(this.state.time.split("-")[2])} size="sm" placeholder="Days of the month" onChange={this.setDayOfMonth} />
-                  </Col>
-                  <Col  md="3" xs="3">
-                    <Label>Days Before</Label>
-                    <Input type="number" defaultValue="5" size="sm" placeholder="Days Before Time Point" onChange={this.setLow} />
-                  </Col>
-                  <Col md="3" xs="3">
-                    <Label>Days After</Label>
-                    <Input type="number" defaultValue="5" size="sm" placeholder="Days After Time Point" onChange={this.setUp} />
-                  </Col>
-                  <Col md="2" xs="2">
-                    <Label>Click To Update Data
-                    </Label>
-                    <Button outline color="info" disabled={!this.state.canUpdate} onClick={this.update} >
-                       Update
-                    </Button>
-                  </Col>
-                </ListGroupItem>
-                <ListGroupItem>
-                  <TimePointChart data={this.state.data} update={this.state.update} />
-                </ListGroupItem>
-                <ListGroupItem>
-                  <CompanyReturn category={this.props.category} setCurrentNews={this.setCurrentNews} date={this.getDate} up={this.state.up} low={this.state.low} update={this.state.update} dataType={this.props.dataType} setData={this.setData}/>
-                </ListGroupItem>
-                <ListGroupItem>
-                    <News category={this.props.category} starting={this.getStarting} ending={this.getEnd} update={this.state.update} dataType={this.props.dataType} current={this.state.currentNews}/>
-                </ListGroupItem>
-              </ListGroup>
+
         </Card>
       )
   }

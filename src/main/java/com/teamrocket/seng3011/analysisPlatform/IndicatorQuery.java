@@ -1,5 +1,7 @@
 package com.teamrocket.seng3011.analysisPlatform;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teamrocket.seng3011.analysisPlatform.models.CategoryCompanyRelation;
@@ -26,7 +28,9 @@ public class IndicatorQuery {
 
     List<CompanyStockEntry> rowData;
 
-    public IndicatorQuery(String companyID, String startingDate, String endDate) throws IOException {
+    @JsonCreator
+    public IndicatorQuery(@JsonProperty("instrumentId")String companyID,
+                          @JsonProperty("startDate")String startingDate, @JsonProperty("endDate")String endDate) throws IOException {
         rowData = new ArrayList<>();
         URL url = new URL("http://api.kaiworship.xyz/cmp/"+ companyID+"/" + startingDate +"/" + endDate);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();

@@ -32,7 +32,6 @@ class TimePointChart extends Component{
         });
         return;
       }
-      console.log(data);
       var lines = [];
       var labels = [];
       var label_set = false;

@@ -425,7 +425,7 @@ class CompanyReturn extends Component{
         header: 'Average Return (%)',
         accessor: 'AV_Return',
       },{
-        header: 'Details',
+        header: 'Stock Detail',
         accessor: 'Click',
         maxWidth: 100
       }

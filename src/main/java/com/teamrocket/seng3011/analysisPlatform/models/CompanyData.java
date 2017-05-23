@@ -8,10 +8,12 @@ public class CompanyData {
 
     private String indicator;
     private DateValue[] dateValues;
+    private String instrumentID;
 
-    public CompanyData(String indicator,DateValue[] dateValues){
+    public CompanyData(String indicator,DateValue[] dateValues,String instrumentID){
         this.indicator = indicator;
         this.dateValues = dateValues;
+        this.instrumentID = instrumentID;
     }
 
     public String getIndicator() {
@@ -28,5 +30,13 @@ public class CompanyData {
 
     public void setDateValues(DateValue[] dateValues) {
         this.dateValues = dateValues;
+    }
+
+    public String getInstrumentID() {
+        return instrumentID;
+    }
+
+    public void setInstrumentID(String instrumentID) {
+        this.instrumentID = instrumentID;
     }
 }

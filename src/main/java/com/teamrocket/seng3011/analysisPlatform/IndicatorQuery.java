@@ -25,12 +25,14 @@ import java.util.List;
 public class IndicatorQuery {
 
 
-    List<CompanyStockEntry> rowData;
+    private List<CompanyStockEntry> rowData;
+    private String instrumentID;
 
     @JsonCreator
     public IndicatorQuery(@JsonProperty("instrumentId")String companyID,
                           @JsonProperty("startDate")String startingDate,
                           @JsonProperty("endDate")String endDate) throws IOException {
+        this.instrumentID = companyID;
         rowData = new ArrayList<>();
         URL url = new URL("http://api.kaiworship.xyz/cmp/"+ companyID+"/" + startingDate +"/" + endDate);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -73,8 +75,8 @@ public class IndicatorQuery {
 
         List<CompanyData> companyDataList = new ArrayList<>();
         companyDataList.add(new CompanyData("Simple Moving Average"
-                ,simpleMovingAverage.toArray(new DateValue[simpleMovingAverage.size()])));
-        companyDataList.add(new CompanyData("Row Money Flow",rawMoneyFlow.toArray(new DateValue[rawMoneyFlow.size()])));
+                ,simpleMovingAverage.toArray(new DateValue[simpleMovingAverage.size()]),instrumentID));
+        companyDataList.add(new CompanyData("Row Money Flow",rawMoneyFlow.toArray(new DateValue[rawMoneyFlow.size()]),instrumentID));
         ObjectMapper mapper = new ObjectMapper();
 
         return mapper.writeValueAsString(companyDataList.toArray(new CompanyData[companyDataList.size()]));

@@ -238,7 +238,7 @@ class DataAnalyzer extends Component {
             <Container>
               <Row>
                 <Col style={{padding: 10}}>
-                    <ControlMenu expert={this.state.expert} onSetSidebarOpen={this.onSetSidebarOpen} onRadioBtnClick={this.onRadioBtnClick}/>
+                    {this.state.dataType && <ControlMenu expert={this.state.expert} onSetSidebarOpen={this.onSetSidebarOpen} onRadioBtnClick={this.onRadioBtnClick}/>}
                 </Col>
               </Row>
               <Row>

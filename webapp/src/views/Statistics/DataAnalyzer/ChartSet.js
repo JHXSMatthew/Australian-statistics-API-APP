@@ -6,7 +6,7 @@ import TimePoint from './TimePoint.js';
 import TimePointsPanel from './TimePointPanel.js';
 import Moment from 'moment';
 
-import {Card,CardHeader,CardBlock,Row, Col} from 'reactstrap';
+import {Card,CardHeader,CardBlock,Row, Col,Button} from 'reactstrap';
 import 'chartjs-plugin-zoom/chartjs-plugin-zoom.js';
 
 // chats components
@@ -14,12 +14,14 @@ class ChartSet extends Component {
   constructor(props){
     super(props);
     this.handleClick = this.handleClick.bind(this);
-
+    this.onClick =this.onClick.bind(this);
     this.state = {
       timePoints: [],
       tabIndex: 0,
       tabIndexMap: []
     };
+    this.chart = [];
+
   }
 
 
@@ -40,8 +42,6 @@ class ChartSet extends Component {
   //      timePoints: tp,
   //    });
   //  }
-    console.log(e);
-
     if(e && e[0]){
       var element = e[0];
       var index = element._index;
@@ -58,6 +58,12 @@ class ChartSet extends Component {
     if(prevState.timePoints.length !== this.state.timePoints.length){
       const node = ReactDOM.findDOMNode(this.pointPanel);
       node.scrollIntoView({behavior: "smooth"});
+    }
+  }
+
+  onClick(){
+    for(var i = 0 ; i < this.chart.length ; i++){
+      this.chart[i].chart_instance.resetZoom();
     }
   }
 
@@ -142,50 +148,58 @@ class ChartSet extends Component {
           <TabPanel key={data[i].Category.label}>
             <Row>
               <Col md="7" xs="7">
-                <Line
-                  data={{
-                    datasets: dataSet,
-                    labels: labels
-                  }}
-                  getElementAtEvent={this.handleClick}
-                  options={{
-                    responsive: true,
-                    scales: {
-                      xAxes: [{
-                          type: "time",
-                          time: {
-                            format: 'YYYY-MM-DD',
-            							 // tooltipFormat: 'll HH:mm'
-                          },
-                          scaleLabel: {
-                              display: true,
-                              labelString: 'Date'
-                          },
-                          ticks:{
-                            min:labels[0],
-                            max:labels[labels.length -1]
-                          }
+                <Row>
+                  <Col md={{size:"10"}} xs={{size:"11"}}>
+                    <Line
+                      ref={(panel) =>{this.chart.push(panel);}}
+                      data={{
+                        datasets: dataSet,
+                        labels: labels
+                      }}
+                      getElementAtEvent={this.handleClick}
+                      options={{
+                        responsive: true,
+                        scales: {
+                          xAxes: [{
+                              type: "time",
+                              time: {
+                                format: 'YYYY-MM-DD',
+                							 // tooltipFormat: 'll HH:mm'
+                              },
+                              scaleLabel: {
+                                  display: true,
+                                  labelString: 'Date'
+                              },
+                              ticks:{
+                                min:labels[0],
+                                max:labels[labels.length -1]
+                              }
 
-                      }],
-                      yAxes: [{
-                          display: true,
-                          scaleLabel: {
+                          }],
+                          yAxes: [{
                               display: true,
-                              labelString: ylabel
-                          }
-                      }]
-                  },
-                  pan: {
-        						enabled: true,
-        						mode: 'x'
-        					},
-                  zoom: {
-          					enabled: true,
-          					drag: false,
-          					mode: 'x',
-          				}
-                  }}
-                />
+                              scaleLabel: {
+                                  display: true,
+                                  labelString: ylabel
+                              }
+                          }]
+                      },
+                      pan: {
+            						enabled: true,
+            						mode: 'x'
+            					},
+                      zoom: {
+              					enabled: true,
+              					drag: true,
+              					mode: 'x',
+              				}
+                      }}
+                    />
+                </Col>
+                <Col md={{size:"2" , pull: 1}} xs={{size:"1"}}>
+                  <Button outline color="primary" onClick={this.onClick}>R</Button>
+                </Col>
+              </Row>
             </Col>
             <Col md="5" xs="5">
               <Pie data={{

@@ -16,7 +16,7 @@ class TimePoint extends Component{
       category: this.props.category,
       up: 5,
       low: 5,
-      canUpdate: false,
+      canUpdate: true,
       update: false,
       data: null,
       currentNews: {name: "all" , instrumentId: "all"},
@@ -41,11 +41,10 @@ class TimePoint extends Component{
   }
 
 
-  componentWillMount(){
-    this.componentWillReceiveProps(this.props);
-  }
+
 
   shouldComponentUpdate(nextProps, nextState){
+
     return JSON.stringify(nextProps) !== JSON.stringify(this.props) || JSON.stringify(nextState) !== JSON.stringify(this.state);
   }
 
@@ -154,7 +153,7 @@ class TimePoint extends Component{
 
   getEnd(){
     var date=this.getDate();
-    return date.setDate(date.getDate() + this.state.up);
+    return new Date(date.getTime() + (this.state.up*24*60*60*1000));
   }
 
   setData(d){
@@ -236,9 +235,8 @@ class TimePoint extends Component{
               });
             }
           }
-          console.log(indicators);
           that.setState({
-            indicators: indicators
+            indicators: indicators,
           })
         })
     });
@@ -351,12 +349,12 @@ function labelToTopics(array,label){
 
 function getDateString(d){
   d = new Date(d);
-  return d.getFullYear() + '-' +('0' + (d.getMonth() +1)).slice(-2) + '-' + ('0'+ (d.getDate() +1 )).slice(-2);
+  return d.getFullYear() + '-' +('0' + (d.getMonth() +1)).slice(-2) + '-' + ('0'+ (d.getDate() )).slice(-2);
 }
 
 function getCalDateString(d){
   d = new Date(d);
-  return d.getFullYear() + '-' +('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0'+ (d.getDate() +1)).slice(-2);
+  return d.getFullYear() + '-' +('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0'+ (d.getDate())).slice(-2);
 }
 
 
@@ -408,12 +406,12 @@ class CompanyReturn extends Component{
           table: []
       };
     });
+    this.props.fetchIndicators();
     this.props.setData([]);
     this.hold = this.hold+1;
     for(var i = 0 ; i < nextProps.companies.length ; i ++){
       this.fetch(false,nextProps.dataType,nextProps.companies[i],this.hold);
     }
-    this.props.fetchIndicators();
   }
 
 

@@ -152,7 +152,6 @@ class TimePointIndicatorCharts extends Component{
                       display: true,
                       onClick: this.legendClick
                     },
-                    responsive: true,
                     scales: {
                       xAxes: [{
                           type: "time",

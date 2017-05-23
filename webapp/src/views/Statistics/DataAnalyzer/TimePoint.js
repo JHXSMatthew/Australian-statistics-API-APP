@@ -44,7 +44,6 @@ class TimePoint extends Component{
 
 
   shouldComponentUpdate(nextProps, nextState){
-
     return JSON.stringify(nextProps) !== JSON.stringify(this.props) || JSON.stringify(nextState) !== JSON.stringify(this.state);
   }
 
@@ -283,11 +282,9 @@ class TimePoint extends Component{
                           </Col>
                         </ListGroupItem>
                         <ListGroupItem>
-                          <Row>
-                            <Col md="12">
-                              {this.props.shouldDraw && <TimePointIndicatorCharts ref={(panel) =>{this.chart = panel;}} data={this.state.data} indicators={this.state.indicators} update={this.state.update}/>}
-                            </Col>
-                          </Row>
+                          <Col md="12">
+                            {this.props.shouldDraw && <TimePointIndicatorCharts ref={(panel) =>{this.chart = panel;}} data={this.state.data} indicators={this.state.indicators} update={this.state.update}/>}
+                          </Col>
                         </ListGroupItem>
                       </ListGroup>
                     </Col>

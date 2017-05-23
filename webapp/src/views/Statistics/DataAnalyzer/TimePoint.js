@@ -34,7 +34,9 @@ class TimePoint extends Component{
     this.setCurrentNews = this.setCurrentNews.bind(this);
     this.resetZoom = this.resetZoom.bind(this);
     this.toggle = this.toggle.bind(this);
-
+    this.fetchIndicators = this.fetchIndicators.bind(this);
+    this.subFetchIndicators = this.subFetchIndicators.bind(this);
+    this.hold = 0;
   }
 
 
@@ -93,6 +95,7 @@ class TimePoint extends Component{
           time: that.props.time,
           dropDownItems: drop
         })
+        that.fetchIndicators();
       })
 
     });
@@ -175,6 +178,47 @@ class TimePoint extends Component{
 
   resetZoom(){
       this.chart.resetZoom();
+  }
+
+  fetchIndicators(){
+    if(this.state.companies){
+      this.setState(function (prevState, props) {
+        return {
+            indicators: []
+        };
+      });
+      this.hold +=1;
+      for(var i = 0 ; i < this.state.companies.length; i++){
+        this.subFetchIndicators(this.state.companies[i].instrumentId,this.hold);
+      }
+    }
+  }
+
+  subFetchIndicators(companyID,localHold){
+    var that = this;
+    var url = 'http://45.76.114.158/api/app/indicators/get'
+    fetch( url,{
+      method: 'POST',
+      headers: {
+       'Accept': 'application/json',
+       'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        instrumentId: companyID,
+        startDate: getDateString(that.getStarting()),
+        endDate:  getDateString(that.getEnd())
+      }),
+    })
+    .then(function(response) {
+      if (response.status >= 400) {
+        alert("Our data source is down, please wait for a while and we'll fix it asap.")
+        return;
+      }
+      return response.json().then(function (json) {
+        //TODO: deal with empty data
+          console.log(json);
+        })
+    });
   }
 
   render(){

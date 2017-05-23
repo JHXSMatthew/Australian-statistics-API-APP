@@ -16,7 +16,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,7 +29,8 @@ public class IndicatorQuery {
 
     @JsonCreator
     public IndicatorQuery(@JsonProperty("instrumentId")String companyID,
-                          @JsonProperty("startDate")String startingDate, @JsonProperty("endDate")String endDate) throws IOException {
+                          @JsonProperty("startDate")String startingDate,
+                          @JsonProperty("endDate")String endDate) throws IOException {
         rowData = new ArrayList<>();
         URL url = new URL("http://api.kaiworship.xyz/cmp/"+ companyID+"/" + startingDate +"/" + endDate);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();

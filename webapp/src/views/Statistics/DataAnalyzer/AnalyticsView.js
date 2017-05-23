@@ -20,7 +20,7 @@ class AnalyticsView extends Component{
 
     render(){
       return(
-          <TimePoint time={this.props.date} category={this.props.category} dataType={this.props.dataType}/>
+          <TimePoint shouldDraw={this.props.shouldDraw} time={this.props.date} category={this.props.category} dataType={this.props.dataType}/>
       )
     }
 

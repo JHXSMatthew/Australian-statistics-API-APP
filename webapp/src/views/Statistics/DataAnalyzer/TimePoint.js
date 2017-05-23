@@ -201,7 +201,7 @@ class TimePoint extends Component{
                           </Col>
                         </ListGroupItem>
                         <ListGroupItem>
-                          <TimePointChart ref={(panel) =>{this.chart = panel;}} data={this.state.data} update={this.state.update} />
+                          {this.props.shouldDraw && <TimePointChart ref={(panel) =>{this.chart = panel;}} data={this.state.data} update={this.state.update} />}
                         </ListGroupItem>
                       </ListGroup>
                     </Col>

@@ -85,7 +85,7 @@ class TimePointChart extends Component{
             responsive: true,
             scales: {
               xAxes: [{
-                type: "time",
+                  type: "time",
                   time: {
                     format: 'YYYY-MM-DD',
                    // tooltipFormat: 'll HH:mm'

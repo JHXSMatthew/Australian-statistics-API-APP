@@ -181,7 +181,7 @@ class ChartSet extends Component {
         					},
                   zoom: {
           					enabled: true,
-          					drag: false,
+          					drag: true,
           					mode: 'x',
           				}
                   }}

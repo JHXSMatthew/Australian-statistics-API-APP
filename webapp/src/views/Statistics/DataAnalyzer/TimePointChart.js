@@ -11,7 +11,11 @@ class TimePointChart extends Component{
       lines: null,
       labels: null
     }
+    this.resetZoom = this.resetZoom.bind(this);
+  }
 
+  resetZoom(){
+      this.chart.chart_instance.resetZoom();
   }
 
   componentWillReceiveProps(nextProps){
@@ -21,6 +25,11 @@ class TimePointChart extends Component{
       var data= nextProps.data;
       //for each line
       if(!data){
+        console.log("null data");
+        this.setState({
+          lines: null,
+          labels: null
+        });
         return;
       }
       var lines = [];
@@ -67,6 +76,7 @@ class TimePointChart extends Component{
     if(this.state.lines){
       return(
          <Line
+          ref={(panel) =>{this.chart = panel;}}
           data={{
             datasets: this.state.lines,
             labels: this.state.labels
@@ -75,6 +85,11 @@ class TimePointChart extends Component{
             responsive: true,
             scales: {
               xAxes: [{
+                type: "time",
+                  time: {
+                    format: 'YYYY-MM-DD',
+                   // tooltipFormat: 'll HH:mm'
+                  },
                   display: true,
                   scaleLabel: {
                       display: true,

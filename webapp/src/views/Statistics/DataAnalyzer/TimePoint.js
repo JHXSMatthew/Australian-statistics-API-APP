@@ -30,6 +30,7 @@ class TimePoint extends Component{
     this.setDayOfMonth = this.setDayOfMonth.bind(this);
     this.setData = this.setData.bind(this);
     this.setCurrentNews = this.setCurrentNews.bind(this);
+    this.resetZoom = this.resetZoom.bind(this);
   }
 
 
@@ -155,6 +156,9 @@ class TimePoint extends Component{
     });
   }
 
+  resetZoom(){
+      this.chart.resetZoom();
+  }
 
   render(){
       return (
@@ -173,24 +177,31 @@ class TimePoint extends Component{
                             <Label>Day of the Month</Label>
                             <Input type="number" value={parseInt(this.state.time.split("-")[2])} size="sm" placeholder="Days of the month" onChange={this.setDayOfMonth} />
                           </Col>
-                          <Col  md="3" xs="3">
+                          <Col  md="2" xs="2">
                             <Label>Days Before</Label>
                             <Input type="number" defaultValue="5" size="sm" placeholder="Days Before Time Point" onChange={this.setLow} />
                           </Col>
-                          <Col md="3" xs="3">
+                          <Col md="2" xs="2">
                             <Label>Days After</Label>
                             <Input type="number" defaultValue="5" size="sm" placeholder="Days After Time Point" onChange={this.setUp} />
                           </Col>
                           <Col md="2" xs="2">
-                            <Label>Click To Update
+                            <Label> Click to Update
                             </Label>
                             <Button outline color="info" disabled={!this.state.canUpdate} onClick={this.update} >
                                Update
                             </Button>
                           </Col>
+                          <Col md="2" xs="2">
+                            <Label>Reset Zoom
+                            </Label>
+                            <Button outline color="info" onClick={this.resetZoom} >
+                               Reset
+                            </Button>
+                          </Col>
                         </ListGroupItem>
                         <ListGroupItem>
-                          <TimePointChart data={this.state.data} update={this.state.update} />
+                          <TimePointChart ref={(panel) =>{this.chart = panel;}} data={this.state.data} update={this.state.update} />
                         </ListGroupItem>
                       </ListGroup>
                     </Col>
@@ -279,6 +290,7 @@ class CompanyReturn extends Component{
     this.state = {
       table: []
     }
+    this.hold = 0;
   }
 /*
   componentWillMount(){
@@ -294,13 +306,15 @@ class CompanyReturn extends Component{
           table: []
       };
     });
+    this.props.setData([]);
+    this.hold = this.hold+1;
     for(var i = 0 ; i < nextProps.companies.length ; i ++){
-      this.fetch(false,nextProps.dataType,nextProps.companies[i]);
+      this.fetch(false,nextProps.dataType,nextProps.companies[i],this.hold);
     }
   }
 
 
-  fetch(a,dataType,companies){
+  fetch(a,dataType,companies,hold){
     var that = this;
     var id = companies.instrumentId;
     var name = companies.name;
@@ -334,6 +348,9 @@ class CompanyReturn extends Component{
           return;
         }
         return response.json().then(function (json) {
+          if(that.hold != hold){
+            return;
+          }
           json = json.CompanyReturns;
           for(var i = 0 ; i < json.length ; i++ ){
             json[i].name = name;

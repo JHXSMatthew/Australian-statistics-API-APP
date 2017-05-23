@@ -4,6 +4,7 @@ import { Pie,Line } from 'react-chartjs-2';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import TimePoint from './TimePoint.js';
 import TimePointsPanel from './TimePointPanel.js';
+import Moment from 'moment';
 
 import {Card,CardHeader,CardBlock,Row, Col} from 'reactstrap';
 import 'chartjs-plugin-zoom/chartjs-plugin-zoom.js';
@@ -39,10 +40,12 @@ class ChartSet extends Component {
   //      timePoints: tp,
   //    });
   //  }
+    console.log(e);
+
     if(e && e[0]){
       var element = e[0];
       var index = element._index;
-      var date = element._xScale.ticks[index];
+      var date = element._xScale.labelMoments[0][index]._i;
       this.props.setFocusDate(date);
     }
   }
@@ -87,7 +90,7 @@ class ChartSet extends Component {
               pointBorderWidth: 1,
               pointHoverRadius: 5,
               pointHoverBorderWidth: 2,
-              pointRadius: 1,
+              pointRadius: 3,
               pointHitRadius: 10,
               borderDash: [],
               borderDashOffset: 0.0,
@@ -111,6 +114,7 @@ class ChartSet extends Component {
             var dateData = regional[j].Data;
             for(var k=0; k < dateData.length; k++){
               line.data.push(dateData[k].Value);
+
               var contain =false;
               for(var m=0; m < labels.length; m++){
                 if(labels[m] === dateData[k].Date){
@@ -148,7 +152,11 @@ class ChartSet extends Component {
                     responsive: true,
                     scales: {
                       xAxes: [{
-                          display: true,
+                          type: "time",
+                          time: {
+                            format: 'YYYY-MM-DD',
+            							 // tooltipFormat: 'll HH:mm'
+                          },
                           scaleLabel: {
                               display: true,
                               labelString: 'Date'
@@ -173,7 +181,7 @@ class ChartSet extends Component {
         					},
                   zoom: {
           					enabled: true,
-          					drag: true,
+          					drag: false,
           					mode: 'x',
           				}
                   }}

@@ -21,7 +21,6 @@ class AddRelation extends Component{
   setArea(a){
     this.setState({
       area: a,
-      category: []
     })
   }
 

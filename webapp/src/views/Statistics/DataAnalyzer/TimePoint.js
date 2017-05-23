@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
-import {ButtonDropdown ,DropdownToggle ,DropdownMenu,DropdownItem ,Container,ModalFooter, ModalBody, ModalHeader,Modal, Button, ListGroup,ListGroupItem,Label,Row,Col,Card,CardHeader,Input} from 'reactstrap';
-import ReactTable from 'react-table'
+import {Dropdown ,DropdownToggle ,DropdownMenu,DropdownItem ,Container,ModalFooter, ModalBody, ModalHeader,Modal, Button, ListGroup,ListGroupItem,Label,Row,Col,Card,CardHeader,Input} from 'reactstrap';
+import ReactTable from 'react-table';
+import Select from 'react-select';
 import TimePointIndicatorCharts from './TimePointIndicatorCharts.js';
 import {CATEGORY_RT} from './DataAnalyzer.js';
 import {CATEGORY_ME} from './DataAnalyzer.js';
@@ -22,7 +23,6 @@ class TimePoint extends Component{
       currentNews: {name: "all" , instrumentId: "all"},
       companies: [],
       dropdownOpen: false
-
     };
     this.setUp = this.setUp.bind(this);
     this.setLow = this.setLow.bind(this);
@@ -98,15 +98,17 @@ class TimePoint extends Component{
         var drop = [];
 
         for(i = 0 ; i < a.length ; i ++){
-            var theId =  a[i];
-          drop.push(<DropdownItem key={a[i].name} onClick={()=>that.setCurrentNews(theId)}>{a[i].name}</DropdownItem>)
+          drop.push({
+            label: a[i].name,
+            value: a[i].instrumentId
+          });
         }
 
         that.setState({
           companies: a,
           update: true,
           time: that.props.time,
-          dropDownItems: drop
+          SelectOptions: drop
         })
         that.fetchIndicators();
       })
@@ -183,6 +185,7 @@ class TimePoint extends Component{
  }
 
   setCurrentNews(id){
+    console.log(id);
     this.setState({
       currentNews: id,
       update: false
@@ -304,17 +307,18 @@ class TimePoint extends Component{
                     </Col>
                     <Col>
                       <ListGroupItem>
-                        <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                          <DropdownToggle caret>
-                            {this.state.currentNews.name}
-                          </DropdownToggle>
-                          <DropdownMenu>
-                            {this.state.dropDownItems}
-                          </DropdownMenu>
-                        </ButtonDropdown>
+                          <Col md="12">
+                            <Select
+                              name="The Name"
+                              value={this.state.currentNews}
+                              options={this.state.SelectOptions}
+                              onChange={this.setCurrentNews}
+                            />
+                          </Col>
+
                       </ListGroupItem>
                       <ListGroupItem>
-                          <News category={this.props.category} starting={this.getStarting} ending={this.getEnd} update={this.state.update} dataType={this.props.dataType} current={this.state.currentNews.instrumentId}/>
+                          <News category={this.props.category} starting={this.getStarting} ending={this.getEnd} update={this.state.update} dataType={this.props.dataType} current={this.state.currentNews ? this.state.currentNews.value : "all"}/>
                       </ListGroupItem>
                     </Col>
                 </Row>

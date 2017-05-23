@@ -81,6 +81,20 @@ class TimePoint extends Component{
             }
           }
         }
+        if(nextProps.dataType){
+          for(var j = 0 ; j < nextProps.category.instruments.length ; j ++){
+            var contain = false;
+            for(var i = 0 ; i < a.length ; i ++){
+              if(a[i].instrumentId === nextProps.category.instruments[j].instrumentId && a[i].name === nextProps.category.instruments[j].name ){
+                contain = true;
+                break;
+              }
+            }
+            if(!contain){
+              a.push(nextProps.category.instruments[j]);
+            }
+          }
+        }
         var drop = [];
 
         for(i = 0 ; i < a.length ; i ++){

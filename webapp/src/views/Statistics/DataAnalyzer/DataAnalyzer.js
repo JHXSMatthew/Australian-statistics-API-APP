@@ -32,61 +32,61 @@ export const CATEGORY_ME = [
   },
   { label: 'Food and Live Animals', value: 'FoodAndLiveAnimals',
     topics:["RETA"],
-    instruments: [{name:"Australian Agricultural Company", id:"AAC.AX"},{name:"Elders Ltd",id:"ELD.AX"},
-      {name:"Graincorp Ltd",id:"GNC.AX"},{name: "Ridley Corporation Ltd",id:"RIC.AX"},
-      {name:"Tassal Group Limited",id:"TGR.AX"},{name:"Webster Ltd",id:"WBA.AX"}]
+    instruments: [{name:"Australian Agricultural Company", instrumentId:"AAC.AX"},{name:"Elders Ltd",instrumentId:"ELD.AX"},
+      {name:"Graincorp Ltd",instrumentId:"GNC.AX"},{name: "Ridley Corporation Ltd",instrumentId:"RIC.AX"},
+      {name:"Tassal Group Limited",instrumentId:"TGR.AX"},{name:"Webster Ltd",instrumentId:"WBA.AX"}]
    },
   { label: 'Beverages and Tobacco', value: 'BeveragesAndTobacco',
     topics: ['RETA'],
-    instruments: [{name:"Coca Cola",id:"CCL.AX"}, {name:"Australian Whiskey Holdings",id:"AWY.AX"}]
+    instruments: [{name:"Coca Cola",instrumentId:"CCL.AX"}, {name:"Australian Whiskey Holdings",instrumentId:"AWY.AX"}]
   },
   { label: 'Crud Material and Inedibles',
     value: 'CrudMaterialAndInedible',
     topics: ['RETA'],
-    instruments: [{name:"Alicanto Minerals Limited",id:"AQI.AX"}, {name:"Alara Resources Limited",id:"AUQ.AX"},
-      {name:"Atc Alloys Ltd",id:"ATA.AX"}, {name:"Woollongong Coal Limited",id:"WLC.AX"}]
+    instruments: [{name:"Alicanto Minerals Limited",instrumentId:"AQI.AX"}, {name:"Alara Resources Limited",instrumentId:"AUQ.AX"},
+      {name:"Atc Alloys Ltd",instrumentId:"ATA.AX"}, {name:"Woollongong Coal Limited",instrumentId:"WLC.AX"}]
 
   },
   { label: 'Mineral, Fuel, Lubricant and Related Material',
     value: 'MineralFuelLubricentAndRelatedMaterial',
     topics:['RETA'],
-    instruments: [{name:"Ceramic Fuel Cells Limited",id:"CFU.AX"}, {name:"Antilles Oil And Gas",id:"AZZ.AX"},
-      {name:"Austex Oil Limited",id:"AOK.AX"}, {name:"Freedom Oil And Gas Limited",id:"FDM.AX"}, {name:"BHP Billiton Limited",id:"BHP.AX"}]
+    instruments: [{name:"Ceramic Fuel Cells Limited",instrumentId:"CFU.AX"}, {name:"Antilles Oil And Gas",instrumentId:"AZZ.AX"},
+      {name:"Austex Oil Limited",instrumentId:"AOK.AX"}, {name:"Freedom Oil And Gas Limited",instrumentId:"FDM.AX"}, {name:"BHP Billiton Limited",instrumentId:"BHP.AX"}]
    },
   { label: 'Animal and Vegetable Oil, Fat and Waxes',
     value: 'AnimalAndVegitableOilFatAndWaxes',
     topics:['RETA'],
-    instruments: [{name:"Australian Agricultural Company", id:"AAC.AX"},{name:"Elders Ltd",id:"ELD.AX"},
-      {name:"Graincorp Ltd",id:"GNC.AX"},{name: "Ridley Corporation Ltd",id:"RIC.AX"},{name:"Tassal Group Limited",id:"TGR.AX"},{name:"Webster Ltd",id:"WBA.AX"}]
+    instruments: [{name:"Australian Agricultural Company", instrumentId:"AAC.AX"},{name:"Elders Ltd",instrumentId:"ELD.AX"},
+      {name:"Graincorp Ltd",instrumentId:"GNC.AX"},{name: "Ridley Corporation Ltd",instrumentId:"RIC.AX"},{name:"Tassal Group Limited",instrumentId:"TGR.AX"},{name:"Webster Ltd",instrumentId:"WBA.AX"}]
   },
   { label: 'Chemicals and Related Products',
     value: 'ChemicalsAndRelatedProducts',
     topics:['RETA'],
-    instruments: [{name:"Acrux Limited",id:"ACR.AX"}, {name:"Bioxyne Limited",id:"BXN.AX"},
-      {name:"Living Cell Technologies",id:"LCT.AX"}, {name:"Suda Ltd",id:"SUD.AX"}]
+    instruments: [{name:"Acrux Limited",instrumentId:"ACR.AX"}, {name:"Bioxyne Limited",instrumentId:"BXN.AX"},
+      {name:"Living Cell Technologies",instrumentId:"LCT.AX"}, {name:"Suda Ltd",instrumentId:"SUD.AX"}]
 
    },
   { label: 'Manufactured Goods',
     value: 'ManufacturedGoods' ,
     topics:['RETA'],
-    instruments: [{name:"Ookami Limited",id:"OOK.AX"}, {name:"Advanced Braking Technology",id:"ABV.AX"},
-      {name:"Bluglass Limited",id:"BLG.AX"}]
+    instruments: [{name:"Ookami Limited",instrumentId:"OOK.AX"}, {name:"Advanced Braking Technology",instrumentId:"ABV.AX"},
+      {name:"Bluglass Limited",instrumentId:"BLG.AX"}]
   },
   { label: 'Machinery and Transport Equipments',
     value: 'MachineryAndTransportEquipments',
     topics:['RETA'],
-    instruments: [{name:"Traffic Technologies Limited",id:"TTI.AX"}, {name:"Macquarie Atlas Roads Group",id:"MQA.AX"},
-      {name:"Sydney Airport",id:"SYD.AX"}, {name:"Aurizon Holdings Limited",id:"AZJ.AX"}]
+    instruments: [{name:"Traffic Technologies Limited",instrumentId:"TTI.AX"}, {name:"Macquarie Atlas Roads Group",instrumentId:"MQA.AX"},
+      {name:"Sydney Airport",instrumentId:"SYD.AX"}, {name:"Aurizon Holdings Limited",instrumentId:"AZJ.AX"}]
   },
   { label: 'Other Manufactured Articles',
     value: 'OtherManufacturedArticles' ,
     topics:['RETA'],
-    instruments: [{name:"Silex Systems Limited",id:"SLX.AX"}, {name:"Netcomm Wireless Limited",id:"NTC.AX"}]
+    instruments: [{name:"Silex Systems Limited",instrumentId:"SLX.AX"}, {name:"Netcomm Wireless Limited",instrumentId:"NTC.AX"}]
   },
   { label: 'Unclassified',
     value: 'Unclassified' ,
     topics: ['RETA'],
-    instruments: [{name:"Coca Cola",id:"CCL.AX"}, {name:"Australian Whiskey Holdings",id:"AWY.AX"}]
+    instruments: [{name:"Coca Cola",instrumentId:"CCL.AX"}, {name:"Australian Whiskey Holdings",instrumentId:"AWY.AX"}]
   },
 ];
 
@@ -97,39 +97,39 @@ export const CATEGORY_RT = [
   { label: 'Foods',
     value: 'Food' ,
     topics: ['RET'],
-    instruments: [{name:"Freedom Foods",id:"FNP.AX"}, {name:"Tassal Group Limited",id:"TGR.AX"},
-    {name:"Seafarms Group Limited",id:"SFG.AX"},{name:"Woolsworths",id:"WOW.AX"}]
+    instruments: [{name:"Freedom Foods",instrumentId:"FNP.AX"}, {name:"Tassal Group Limited",instrumentId:"TGR.AX"},
+    {name:"Seafarms Group Limited",instrumentId:"SFG.AX"},{name:"Woolsworths",instrumentId:"WOW.AX"}]
   },
   { label: 'Household Goods',
     value: 'HouseholdGood' ,
     topics: ['FOD'],
-    instruments: [{name:"Home Depot",id:"HD"}, {name:"Nick Scali",id:"NCK.AX"},
-      {name:"Harvey Norman",id:"HVN.AX"}, {name:"Ennis Inc",id:"EBF"},
-      {name:"Bed Bath And Beyond",id:"BBBY"}]
+    instruments: [{name:"Home Depot",instrumentId:"HD"}, {name:"Nick Scali",instrumentId:"NCK.AX"},
+      {name:"Harvey Norman",instrumentId:"HVN.AX"}, {name:"Ennis Inc",instrumentId:"EBF"},
+      {name:"Bed Bath And Beyond",instrumentId:"BBBY"}]
   },
   { label: 'Clothing, Footware and Personal Accessories',
     value: 'ClothingFootwareAndPersonalAccessory',
     topics:['TEX'],
-    instruments: [{name:"Gap Inc",id:"GPS"}, {name:"Footlocker",id:"FL"},
-      {name:"Billabong International",id:"BBG.AX"}]
+    instruments: [{name:"Gap Inc",instrumentId:"GPS"}, {name:"Footlocker",instrumentId:"FL"},
+      {name:"Billabong International",instrumentId:"BBG.AX"}]
    },
   { label: 'Stores',
     value: 'DepartmentStores' ,
     topics: ['WHO'],
-    instruments: [{name:"Walmart Stores",id:"WMT"}, {name:"Costco Wholesale Corporation",id:"COST"},
-     {name:"Nick Scali",id:"NCK.AX"},
-      {name:"Harvey Norman",id:"HVN.AX"}]
-  },  //{name:"Myer Holdings",id:"MYR.AX"}, BOOM, WTF is RIC this to seesharps api?
+    instruments: [{name:"Walmart Stores",instrumentId:"WMT"}, {name:"Costco Wholesale Corporation",instrumentId:"COST"},
+     {name:"Nick Scali",instrumentId:"NCK.AX"},
+      {name:"Harvey Norman",instrumentId:"HVN.AX"}]
+  },  //{name:"Myer Holdings",instrumentId:"MYR.AX"}, BOOM, WTF is RIC this to seesharps api?
   { label: 'Restaurants',
     value: 'CafesResturantsAndTakeawayFood',
     topics:['LEI'],
-    instruments: [{name:"Mcdonalds",id:"MCD"}, {name:"Ark Restaurants Corp",id:"ARKR"},
-      {name:"BJ Resutaurants Inc",id:"BJRI"}, {name:"Starbucks",id:"SBUX"}]
+    instruments: [{name:"Mcdonalds",instrumentId:"MCD"}, {name:"Ark Restaurants Corp",instrumentId:"ARKR"},
+      {name:"BJ Resutaurants Inc",instrumentId:"BJRI"}, {name:"Starbucks",instrumentId:"SBUX"}]
    },
   { label: 'Others',
     value: 'Other' ,
     topics:['RET'],
-    instruments: [{name:"Jb Hifi",id:"JBH.AX"}, {name:"Activistic Limited",id:"ACU.AX"},
+    instruments: [{name:"Jb Hifi",instrumentId:"JBH.AX"}, {name:"Activistic Limited",instrumentId:"ACU.AX"},
       {name:"Dropsuite Limited",id:"DSE.AX"}]
   },
 ];

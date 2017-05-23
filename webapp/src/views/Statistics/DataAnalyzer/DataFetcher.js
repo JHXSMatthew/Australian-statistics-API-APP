@@ -23,7 +23,7 @@ class DataFetcher extends Component {
       area: null,
       region: [],
       category: [],
-      mrange: {from: {year: 2016, month: 7}, to: {year: 2017, month: 2}},
+      mrange: {from: {year: 2014, month: 7}, to: {year: 2017, month: 2}},
       count: 0,
       popoverOpen: false
     }
@@ -272,7 +272,7 @@ export class AreaSelector extends Component{
   }
 }
 
-class StateSelector extends Component{
+export class StateSelector extends Component{
   constructor(prop){
     super(prop)
     this.state = {

@@ -151,7 +151,7 @@ class ChartSet extends Component {
             <Row>
               <Col md="7" xs="7">
                 <Row>
-                  <Col md={{size:"10"}} xs={{size:"11"}}>
+                  <Col md={{size:"11"}} xs={{size:"11"}}>
                     <Line
                       ref={(panel) =>{this.chart.push(panel);}}
                       data={{
@@ -198,7 +198,7 @@ class ChartSet extends Component {
                       }}
                     />
                 </Col>
-                <Col md={{size:"2" , pull: 1}} xs={{size:"1"}}>
+                <Col md={{size:"1"}} xs={{size:"1"}}>
                   <Button outline color="primary" onClick={this.onClick}>R</Button>
                 </Col>
               </Row>

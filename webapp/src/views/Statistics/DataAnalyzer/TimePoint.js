@@ -167,7 +167,6 @@ class TimePoint extends Component{
  }
 
   setCurrentNews(id){
-    console.log(id);
     this.setState({
       currentNews: id,
       update: false

@@ -179,6 +179,7 @@ class DataFetcher extends Component {
                   </div>
                 </div>
               </div>
+
               {this.props.expert &&<div className="row">
                 <div className="col-sm-12 col-md-12">
                   <div className="form-group">
@@ -187,6 +188,22 @@ class DataFetcher extends Component {
                   </div>
                 </div>
               </div>}
+              <div className="row">
+                {this.props.expert &&<div className="col-sm-4 col-md-4"/>}
+                <div className="col-sm-4 col-md-4">
+                  <Picker
+                      ref="pickRange"
+                      years={{min: 1983, max: 2017}}
+                      range={this.state.mrange}
+                      lang={DATE_LANG}
+                      theme="light"
+                      onChange={this.handleRangeChange}
+                      onDismiss={this.handleRangeDissmis}
+                      >
+                  </Picker>
+                </div>
+                {this.props.expert &&<div className="col-sm-4 col-md-4"/>}
+              </div>
               {this.props.expert && <div className="row">
                 <div className="col-sm-12 col-md-12">
                   <div className="form-group">
@@ -204,16 +221,7 @@ class DataFetcher extends Component {
                 </div>
               </div>
 
-                <Picker
-                    ref="pickRange"
-                    years={{min: 1983, max: 2017}}
-                    range={this.state.mrange}
-                    lang={DATE_LANG}
-                    theme="light"
-                    onChange={this.handleRangeChange}
-                    onDismiss={this.handleRangeDissmis}
-                    >
-                </Picker>
+
             </div>
             <div className="card-footer">
               <button className="btn btn-sm btn-primary" onClick={this.fetch} disabled={button} ><i className="fa fa-dot-circle-o" ></i> Confirm</button>

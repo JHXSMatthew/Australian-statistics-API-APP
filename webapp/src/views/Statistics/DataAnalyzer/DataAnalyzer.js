@@ -229,12 +229,12 @@ class DataAnalyzer extends Component {
       expert: !this.state.expert
     });
   }
+//             <SiderBarWrapper addDataEntry={this.addDataEntry} expert={this.state.expert} toggleExpert={this.toggleExpert} sidebarOpen={this.state.sidebarOpen} onSetSidebarOpen={this.onSetSidebarOpen} />
 
   render(){
     return(
         <div className="animated fadeIn">
           <Container fluid={true}>
-            <SiderBarWrapper addDataEntry={this.addDataEntry} expert={this.state.expert} toggleExpert={this.toggleExpert} sidebarOpen={this.state.sidebarOpen} onSetSidebarOpen={this.onSetSidebarOpen} />
             <Container>
               <Row>
                 <Col style={{padding: 10}}>

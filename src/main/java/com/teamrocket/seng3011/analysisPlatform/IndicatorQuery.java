@@ -76,7 +76,7 @@ public class IndicatorQuery {
         List<CompanyData> companyDataList = new ArrayList<>();
         companyDataList.add(new CompanyData("Simple Moving Average"
                 ,simpleMovingAverage.toArray(new DateValue[simpleMovingAverage.size()]),instrumentID));
-        companyDataList.add(new CompanyData("Row Money Flow",rawMoneyFlow.toArray(new DateValue[rawMoneyFlow.size()]),instrumentID));
+        companyDataList.add(new CompanyData("Raw Money Flow",rawMoneyFlow.toArray(new DateValue[rawMoneyFlow.size()]),instrumentID));
         ObjectMapper mapper = new ObjectMapper();
 
         return mapper.writeValueAsString(companyDataList.toArray(new CompanyData[companyDataList.size()]));

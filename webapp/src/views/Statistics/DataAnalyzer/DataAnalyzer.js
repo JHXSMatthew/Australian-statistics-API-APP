@@ -252,7 +252,7 @@ class DataAnalyzer extends Component {
                 <ComparisonView expert={this.state.expert} data={this.state.data} dataType={this.state.dataType} setFocusDate={this.setFocusDate} setCategory={this.setCategory}></ComparisonView>
               </div>
               <div style={this.state.rSelected === 3 && this.state.dataType && this.state.focusDate ?  {display: 'inline'} : {display: 'none'}}>
-                {this.state.focusDate && <AnalyticsView shouldDraw={this.state.rSelected === 3} date={this.state.focusDate} dataType={this.state.dataType} category={this.state.category}/>}
+                {this.state.focusDate && <AnalyticsView shouldDraw={true} date={this.state.focusDate} dataType={this.state.dataType} category={this.state.category}/>}
               </div>
             </div>
           </Container>

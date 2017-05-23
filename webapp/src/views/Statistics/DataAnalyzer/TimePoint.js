@@ -144,7 +144,7 @@ class TimePoint extends Component{
 
   getDate(){
     var str = this.state.time.split("-");
-    return new Date(str[0],str[1] ,str[2]);
+    return new Date(str[0],str[1] -1 ,str[2] -1);
   }
 
   getStarting(){
@@ -206,8 +206,8 @@ class TimePoint extends Component{
       },
       body: JSON.stringify({
         instrumentId: companyID,
-        startDate: getDateString(that.getStarting()),
-        endDate:  getDateString(that.getEnd())
+        startDate: getCalDateString(that.getStarting()),
+        endDate:  getCalDateString(that.getEnd())
       }),
     })
     .then(function(response) {
@@ -216,9 +216,29 @@ class TimePoint extends Component{
         return;
       }
       return response.json().then(function (json) {
-        console.log(json);
+          if(localHold != that.hold){
+            return;
+          }
+          var indicators = that.state.indicators;
+          for(var i = 0 ; i < json.length ; i ++){
+            var contain = false;
+            for(var j = 0 ; j < indicators.length ; j ++){
+              if(indicators[j].indicator === json[i].indicator){
+                contain = true;
+                indicators[j].data.push(json[i]);
+                break;
+              }
+            }
+            if(!contain){
+              indicators.push({
+                indicator: json[i].indicator,
+                data: [json[i]]
+              });
+            }
+          }
+          console.log(indicators);
           that.setState({
-            indicators: json
+            indicators: indicators
           })
         })
     });
@@ -265,7 +285,11 @@ class TimePoint extends Component{
                           </Col>
                         </ListGroupItem>
                         <ListGroupItem>
-                          {this.props.shouldDraw && <TimePointIndicatorCharts ref={(panel) =>{this.chart = panel;}} data={this.state.data} indicators={this.state.indicators}/>}
+                          <Row>
+                            <Col md="12">
+                              {this.props.shouldDraw && <TimePointIndicatorCharts ref={(panel) =>{this.chart = panel;}} data={this.state.data} indicators={this.state.indicators} update={this.state.update}/>}
+                            </Col>
+                          </Row>
                         </ListGroupItem>
                       </ListGroup>
                     </Col>
@@ -290,7 +314,7 @@ class TimePoint extends Component{
           </Row>
           <Row>
             <Col>
-              <CompanyReturn companies={this.state.companies} category={this.props.category} setCurrentNews={this.setCurrentNews} date={this.getDate} up={this.state.up} low={this.state.low} update={this.state.update} dataType={this.props.dataType} setData={this.setData}/>
+              <CompanyReturn fetchIndicators={this.fetchIndicators} companies={this.state.companies} category={this.props.category} setCurrentNews={this.setCurrentNews} date={this.getDate} up={this.state.up} low={this.state.low} update={this.state.update} dataType={this.props.dataType} setData={this.setData}/>
             </Col>
           </Row>
         </Container>
@@ -327,7 +351,12 @@ function labelToTopics(array,label){
 
 function getDateString(d){
   d = new Date(d);
-  return d.getFullYear() + '-' +('0' + (d.getMonth() )).slice(-2) + '-' + ('0'+ (d.getDate() )).slice(-2);
+  return d.getFullYear() + '-' +('0' + (d.getMonth() +1)).slice(-2) + '-' + ('0'+ (d.getDate() +1 )).slice(-2);
+}
+
+function getCalDateString(d){
+  d = new Date(d);
+  return d.getFullYear() + '-' +('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0'+ (d.getDate() +1)).slice(-2);
 }
 
 
@@ -384,6 +413,7 @@ class CompanyReturn extends Component{
     for(var i = 0 ; i < nextProps.companies.length ; i ++){
       this.fetch(false,nextProps.dataType,nextProps.companies[i],this.hold);
     }
+    this.props.fetchIndicators();
   }
 
 
@@ -425,6 +455,9 @@ class CompanyReturn extends Component{
             return;
           }
           json = json.CompanyReturns;
+          if(!json){
+            console.log(json);
+          }
           for(var i = 0 ; i < json.length ; i++ ){
             json[i].name = name;
             var av = 0;

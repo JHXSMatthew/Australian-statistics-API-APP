@@ -15,7 +15,13 @@ class TimePointChart extends Component{
   }
 
   resetZoom(){
-      this.chart.chart_instance.resetZoom();
+      if(this.chart){
+        this.chart.chart_instance.resetZoom();
+      }
+  }
+
+  componentWillMount(){
+    this.componentWillReceiveProps(this.props);
   }
 
   componentWillReceiveProps(nextProps){
@@ -25,7 +31,6 @@ class TimePointChart extends Component{
       var data= nextProps.data;
       //for each line
       if(!data){
-        console.log("null data");
         this.setState({
           lines: null,
           labels: null

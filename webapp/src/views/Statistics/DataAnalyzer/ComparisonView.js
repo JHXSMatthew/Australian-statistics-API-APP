@@ -11,7 +11,7 @@ class ResultPanel extends Component{
           <Container fluid={true}>
             <Row>
               <Col md="12" xs="12" >
-                <ChartSet data={this.props.data} dataType={this.props.dataType} setFocusDate={this.props.setFocusDate} comparisonSelected={this.props.comparisonSelected} setCategory={this.props.setCategory}/>
+                <ChartSet expert={this.props.expert} data={this.props.data} dataType={this.props.dataType} setFocusDate={this.props.setFocusDate} comparisonSelected={this.props.comparisonSelected} setCategory={this.props.setCategory}/>
               </Col>
             </Row>
             <Row>

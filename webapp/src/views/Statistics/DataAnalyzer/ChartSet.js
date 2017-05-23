@@ -15,6 +15,7 @@ class ChartSet extends Component {
     super(props);
     this.handleClick = this.handleClick.bind(this);
     this.onClick =this.onClick.bind(this);
+    this.legendClick = this.legendClick.bind(this);
     this.state = {
       timePoints: [],
       tabIndex: 0,
@@ -50,6 +51,20 @@ class ChartSet extends Component {
     }
   }
 
+  legendClick(e,item){
+    for(var i = 0 ; i < this.chart.length ; i++){
+      if(this.chart && this.chart[i] && this.chart[i].chart_instance){
+        var dataSets = this.chart[i].chart_instance.config.data.datasets;
+        for(var j = 0 ; j < dataSets.length ; j ++){
+          if(dataSets[j].label === item.text){
+            dataSets[j].hidden = !dataSets[j].hidden;
+            return;
+          }
+        }
+      }
+    }
+  }
+
   componentWillMount(){
     this.componentWillReceiveProps(this.props);
   }
@@ -75,7 +90,6 @@ class ChartSet extends Component {
     const color=['rgba(75,192,192,1)','rgba(226,67,30,1)','rgba(231,113,27,1)',
     'rgba(15,255,58,1)','rgba(111,150,84,1)','rgba(28,145,192,1)',
     'rgba(67,69,157,1)','rgba(165,59,162,1)','rgba(47,252,150,1)'];
-    this.chart = [];
     var data=nextProps.data;
     if(data){
       var labels=[];
@@ -94,7 +108,12 @@ class ChartSet extends Component {
         var regional = data[i].RegionalData;
         if(regional){
           for(var j = 0; j < regional.length; j++ ){
+            var hidden = false;
+            if(!nextProps.expert && regional[j].State!== "All Australian Regions" ){
+              hidden = true;
+            }
             var line = {
+              hidden: hidden,
               pointBorderWidth: 1,
               pointHoverRadius: 5,
               pointHoverBorderWidth: 2,
@@ -151,7 +170,7 @@ class ChartSet extends Component {
             <Row>
               <Col md="7" xs="7">
                 <Row>
-                  <Col md={{size:"11"}} xs={{size:"11"}}>
+                  <Col md={{size:"12"}} xs={{size:"12"}}>
                     <Line
                       ref={(panel) =>{this.chart.push(panel);}}
                       data={{
@@ -160,6 +179,10 @@ class ChartSet extends Component {
                       }}
                       getElementAtEvent={this.handleClick}
                       options={{
+                        legend:{
+                          display: true,
+                          onClick: this.legendClick
+                        },
                         responsive: true,
                         scales: {
                           xAxes: [{
@@ -198,9 +221,6 @@ class ChartSet extends Component {
                       }}
                     />
                 </Col>
-                <Col md={{size:"1"}} xs={{size:"1"}}>
-                  <Button outline color="primary" onClick={this.onClick}>R</Button>
-                </Col>
               </Row>
             </Col>
             <Col md="5" xs="5">
@@ -212,6 +232,9 @@ class ChartSet extends Component {
                 }],
                 labels: pieLabels
               }}/>
+            </Col>
+            <Col md={{size:"1"}} xs={{size:"1"}}>
+              <Button outline color="primary" onClick={this.onClick}>R</Button>
             </Col>
           </Row>
         </TabPanel>

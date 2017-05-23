@@ -64,7 +64,7 @@ public class IndicatorQuery {
         float totalClose = 0;
         for(CompanyStockEntry row : rowData){
             totalClose +=  row.getAdjClose();
-            simpleMovingAverage.add(new DateValue(row.getDate(),totalClose/simpleMovingAverage.size()));
+            simpleMovingAverage.add(new DateValue(row.getDate(),totalClose/(simpleMovingAverage.size()+1)));
             float typicalPrice = (row.getHigh() + row.getLow() + row.getClose())/3f;
             rawMoneyFlow.add(new DateValue(row.getDate(), typicalPrice * row.getVolume()));
         }

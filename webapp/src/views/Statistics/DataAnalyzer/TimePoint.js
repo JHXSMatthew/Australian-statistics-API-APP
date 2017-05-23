@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 import {ButtonDropdown ,DropdownToggle ,DropdownMenu,DropdownItem ,Container,ModalFooter, ModalBody, ModalHeader,Modal, Button, ListGroup,ListGroupItem,Label,Row,Col,Card,CardHeader,Input} from 'reactstrap';
 import ReactTable from 'react-table'
+import TimePointIndicatorCharts from './TimePointIndicatorCharts.js';
 import {CATEGORY_RT} from './DataAnalyzer.js';
 import {CATEGORY_ME} from './DataAnalyzer.js';
 import {getCategory} from './DataAnalyzer.js';
@@ -215,8 +216,10 @@ class TimePoint extends Component{
         return;
       }
       return response.json().then(function (json) {
-        //TODO: deal with empty data
-          console.log(json);
+        console.log(json);
+          that.setState({
+            indicators: json
+          })
         })
     });
   }
@@ -262,7 +265,7 @@ class TimePoint extends Component{
                           </Col>
                         </ListGroupItem>
                         <ListGroupItem>
-                          {this.props.shouldDraw && <TimePointChart ref={(panel) =>{this.chart = panel;}} data={this.state.data} update={this.state.update} />}
+                          {this.props.shouldDraw && <TimePointIndicatorCharts ref={(panel) =>{this.chart = panel;}} data={this.state.data} indicators={this.state.indicators}/>}
                         </ListGroupItem>
                       </ListGroup>
                     </Col>

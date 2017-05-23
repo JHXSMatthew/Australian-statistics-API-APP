@@ -168,8 +168,6 @@ class DataFetcher extends Component {
                <PopoverTitle>Data Fetcher</PopoverTitle>
                <PopoverContent>Fill all forms and click fetch to fetch data. All fetched data will be shown in Data Set and charts will be shown. <strong>Click on switch to enable Advanced searching mode.</strong></PopoverContent>
              </Popover>
-
-
              <div className="card-block">
               <div className="row">
                 <div className="col-sm-12 col-md-12">

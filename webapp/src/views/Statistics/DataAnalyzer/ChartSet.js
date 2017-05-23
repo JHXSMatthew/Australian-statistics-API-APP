@@ -63,7 +63,9 @@ class ChartSet extends Component {
 
   onClick(){
     for(var i = 0 ; i < this.chart.length ; i++){
-      this.chart[i].chart_instance.resetZoom();
+      if(this.chart && this.chart[i] && this.chart[i].chart_instance){
+        this.chart[i].chart_instance.resetZoom();
+      }
     }
   }
 
@@ -73,7 +75,7 @@ class ChartSet extends Component {
     const color=['rgba(75,192,192,1)','rgba(226,67,30,1)','rgba(231,113,27,1)',
     'rgba(15,255,58,1)','rgba(111,150,84,1)','rgba(28,145,192,1)',
     'rgba(67,69,157,1)','rgba(165,59,162,1)','rgba(47,252,150,1)'];
-
+    this.chart = [];
     var data=nextProps.data;
     if(data){
       var labels=[];

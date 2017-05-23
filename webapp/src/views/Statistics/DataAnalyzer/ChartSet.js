@@ -141,7 +141,7 @@ class ChartSet extends Component {
         charts.push(
           <TabPanel key={data[i].Category.label}>
             <Row>
-              <Col md="8" xs="8">
+              <Col md="7" xs="7">
                 <Line
                   data={{
                     datasets: dataSet,
@@ -181,13 +181,13 @@ class ChartSet extends Component {
         					},
                   zoom: {
           					enabled: true,
-          					drag: true,
+          					drag: false,
           					mode: 'x',
           				}
                   }}
                 />
             </Col>
-            <Col md="4" xs="4">
+            <Col md="5" xs="5">
               <Pie data={{
                 datasets: [{
                   data: pieDataSet,

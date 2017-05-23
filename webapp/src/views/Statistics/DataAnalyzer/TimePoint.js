@@ -216,7 +216,6 @@ class TimePoint extends Component{
           </Row>
           <Row>
             <Col>
-
               <CompanyReturn companies={this.state.companies} category={this.props.category} setCurrentNews={this.setCurrentNews} date={this.getDate} up={this.state.up} low={this.state.low} update={this.state.update} dataType={this.props.dataType} setData={this.setData}/>
             </Col>
           </Row>

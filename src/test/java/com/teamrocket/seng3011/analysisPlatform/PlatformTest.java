@@ -14,6 +14,5 @@ public class PlatformTest {
         Company company = new Company("myname","myID");
         ObjectMapper mapper = new ObjectMapper();
         System.out.println(mapper.writeValueAsString(company));
-
     }
 }

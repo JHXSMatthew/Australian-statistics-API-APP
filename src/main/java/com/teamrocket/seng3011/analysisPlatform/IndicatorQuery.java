@@ -40,7 +40,6 @@ public class IndicatorQuery {
             if(names != null){
                 HashMap<String,Object> map = new HashMap<>();
                 String[] inside = output.split(",");
-                System.err.println(Arrays.toString(inside));
                 for(int j = 0 ; j < inside.length ; j ++){
                     map.put(names[j],inside[j]);
                 }
@@ -65,6 +64,8 @@ public class IndicatorQuery {
             float typicalPrice = (row.getHigh() + row.getLow() + row.getClose())/3f;
             rawMoneyFlow.add(new DateValue(row.getDate(), typicalPrice * row.getVolume()));
         }
+
+
 
         List<CompanyData> companyDataList = new ArrayList<>();
         companyDataList.add(new CompanyData("Simple Moving Average"

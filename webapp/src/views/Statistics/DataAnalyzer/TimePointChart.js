@@ -32,6 +32,7 @@ class TimePointChart extends Component{
         });
         return;
       }
+      console.log(data);
       var lines = [];
       var labels = [];
       var label_set = false;
@@ -61,7 +62,7 @@ class TimePointChart extends Component{
           if(!label_set){
             labels.push(data[i].Data[j].Date);
           }
-          line.data.push(data[i].Data[j].CM_Return);
+          line.data.push(data[i].Data[j].value);
         }
         label_set = true;
         lines.push(line);

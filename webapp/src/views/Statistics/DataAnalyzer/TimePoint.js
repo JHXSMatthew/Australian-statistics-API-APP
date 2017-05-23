@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {Container,ModalFooter, ModalBody, ModalHeader,Modal, Button, ListGroup,ListGroupItem,Label,Row,Col,Card,CardHeader,Input} from 'reactstrap';
+import {ButtonDropdown ,DropdownToggle ,DropdownMenu,DropdownItem ,Container,ModalFooter, ModalBody, ModalHeader,Modal, Button, ListGroup,ListGroupItem,Label,Row,Col,Card,CardHeader,Input} from 'reactstrap';
 import ReactTable from 'react-table'
 import {CATEGORY_RT} from './DataAnalyzer.js';
 import {CATEGORY_ME} from './DataAnalyzer.js';
@@ -18,8 +18,10 @@ class TimePoint extends Component{
       canUpdate: false,
       update: false,
       data: null,
-      currentNews: "all",
-      companies: []
+      currentNews: {name: "all" , instrumentId: "all"},
+      companies: [],
+      dropdownOpen: false
+
     };
     this.setUp = this.setUp.bind(this);
     this.setLow = this.setLow.bind(this);
@@ -31,6 +33,8 @@ class TimePoint extends Component{
     this.setData = this.setData.bind(this);
     this.setCurrentNews = this.setCurrentNews.bind(this);
     this.resetZoom = this.resetZoom.bind(this);
+    this.toggle = this.toggle.bind(this);
+
   }
 
 
@@ -76,11 +80,18 @@ class TimePoint extends Component{
             }
           }
         }
+        var drop = [];
+
+        for(i = 0 ; i < a.length ; i ++){
+            var theId =  a[i];
+          drop.push(<DropdownItem key={a[i].name} onClick={()=>that.setCurrentNews(theId)}>{a[i].name}</DropdownItem>)
+        }
 
         that.setState({
           companies: a,
           update: true,
-          time: that.props.time
+          time: that.props.time,
+          dropDownItems: drop
         })
       })
 
@@ -149,7 +160,14 @@ class TimePoint extends Component{
     });
   }
 
+  toggle() {
+   this.setState({
+     dropdownOpen: !this.state.dropdownOpen
+   });
+ }
+
   setCurrentNews(id){
+    console.log(id);
     this.setState({
       currentNews: id,
       update: false
@@ -207,7 +225,17 @@ class TimePoint extends Component{
                     </Col>
                     <Col>
                       <ListGroupItem>
-                          <News category={this.props.category} starting={this.getStarting} ending={this.getEnd} update={this.state.update} dataType={this.props.dataType} current={this.state.currentNews}/>
+                        <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+                          <DropdownToggle caret>
+                            {this.state.currentNews.name}
+                          </DropdownToggle>
+                          <DropdownMenu>
+                            {this.state.dropDownItems}
+                          </DropdownMenu>
+                        </ButtonDropdown>
+                      </ListGroupItem>
+                      <ListGroupItem>
+                          <News category={this.props.category} starting={this.getStarting} ending={this.getEnd} update={this.state.update} dataType={this.props.dataType} current={this.state.currentNews.instrumentId}/>
                       </ListGroupItem>
                     </Col>
                 </Row>
@@ -342,7 +370,7 @@ class CompanyReturn extends Component{
       .then(function(response) {
         if (response.status >= 400) {
           if(!a){
-            that.fetch(true,dataType,companies);
+            that.fetch(true,dataType,companies,hold);
           }
           return;
         }
@@ -361,12 +389,15 @@ class CompanyReturn extends Component{
 
               json[i].Data[j].CM_Return *= 100 ;
               json[i].Data[j].CM_Return = parseFloat(json[i].Data[j].CM_Return).toFixed(7);
+              json[i].Data[j].value = json[i].Data[j].CM_Return;
 
               json[i].Data[j].Return *= 100 ;
               json[i].Data[j].Return = parseFloat(json[i].Data[j].Return).toFixed(7);
             }
             json[i].AV_Return = parseFloat(av/json[i].Data.length * 100).toFixed(7) ;
             json[i].Get = <NewsFilter id={json[i].InstrumentID} setCurrentNews={that.props.setCurrentNews}/>
+            json[i].Click = <NewsArticle article={"https://au.finance.yahoo.com/chart/"+id}/>
+
           }
           json = that.state.table.concat(json);
           that.setState({
@@ -380,6 +411,8 @@ class CompanyReturn extends Component{
         that.fetch(true,dataType,companies);
       }
     }
+
+
   }
 
   render(){
@@ -393,8 +426,8 @@ class CompanyReturn extends Component{
         header: 'Average Return (%)',
         accessor: 'AV_Return',
       },{
-        header: 'News',
-        accessor: 'Get',
+        header: 'Details',
+        accessor: 'Click',
         maxWidth: 100
       }
     ];

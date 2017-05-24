@@ -202,7 +202,7 @@ class TimePointIndicatorCharts extends Component{
             <TimePointChart ref={(panel) =>{this.chart.push(panel);}} data={this.state.data}/>
           </TabPanel>
       );
-
+      this.props.chartUpdated();
       this.setState(function (prevState, props) {
           return {
             charts: charts,

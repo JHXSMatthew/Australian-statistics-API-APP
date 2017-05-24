@@ -38,6 +38,7 @@ class TimePoint extends Component{
     this.toggle = this.toggle.bind(this);
     this.fetchIndicators = this.fetchIndicators.bind(this);
     this.subFetchIndicators = this.subFetchIndicators.bind(this);
+    this.chartUpdated = this.chartUpdated.bind(this);
     this.hold = 0;
   }
 
@@ -67,7 +68,6 @@ class TimePoint extends Component{
     })
     .then(function(response) {
       if (response.status >= 400) {
-        alert("Our data source is down, please wait for a while and we'll fix it asap.")
         return;
       }
       return response.json().then(function (json) {
@@ -84,16 +84,18 @@ class TimePoint extends Component{
         }
         if(nextProps.dataType){
           if(nextProps.category){
-            for(var j = 0 ; j < nextProps.category.instruments.length ; j ++){
-              var contain = false;
-              for(var i = 0 ; i < a.length ; i ++){
-                if(a[i].instrumentId === nextProps.category.instruments[j].instrumentId && a[i].name === nextProps.category.instruments[j].name ){
-                  contain = true;
-                  break;
+            if(nextProps.category.instruments){
+              for(var j = 0 ; j < nextProps.category.instruments.length ; j ++){
+                var contain = false;
+                for(var i = 0 ; i < a.length ; i ++){
+                  if(a[i].instrumentId === nextProps.category.instruments[j].instrumentId && a[i].name === nextProps.category.instruments[j].name ){
+                    contain = true;
+                    break;
+                  }
                 }
-              }
-              if(!contain){
-                a.push(nextProps.category.instruments[j]);
+                if(!contain){
+                  a.push(nextProps.category.instruments[j]);
+                }
               }
             }
           }
@@ -110,12 +112,19 @@ class TimePoint extends Component{
         that.setState({
           companies: a,
           update: true,
+          chartUpdate: true,
           time: that.props.time,
           SelectOptions: drop
         })
         that.fetchIndicators();
       })
 
+    });
+  }
+
+  chartUpdated(){
+    this.setState({
+      chartUpdate: false
     });
   }
 
@@ -230,7 +239,6 @@ class TimePoint extends Component{
     })
     .then(function(response) {
       if (response.status >= 400) {
-        alert("Our data source is down, please wait for a while and we'll fix it asap.")
         return;
       }
       return response.json().then(function (json) {
@@ -304,7 +312,7 @@ class TimePoint extends Component{
                         </ListGroupItem>
                         <ListGroupItem>
                           <Col md="12">
-                             <TimePointIndicatorCharts ref={(panel) =>{this.chart = panel;}} data={this.state.data} indicators={this.state.indicators} update={this.state.chartUpdate}/>
+                             {this.props.shouldDraw && <TimePointIndicatorCharts ref={(panel) =>{this.chart = panel;}} chartUpdated={this.chartUpdated} data={this.state.data} indicators={this.state.indicators} update={this.state.chartUpdate}/>}
                           </Col>
                         </ListGroupItem>
                       </ListGroup>

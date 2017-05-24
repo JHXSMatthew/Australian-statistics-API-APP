@@ -30,6 +30,8 @@ class TimePointChart extends Component{
     'rgba(67,69,157,1)','rgba(165,59,162,1)','rgba(47,252,150,1)'];
       var data= nextProps.data;
       //for each line
+
+      console.log(data);
       if(!data){
         this.setState({
           lines: null,

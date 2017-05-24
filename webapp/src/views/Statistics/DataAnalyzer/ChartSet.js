@@ -128,7 +128,7 @@ class ChartSet extends Component {
               lineTension: 0.1,
               pointHoverBorderColor: 'rgba(220,220,220,1)',
             };
-            if(pieLabels.indexOf(regional[j].State) == -1){
+            if(pieLabels.indexOf(regional[j].State) == -1 && regional[j].State !== "All Australian Regions") {
               pieLabels.push(regional[j].State);
             }
             line.label = regional[j].State;
@@ -155,7 +155,9 @@ class ChartSet extends Component {
             }
 
             dataSet.push(line);
-            pieDataSet.push(regional[j].total);
+            if(regional[j].State !== "All Australian Regions"){
+              pieDataSet.push(regional[j].total);
+            }
           }
         }
 

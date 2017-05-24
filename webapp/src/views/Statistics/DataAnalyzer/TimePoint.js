@@ -19,6 +19,7 @@ class TimePoint extends Component{
       low: 5,
       canUpdate: true,
       update: false,
+      chartUpdate: false,
       data: null,
       currentNews: {name: "all" , instrumentId: "all"},
       companies: [],
@@ -82,16 +83,18 @@ class TimePoint extends Component{
           }
         }
         if(nextProps.dataType){
-          for(var j = 0 ; j < nextProps.category.instruments.length ; j ++){
-            var contain = false;
-            for(var i = 0 ; i < a.length ; i ++){
-              if(a[i].instrumentId === nextProps.category.instruments[j].instrumentId && a[i].name === nextProps.category.instruments[j].name ){
-                contain = true;
-                break;
+          if(nextProps.category){
+            for(var j = 0 ; j < nextProps.category.instruments.length ; j ++){
+              var contain = false;
+              for(var i = 0 ; i < a.length ; i ++){
+                if(a[i].instrumentId === nextProps.category.instruments[j].instrumentId && a[i].name === nextProps.category.instruments[j].name ){
+                  contain = true;
+                  break;
+                }
               }
-            }
-            if(!contain){
-              a.push(nextProps.category.instruments[j]);
+              if(!contain){
+                a.push(nextProps.category.instruments[j]);
+              }
             }
           }
         }
@@ -174,7 +177,8 @@ class TimePoint extends Component{
   setData(d){
     this.setState({
       data:d,
-      update: false
+      update: false,
+      chartUpdate: true
     });
   }
 
@@ -185,7 +189,6 @@ class TimePoint extends Component{
  }
 
   setCurrentNews(id){
-    console.log(id);
     this.setState({
       currentNews: id,
       update: false
@@ -253,6 +256,7 @@ class TimePoint extends Component{
           }
           that.setState({
             indicators: indicators,
+            chartUpdate: true
           })
         })
     });
@@ -300,7 +304,7 @@ class TimePoint extends Component{
                         </ListGroupItem>
                         <ListGroupItem>
                           <Col md="12">
-                            {this.props.shouldDraw && <TimePointIndicatorCharts ref={(panel) =>{this.chart = panel;}} data={this.state.data} indicators={this.state.indicators} update={this.state.update}/>}
+                             <TimePointIndicatorCharts ref={(panel) =>{this.chart = panel;}} data={this.state.data} indicators={this.state.indicators} update={this.state.chartUpdate}/>
                           </Col>
                         </ListGroupItem>
                       </ListGroup>
@@ -468,9 +472,7 @@ class CompanyReturn extends Component{
             return;
           }
           json = json.CompanyReturns;
-          if(!json){
-            console.log(json);
-          }
+
           for(var i = 0 ; i < json.length ; i++ ){
             json[i].name = name;
             var av = 0;

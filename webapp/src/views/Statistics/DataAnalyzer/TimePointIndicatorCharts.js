@@ -193,11 +193,11 @@ class TimePointIndicatorCharts extends Component{
             </TabPanel>
         );
       }
-      navs.unshift(<Tab key="firstone">
+      navs.push(<Tab key="firstone">
           Cumulative Returns
           </Tab>
         );
-      charts.unshift(
+      charts.push(
           <TabPanel key="firstone">
             <TimePointChart ref={(panel) =>{this.chart.push(panel);}} data={this.state.data}/>
           </TabPanel>

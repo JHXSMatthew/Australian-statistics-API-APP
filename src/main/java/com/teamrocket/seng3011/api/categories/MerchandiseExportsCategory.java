@@ -55,4 +55,8 @@ public enum MerchandiseExportsCategory implements HaveID {
         return id;
     }
 
+    public String getName(){
+        return toString();
+    }
+
 }

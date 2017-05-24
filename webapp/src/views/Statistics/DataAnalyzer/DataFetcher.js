@@ -23,7 +23,7 @@ class DataFetcher extends Component {
       area: null,
       region: [],
       category: [],
-      mrange: {from: {year: 2016, month: 7}, to: {year: 2017, month: 2}},
+      mrange: {from: {year: 2014, month: 7}, to: {year: 2017, month: 2}},
       count: 0,
       popoverOpen: false
     }
@@ -36,6 +36,33 @@ class DataFetcher extends Component {
     this.handleRangeDissmis = this.handleRangeDissmis.bind(this);
   }
 
+
+  componentWillReceiveProps(nextProps){
+    if(!nextProps.expert){
+      var categoryStrs = [];
+      var regionStrs = [];
+      var temp = [];
+      var a = this.state.area;
+      if(a==="MerchandiseExports"){
+        temp = CATEGORY_ME;
+      }else if(a==="Retail"){
+        temp = CATEGORY_RT;
+      }else{
+        return;
+      }
+      for(var i = 0 ; i < temp.length ; i ++){
+        categoryStrs.push(temp[i].value);
+      }
+      for(i = 0 ; i < STATE.length ; i ++){
+        regionStrs.push(STATE[i].value);
+      }
+      this.setState({
+        category: categoryStrs.join(),
+        region: regionStrs.join()
+      })
+    }
+  }
+
   toggle() {
       this.setState({
         popoverOpen: !this.state.popoverOpen
@@ -43,10 +70,33 @@ class DataFetcher extends Component {
     }
 
   setArea(a){
-    this.setState({
-      area: a,
-      category: []
-    })
+    if(this.props.expert){
+      this.setState({
+        area: a,
+        category: []
+      })
+    }else{
+      var categoryStrs = [];
+      var regionStrs = [];
+      var temp = [];
+      if(a==="MerchandiseExports"){
+        temp = CATEGORY_ME;
+      }else if(a==="Retail"){
+        temp = CATEGORY_RT;
+      }
+      for(var i = 0 ; i < temp.length ; i ++){
+        categoryStrs.push(temp[i].value);
+      }
+      for(i = 0 ; i < STATE.length ; i ++){
+        regionStrs.push(STATE[i].value);
+      }
+      this.setState({
+        area: a,
+        category: categoryStrs.join(),
+        region: regionStrs.join()
+      })
+    }
+
   }
 
   setRegion(a){
@@ -93,7 +143,8 @@ class DataFetcher extends Component {
       }
       return response.json().then(function (json) {
         //TODO: deal with empty data
-        that.props.addDataEntry(json,"Data Entry"+that.state.count++);
+        that.props.addDataEntry(json,"Data Entry"+that.state.count++,that.state.mrange.from.year + "-" + that.state.mrange.from.month + "-01");
+
       })
 
     });
@@ -103,17 +154,21 @@ class DataFetcher extends Component {
     var button = (this.state.area && this.state.region && this.state.category && this.state.region.length > 0 && this.state.category.length > 0) ? false : true;
 
     return (
-        <div style={{padding: 20}}>
           <div className="card">
             <div className="card-header">
-              <strong>Data fetcher</strong>
+              {this.props.expert ?<strong>Advanced Search</strong> :<strong>Getting started</strong>}
+              <label className="switch switch-sm switch-text switch-info float-right mb-0">
+               <input type="checkbox" className="switch-input" checked={this.props.expert ? true : false}  onChange={this.props.toggleExpert} />
+               <span className="switch-label" data-on="On" data-off="Off"></span>
+               <span className="switch-handle"></span>
+             </label>
               <span className="float-right"><i className="icon-question" id="Popover1" onClick={this.toggle}></i></span>
             </div>
             <Popover placement="bottom" isOpen={this.state.popoverOpen} target="Popover1" toggle={this.toggle}>
                <PopoverTitle>Data Fetcher</PopoverTitle>
-               <PopoverContent>Fill all forms and click fetch to fetch data. All fetched data will be shown in Data Set and charts will be shown.</PopoverContent>
+               <PopoverContent>Fill all forms and click fetch to fetch data. All fetched data will be shown in Data Set and charts will be shown. <strong>Click on switch to enable Advanced searching mode.</strong></PopoverContent>
              </Popover>
-            <div className="card-block">
+             <div className="card-block">
               <div className="row">
                 <div className="col-sm-12 col-md-12">
                   <div className="form-group">
@@ -122,22 +177,39 @@ class DataFetcher extends Component {
                   </div>
                 </div>
               </div>
-              <div className="row">
+
+              {this.props.expert &&<div className="row">
                 <div className="col-sm-12 col-md-12">
                   <div className="form-group">
                     <label htmlFor="regions">Regions</label>
-                    <StateSelector setRegion={this.setRegion}/>
+                    <StateSelector region={this.state.region} setRegion={this.setRegion}/>
                   </div>
                 </div>
-              </div>
+              </div>}
               <div className="row">
+                {this.props.expert &&<div className="col-sm-4 col-md-4"/>}
+                <div className="col-sm-4 col-md-4">
+                  <Picker
+                      ref="pickRange"
+                      years={{min: 1983, max: 2017}}
+                      range={this.state.mrange}
+                      lang={DATE_LANG}
+                      theme="light"
+                      onChange={this.handleRangeChange}
+                      onDismiss={this.handleRangeDissmis}
+                      >
+                  </Picker>
+                </div>
+                {this.props.expert &&<div className="col-sm-4 col-md-4"/>}
+              </div>
+              {this.props.expert && <div className="row">
                 <div className="col-sm-12 col-md-12">
                   <div className="form-group">
                     <label htmlFor="category">Category</label>
                     <CategorySelector setCategory={this.setCategory} area={this.state.area} category={this.state.category}/>
                   </div>
                 </div>
-              </div>
+              </div>}
               <div className="row">
                 <div className="col-sm-12 col-md-12">
                   <div className="form-group">
@@ -147,23 +219,14 @@ class DataFetcher extends Component {
                 </div>
               </div>
 
-                <Picker
-                    ref="pickRange"
-                    years={{min: 1983, max: 2017}}
-                    range={this.state.mrange}
-                    lang={DATE_LANG}
-                    theme="light"
-                    onChange={this.handleRangeChange}
-                    onDismiss={this.handleRangeDissmis}
-                    >
-                </Picker>
+
             </div>
             <div className="card-footer">
-              <button className="btn btn-sm btn-primary" onClick={this.fetch} disabled={button} ><i className="fa fa-dot-circle-o" ></i> Fetch</button>
+              <button className="btn btn-sm btn-primary" onClick={this.fetch} disabled={button} ><i className="fa fa-dot-circle-o" ></i> Confirm</button>
             </div>
 
           </div>
-        </div>
+
 
     )
   }
@@ -194,7 +257,7 @@ class MonthBox extends Component {
 }
 
 
-class AreaSelector extends Component{
+export class AreaSelector extends Component{
   constructor(prop){
     super(prop)
     this.state = {
@@ -215,29 +278,27 @@ class AreaSelector extends Component{
   }
 }
 
-class StateSelector extends Component{
+export class StateSelector extends Component{
   constructor(prop){
     super(prop)
     this.state = {
       disabled: false,
       options: STATE,
-      value: [],
     };
     this.handleSelectChange = this.handleSelectChange.bind(this);
   }
 
   handleSelectChange(value) {
-  		this.setState({ value });
       this.props.setRegion(value);
   }
 
   render(){
-    return <Select multi simpleValue value={this.state.value} placeholder="Select regions" options={this.state.options} onChange={this.handleSelectChange} />
+    return <Select multi simpleValue value={this.props.region} placeholder="Select regions" options={this.state.options} onChange={this.handleSelectChange} />
   }
 }
 
 
-class CategorySelector extends Component{
+export class CategorySelector extends Component{
   constructor(props){
     super(props)
     this.handleSelectChange = this.handleSelectChange.bind(this);

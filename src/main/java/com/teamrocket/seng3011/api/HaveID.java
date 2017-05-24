@@ -5,4 +5,5 @@ package com.teamrocket.seng3011.api;
  */
 public interface HaveID {
     int getId();
+    String getName();
 }

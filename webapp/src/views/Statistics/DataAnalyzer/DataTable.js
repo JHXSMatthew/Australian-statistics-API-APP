@@ -23,20 +23,40 @@ class DataTable extends Component {
   }
 
   toggle2() {
-  this.setState({
-    popoverOpen: !this.state.popoverOpen
-  });
-}
+    this.setState({
+      popoverOpen: !this.state.popoverOpen
+    });
+  }
+
+  shouldComponentUpdate(nextProps, nextState){
+    return JSON.stringify(nextProps) !== JSON.stringify(this.props) || JSON.stringify(nextState) !== JSON.stringify(this.state);
+  }
 
   render() {
     var data = this.props.data;
     const categoryValue = [{
       header: 'Category',
-      accessor: 'Category' // String-based value accessors!
+      accessor: 'Category.label' // String-based value accessors!
     }, {
       header: 'Average',
       accessor: 'average',
-    }]
+    }, {
+      header: 'Minimum',
+      accessor: 'minimum',
+    }, {
+      header: 'First Quartile',
+      accessor: 'fq',
+    }, {
+      header: 'Median',
+      accessor: 'median',
+    }, {
+      header: 'Third Quartile',
+      accessor: 'tq',
+    }, {
+      header: 'Maximum',
+      accessor: 'maximum',
+    }
+  ]
 
     const regionalData = [{
       header: 'State',
@@ -44,20 +64,37 @@ class DataTable extends Component {
     }, {
       header: 'Average',
       accessor: 'average',
+    }, {
+      header: 'Minimum',
+      accessor: 'minimum',
+    }, {
+      header: 'First Quartile',
+      accessor: 'fq',
+    }, {
+      header: 'Median',
+      accessor: 'median',
+    }, {
+      header: 'Third Quartile',
+      accessor: 'tq',
+    }, {
+      header: 'Maximum',
+      accessor: 'maximum',
+    }, {
+      header: 'Total',
+      accessor: 'total',
     }]
 
     const Datedata = [{
+      sortFunction: 'Date',
       header: 'Date',
       accessor: 'Date' // String-based value accessors!
     }, {
       header: 'Value',
       accessor: 'Value',
     }]
-    var unit = null;
-    if(this.props.dataType === "Export"){
-      unit = "($ thousands)"
-    }else if(this.props.dataType === "Retail"){
-      unit = "($ millions)";
+      var unit = null;
+    if(this.props.dataType){
+      unit = this.props.dataType.unit;
     }
 
     return(

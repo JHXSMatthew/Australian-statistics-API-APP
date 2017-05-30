@@ -33,6 +33,17 @@ public class CompanyStockEntry {
         }
     }
 
+    public CompanyStockEntry(String date, CompanyStockEntry entry){
+        this.date = date;
+        this.open = entry.getOpen();
+        this.high = entry.getHigh();
+        this.low = entry.getLow();
+        this.close = entry.getClose();
+        this.adjClose = entry.getAdjClose();
+        this.volume = entry.getVolume();
+        valid = true;
+    }
+
     public boolean valid(){
         return valid;
     }

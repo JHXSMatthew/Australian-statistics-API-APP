@@ -443,30 +443,43 @@ class CompanyReturn extends Component{
 
 
   fetch(a,dataType,companies,hold){
+
     var that = this;
     var id = companies.instrumentId;
     var name = companies.name;
-
+    if(!id || !getDateString(this.props.date()) || !that.props.up || !that.props.low){
+      return;
+    }
     var proxy = "https://cors-anywhere.herokuapp.com/";
 
    //Alvin's frined's API,
-   url = "http://128.199.197.216:3000/v5/id="+ id
-        +  "&dateOfInterest="+ getDateString(this.props.date())
-        +  "&listOfVars=AV_Return;CM_Return&upperWindow="+ this.props.up
-        +  "&lowerWindow=" + this.props.low;
+   //url = "http://128.199.197.216:3000/v5/id="+ id
+    //    +  "&dateOfInterest="+ getDateString(this.props.date())
+  //      +  "&listOfVars=AV_Return;CM_Return&upperWindow="+ this.props.up
+  //      +  "&lowerWindow=" + this.props.low;
 
-    if(a){
+  //  if(a){
        // seesharp's API
-       var url  = "http://174.138.67.207/InstrumentID/"+ id
-           +  "/DateOfInterest/"+ getDateString(this.props.date())
-          +  "/List_of_Var/CM_Return,AV_Return/Upper_window/"+ this.props.up
-         +  "/Lower_window/" + this.props.low;
-    }
-    console.log("company return True URL:" + url);
-    try{
-      fetch(proxy + url,{
-        method: 'GET',
+  //     var url  = "http://174.138.67.207/InstrumentID/"+ id
+  //         +  "/DateOfInterest/"+ getDateString(this.props.date())
+  //        +  "/List_of_Var/CM_Return,AV_Return/Upper_window/"+ this.props.up
+  //       +  "/Lower_window/" + this.props.low;
+  //  }    var url = 'http://45.76.114.158/api/app/indicators/get'
 
+    var url = "http://45.76.114.158/api/app/companyReturn/get";
+    try{
+      fetch( url,{
+        headers: {
+         'Accept': 'application/json',
+         'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          id: id,
+          dateOfInterest: getDateString(that.props.date()),
+          upperWindow: that.props.up,
+          lowerWindow: that.props.low
+        }),
       })
       .then(function(response) {
         if (response.status >= 400) {
@@ -479,24 +492,22 @@ class CompanyReturn extends Component{
           if(that.hold != hold){
             return;
           }
-          json = json.CompanyReturns;
-
           for(var i = 0 ; i < json.length ; i++ ){
             json[i].name = name;
             var av = 0;
-            for(var j = 0 ; j < json[i].Data.length ; j ++){
-              av += json[i].Data[j].AV_Return;
-              json[i].Data[j].AV_Return *= 100 ;
-              json[i].Data[j].AV_Return = parseFloat(json[i].Data[j].AV_Return).toFixed(7);
+            for(var j = 0 ; j < json[i].dateValues.length ; j ++){
+              av += json[i].dateValues[j].AV_Return;
+              json[i].dateValues[j].AV_Return *= 100 ;
+              json[i].dateValues[j].AV_Return = parseFloat(json[i].dateValues[j].AV_Return).toFixed(7);
 
-              json[i].Data[j].CM_Return *= 100 ;
-              json[i].Data[j].CM_Return = parseFloat(json[i].Data[j].CM_Return).toFixed(7);
-              json[i].Data[j].value = json[i].Data[j].CM_Return;
+              json[i].dateValues[j].CM_Return *= 100 ;
+              json[i].dateValues[j].CM_Return = parseFloat(json[i].dateValues[j].CM_Return).toFixed(7);
+              json[i].dateValues[j].value = json[i].dateValues[j].CM_Return;
 
-              json[i].Data[j].Return *= 100 ;
-              json[i].Data[j].Return = parseFloat(json[i].Data[j].Return).toFixed(7);
+              json[i].dateValues[j].Return *= 100 ;
+              json[i].dateValues[j].Return = parseFloat(json[i].dateValues[j].Return).toFixed(7);
             }
-            json[i].AV_Return = parseFloat(av/json[i].Data.length * 100).toFixed(7) ;
+            json[i].AV_Return = parseFloat(av/json[i].dateValues.length * 100).toFixed(7) ;
             json[i].Get = <NewsFilter id={json[i].InstrumentID} setCurrentNews={that.props.setCurrentNews}/>
             json[i].Click = <NewsArticle article={"https://au.finance.yahoo.com/chart/"+id}/>
 
@@ -523,7 +534,7 @@ class CompanyReturn extends Component{
         accessor: 'name' // String-based value accessors!
       }, {
         header: 'InstrumentID',
-        accessor: 'InstrumentID',
+        accessor: 'instrumentID',
       }, {
         header: 'Average Return (%)',
         accessor: 'AV_Return',
@@ -536,9 +547,9 @@ class CompanyReturn extends Component{
       const compnayDetail = [{
         header: 'Date',
         accessor: 'Date' // String-based value accessors!
-      },{
-       header: 'Return (%)',
-       accessor: 'Return',
+      }, {
+        header: 'Return (%)',
+        accessor: 'Return',
       }, {
         header: 'Average Return (%)',
         accessor: 'AV_Return',
@@ -563,7 +574,7 @@ class CompanyReturn extends Component{
               SubComponent={(row) => {
                 return(
                   <ReactTable
-                    data={row.row.Data}
+                    data={row.row.dateValues}
                     columns={compnayDetail}
                     defaultPageSize={10}
                   />

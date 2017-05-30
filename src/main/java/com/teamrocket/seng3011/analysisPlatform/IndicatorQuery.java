@@ -8,6 +8,7 @@ import com.teamrocket.seng3011.analysisPlatform.models.CategoryCompanyRelation;
 import com.teamrocket.seng3011.analysisPlatform.models.CompanyData;
 import com.teamrocket.seng3011.analysisPlatform.models.CompanyStockEntry;
 import com.teamrocket.seng3011.analysisPlatform.models.DateValue;
+import com.teamrocket.seng3011.api.exceptions.KnownException;
 import com.teamrocket.seng3011.utils.DateUtils;
 
 import java.io.BufferedReader;
@@ -16,8 +17,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by JHXSMatthew on 23/05/2017.
@@ -31,9 +34,13 @@ public class IndicatorQuery {
     @JsonCreator
     public IndicatorQuery(@JsonProperty("instrumentId")String companyID,
                           @JsonProperty("startDate")String startingDate,
-                          @JsonProperty("endDate")String endDate) throws IOException {
+                          @JsonProperty("endDate")String endDate) throws IOException, KnownException {
         this.instrumentID = companyID;
         rowData = new ArrayList<>();
+        fetch(companyID,startingDate,endDate);
+    }
+
+    private void fetch(String companyID,String startingDate, String endDate) throws IOException, KnownException {
         URL url = new URL("http://api.kaiworship.xyz/cmp/"+ companyID+"/" + startingDate +"/" + endDate);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
@@ -50,9 +57,10 @@ public class IndicatorQuery {
                     map.put(names[j],inside[j]);
                 }
                 CompanyStockEntry entry = new CompanyStockEntry(map);
-                if(entry.valid()) {
+                if(entry.valid()){
                     rowData.add(entry);
                 }
+
             }else{
                 names = output.split(",");
             }
@@ -60,9 +68,11 @@ public class IndicatorQuery {
         in.close();
     }
 
-    public String get() throws JsonProcessingException {
+    public String get() throws JsonProcessingException, KnownException {
         List<DateValue> simpleMovingAverage = new ArrayList<>();
         List<DateValue> rawMoneyFlow = new ArrayList<>();
+        //rowData = rowData.stream().filter(i->i.valid()).collect(Collectors.toList());
+
         float totalClose = 0;
         for(CompanyStockEntry row : rowData){
             totalClose +=  row.getAdjClose();
@@ -80,5 +90,13 @@ public class IndicatorQuery {
         ObjectMapper mapper = new ObjectMapper();
 
         return mapper.writeValueAsString(companyDataList.toArray(new CompanyData[companyDataList.size()]));
+    }
+
+    public List<CompanyStockEntry> getRowData() {
+        return rowData;
+    }
+
+    public String getInstrumentID() {
+        return instrumentID;
     }
 }

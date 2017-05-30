@@ -58,17 +58,17 @@ class TimePointChart extends Component{
           lineTension: 0.1,
           pointHoverBorderColor: 'rgba(220,220,220,1)',
         };
-        line.label = data[i].InstrumentID;
+        line.label = data[i].instrumentID;
         line.backgroundColor = color[i];
         line.borderColor = color[i];
         line.pointBorderColor = color[i];
         line.pointHoverBackgroundColor = color[i];
         line.data = [];
-        for(var j = 0 ; j < data[i].Data.length ; j ++){
+        for(var j = 0 ; j < data[i].dateValues.length ; j ++){
           if(!label_set){
-            labels.push(data[i].Data[j].Date);
+            labels.push(data[i].dateValues[j].Date);
           }
-          line.data.push(data[i].Data[j].value);
+          line.data.push(data[i].dateValues[j].value);
         }
         label_set = true;
         lines.push(line);

@@ -31,7 +31,6 @@ class TimePointChart extends Component{
       var data= nextProps.data;
       //for each line
 
-      console.log(data);
       if(!data){
         this.setState({
           lines: null,

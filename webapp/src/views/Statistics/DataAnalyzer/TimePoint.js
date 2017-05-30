@@ -7,6 +7,7 @@ import {CATEGORY_RT} from './DataAnalyzer.js';
 import {CATEGORY_ME} from './DataAnalyzer.js';
 import {getCategory} from './DataAnalyzer.js';
 import TimePointChart from './TimePointChart.js';
+import TimePointLeaderboard from './TimePointLeaderboard.js';
 
 
 class TimePoint extends Component{
@@ -318,20 +319,7 @@ class TimePoint extends Component{
                       </ListGroup>
                     </Col>
                     <Col>
-                      <ListGroupItem>
-                          <Col md="12">
-                            <Select
-                              name="The Name"
-                              value={this.state.currentNews}
-                              options={this.state.SelectOptions}
-                              onChange={this.setCurrentNews}
-                            />
-                          </Col>
-
-                      </ListGroupItem>
-                      <ListGroupItem>
-                          <News category={this.props.category} starting={this.getStarting} ending={this.getEnd} update={this.state.update} dataType={this.props.dataType} current={this.state.currentNews ? this.state.currentNews.value : "all"}/>
-                      </ListGroupItem>
+                        <TimePointLeaderboard data={this.state.data}/>
                     </Col>
                 </Row>
               </Card>
@@ -346,7 +334,22 @@ class TimePoint extends Component{
       )
   }
 }
+/*
+<ListGroupItem>
+    <Col md="12">
+      <Select
+        name="The Name"
+        value={this.state.currentNews}
+        options={this.state.SelectOptions}
+        onChange={this.setCurrentNews}
+      />
+    </Col>
 
+</ListGroupItem>
+<ListGroupItem>
+    <News category={this.props.category} starting={this.getStarting} ending={this.getEnd} update={this.state.update} dataType={this.props.dataType} current={this.state.currentNews ? this.state.currentNews.value : "all"}/>
+</ListGroupItem>
+*/
 function daysInMonth(month,year) {
     return new Date(year, month, 0).getDate();
 }

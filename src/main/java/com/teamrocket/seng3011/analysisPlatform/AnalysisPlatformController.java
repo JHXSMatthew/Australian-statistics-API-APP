@@ -5,6 +5,7 @@ import com.teamrocket.seng3011.analysisPlatform.models.Company;
 import com.teamrocket.seng3011.api.exceptions.CannotParseCategoryException;
 import com.teamrocket.seng3011.api.exceptions.CannotParseJSONException;
 import com.teamrocket.seng3011.api.exceptions.CannotParseStatsTypeException;
+import com.teamrocket.seng3011.api.exceptions.KnownException;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,12 @@ public class AnalysisPlatformController {
     }
 
     @RequestMapping(value = "app/indicators/get", consumes = MediaType.APPLICATION_JSON_VALUE, produces = "application/json")
-    public String onIndicatorQuery(@RequestBody IndicatorQuery query) throws JsonProcessingException {
+    public String onIndicatorQuery(@RequestBody IndicatorQuery query) throws JsonProcessingException, KnownException {
+        return query.get();
+    }
+
+    @RequestMapping(value = "app/companyReturn/get", consumes = MediaType.APPLICATION_JSON_VALUE, produces = "application/json")
+    public String onIndicatorQuery(@RequestBody CompanyReturnQuery query) throws JsonProcessingException, KnownException {
         return query.get();
     }
 

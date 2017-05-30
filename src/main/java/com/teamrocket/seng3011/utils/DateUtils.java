@@ -15,18 +15,20 @@ import java.util.List;
  * Created by JHXSMatthew on 17/3/17.
  */
 public class DateUtils {
-    private static DateFormat formatymd = new SimpleDateFormat("yyyy-MM-dd");
-    private static DateFormat formatym = new SimpleDateFormat("yyyy-MM");
+
 
     public static String dateToStringYM(Date date) {
+        DateFormat formatym =new SimpleDateFormat("yyyy-MM");
         return formatym.format(date);
     }
 
     public static String dateToStringYMD(Date date) {
+        DateFormat formatymd = new SimpleDateFormat("yyyy-MM-dd");
         return formatymd.format(date);
     }
 
     public static Date stringToDateYM(String date) throws KnownException {
+        DateFormat formatym =new SimpleDateFormat("yyyy-MM");
         try {
             return formatym.parse(date);
         } catch (ParseException e) {
@@ -35,8 +37,10 @@ public class DateUtils {
     }
 
     public static Date stringToDateYMD(String date) throws KnownException {
+        DateFormat formatymd = new SimpleDateFormat("yyyy-MM-dd");
+
         try {
-            return formatym.parse(date);
+            return formatymd.parse(date);
         } catch (ParseException e) {
             throw new DateInvalidException(date);
         }
@@ -98,6 +102,30 @@ public class DateUtils {
         calendar.add(Calendar.MONTH,1);
         calendar.add(Calendar.DATE,-1);
         return calendar;
+    }
+
+    public static Date addDate(Date date, int days){
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.DATE,days);
+        return c.getTime();
+    }
+
+    public static boolean isOnTheSameDate(Date date1, Date date2){
+        Calendar c1 = Calendar.getInstance();
+        c1.setTime(date1);
+        Calendar c2 = Calendar.getInstance();
+        c2.setTime(date2);
+        return c1.get(Calendar.DATE) == c2.get(Calendar.DATE) &&  c1.get(Calendar.MONTH) ==  c2.get(Calendar.MONTH) &&
+                c1.get(Calendar.YEAR) ==  c2.get(Calendar.YEAR);
+    }
+
+    public static boolean isAfter(Date date1, Date date2){
+        Calendar c1 = Calendar.getInstance();
+        c1.setTime(date1);
+        Calendar c2 = Calendar.getInstance();
+        c2.setTime(date2);
+        return c1.after(c2);
     }
 
 

@@ -1,16 +1,19 @@
 package com.teamrocket.seng3011.analysisPlatform.models;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Created by JHXSMatthew on 23/05/2017.
  */
 public class CompanyData {
 
     private String indicator;
-    private DateValue[] dateValues;
+    @JsonProperty("dateValues")
+    private Object[] dateValues;
     private String instrumentID;
 
-    public CompanyData(String indicator,DateValue[] dateValues,String instrumentID){
+    public CompanyData(String indicator,Object[] dateValues,String instrumentID){
         this.indicator = indicator;
         this.dateValues = dateValues;
         this.instrumentID = instrumentID;
@@ -22,10 +25,6 @@ public class CompanyData {
 
     public void setIndicator(String indicator) {
         this.indicator = indicator;
-    }
-
-    public DateValue[] getDateValues() {
-        return dateValues;
     }
 
     public void setDateValues(DateValue[] dateValues) {

@@ -257,14 +257,14 @@ class DataAnalyzer extends Component {
                 {this.state.focusDate && <AnalyticsView shouldDraw={this.state.rSelected === 3} date={this.state.focusDate} dataType={this.state.dataType} category={this.state.category}/>}
               </div>
             </div>
-            <div>
-              <StockTradingView />
-            </div>
           </Container>
         </div>
     )
   }
 
+  //<div>
+  //  <StockTradingView company={{name:"Elders Ltd",instrumentId:"ELD.AX"}} />
+  //</div>
 
     addDataEntry(e,b,c){
       var data = e.data;

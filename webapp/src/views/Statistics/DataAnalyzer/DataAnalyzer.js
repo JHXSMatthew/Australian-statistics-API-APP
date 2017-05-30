@@ -8,6 +8,8 @@ import ControlMenu from './ControlMenu.js';
 import SiderBarWrapper from './SiderBarWrapper.js';
 import {ButtonGroup,Button,Row, Col,Container} from 'reactstrap';
 
+import StockTradingView from './StockTradingView.js';
+
 export const STATE = [
 { label: 'All Australian Regions', value: 'AUS' },
 { label: 'New South Wales', value: 'NSW' },
@@ -254,6 +256,9 @@ class DataAnalyzer extends Component {
               <div style={this.state.rSelected === 3 && this.state.dataType && this.state.focusDate ?  {display: 'inline'} : {display: 'none'}}>
                 {this.state.focusDate && <AnalyticsView shouldDraw={this.state.rSelected === 3} date={this.state.focusDate} dataType={this.state.dataType} category={this.state.category}/>}
               </div>
+            </div>
+            <div>
+              <StockTradingView />
             </div>
           </Container>
         </div>

@@ -1,5 +1,7 @@
 package com.teamrocket.seng3011.analysisPlatform.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Map;
 
 /**
@@ -15,11 +17,12 @@ public class CompanyStockEntry {
     private float close;
     private float adjClose;
     private float volume;
+    @JsonIgnore
     private boolean valid;
 
     public CompanyStockEntry(Map<String,Object> map){
         this.date = (String) map.get("Date");
-        if(map.get("Open") == null){
+        if(map.get("Open") == null || map.get("Open").equals("null")){
             valid = false;
             return;
         }else{
@@ -43,7 +46,7 @@ public class CompanyStockEntry {
         this.volume = entry.getVolume();
         valid = true;
     }
-
+    @JsonIgnore
     public boolean valid(){
         return valid;
     }

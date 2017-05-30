@@ -37,6 +37,11 @@ public class AnalysisPlatformController {
         return query.get();
     }
 
+    @RequestMapping(value = "app/stockData/get", consumes = MediaType.APPLICATION_JSON_VALUE, produces = "application/json")
+    public String onIndicatorQuery(@RequestBody StockDataQuery query) throws JsonProcessingException, KnownException {
+        return query.get();
+    }
+
 
     //Should be a function handles fetch each categories/states/area here instead of hard coding in the view.
     // but I am lazy (no)

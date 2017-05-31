@@ -117,7 +117,7 @@ class StockTradingView extends Component {
           <Row>
             <Col md="9" xs="9">
               <Card>
-                  {this.state.data && <StockTradingGraph width={1200} news={this.state.news} data={this.state.data} type={"hybrid"} ratio={1}  />}
+                  {this.state.data && <StockTradingGraph width={1000} news={this.state.news} data={this.state.data} type={"hybrid"} ratio={1}  />}
               </Card>
             </Col>
             <Col md="3" xs="3">

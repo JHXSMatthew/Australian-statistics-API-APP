@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Media,Container,Col,Row,Card} from 'reactstrap';
+import {Media,Container,ListGroupItem,ListGroup,Col,Row,Card} from 'reactstrap';
 import { timeParse } from "d3-time-format";
 import { scaleTime } from "d3-scale";
 import { format } from "d3-format";
@@ -117,7 +117,7 @@ class StockTradingView extends Component {
           <Row>
             <Col md="9" xs="9">
               <Card>
-                  {this.state.data && <StockTradingGraph width={800} news={this.state.news} data={this.state.data} type={"hybrid"} ratio={1}  />}
+                  {this.state.data && <StockTradingGraph width={window.innerWidth * 0.7} news={this.state.news} data={this.state.data} type={"hybrid"} ratio={1}  />}
               </Card>
             </Col>
             <Col md="3" xs="3">
@@ -269,17 +269,19 @@ class News extends Component{
 
         for(var i = 0 ; i < json.length ; i ++){
           news.push(
-            <Media key={json[i].link}>
-             <Media body>
-               <Media heading>
-                 {json[i].title}
+             <ListGroupItem>
+              <Media key={json[i].link}>
+               <Media body>
+                 <Media heading>
+                   {json[i].title}
+                 </Media>
+                   {json[i].description}
                </Media>
-                 {json[i].description}
+               <Media right href={json[i].link}>
+                 View
+               </Media>
              </Media>
-             <Media right href={json[i].link}>
-               View
-             </Media>
-           </Media>
+           </ListGroupItem>
           );
         }
         that.props.setNewsData(json);
@@ -291,7 +293,7 @@ class News extends Component{
     });
   }
   render(){
-    return(<div>{this.state.table}</div>)
+    return(<div><ListGroup>{this.state.table}</ListGroup></div>)
   }
 
 

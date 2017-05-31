@@ -65,7 +65,7 @@ class TimePointLeaderboard extends Component{
       header: 'InstrumentID',
       accessor: 'instrumentID',
     }, {
-      header: 'Perfermance',
+      header: 'Performance',
       accessor: 'CM_Return',
     },{
       header: 'Stock Detail',

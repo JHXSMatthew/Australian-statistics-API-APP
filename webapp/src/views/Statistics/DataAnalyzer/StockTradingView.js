@@ -275,7 +275,7 @@ class News extends Component{
                  <Media heading>
                    {json[i].title}
                  </Media>
-                   {json[i].description}
+                   <div dangerouslySetInnerHTML={{__html: json[i].description.replace(/Read more/g, ".")}}></div>
                </Media>
                <Media right href={json[i].link}>
                  View

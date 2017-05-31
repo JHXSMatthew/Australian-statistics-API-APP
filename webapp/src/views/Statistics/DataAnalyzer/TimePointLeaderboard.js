@@ -56,7 +56,8 @@ class TimePointLeaderboard extends Component{
   render(){
     const topCompanies = [{
       header: 'Rank',
-      accessor: 'rank' // String-based value accessors!
+      accessor: 'rank', // String-based value accessors!,
+      maxWidth: 50
     },{
       header: 'Company',
       accessor: 'name' // String-based value accessors!

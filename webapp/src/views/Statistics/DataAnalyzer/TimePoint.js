@@ -327,7 +327,7 @@ class TimePoint extends Component{
           </Row>
           <Row>
             <Col>
-              <CompanyReturn fetchIndicators={this.fetchIndicators} companies={this.state.companies} category={this.props.category} setCurrentNews={this.setCurrentNews} date={this.getDate} up={this.state.up} low={this.state.low} update={this.state.update} dataType={this.props.dataType} setData={this.setData}/>
+              <CompanyReturn fetchIndicators={this.fetchIndicators} setCompany={this.props.setCompany} companies={this.state.companies} category={this.props.category} setCurrentNews={this.setCurrentNews} date={this.getDate} up={this.state.up} low={this.state.low} update={this.state.update} dataType={this.props.dataType} setData={this.setData}/>
             </Col>
           </Row>
         </Container>
@@ -512,7 +512,7 @@ class CompanyReturn extends Component{
             }
             json[i].AV_Return = parseFloat(av/json[i].dateValues.length * 100).toFixed(7) ;
             json[i].Get = <NewsFilter id={json[i].InstrumentID} setCurrentNews={that.props.setCurrentNews}/>
-            json[i].Click = <NewsArticle article={"https://au.finance.yahoo.com/chart/"+id}/>
+            json[i].Click = <StockDetail company={companies} setCompany={that.props.setCompany}/>
 
           }
           json = that.state.table.concat(json);
@@ -735,7 +735,24 @@ class NewsArticle extends Component{
   }
 }
 
+class StockDetail extends Component{
+  constructor(props) {
+    super(props);
+    this.toggle = this.toggle.bind(this);
+  }
 
+  toggle() {
+    this.props.setCompany(this.props.company);
+  }
+
+  render() {
+    return (
+      <div>
+        <Button color="info" onClick={this.toggle}>View</Button>
+      </div>
+    );
+  }
+}
 
 
 export default TimePoint;

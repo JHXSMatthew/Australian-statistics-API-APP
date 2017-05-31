@@ -68,6 +68,9 @@ class StockTradingView extends Component {
 
 
   componentWillReceiveProps(nextProps){
+    if(!nextProps.company){
+      return;
+    }
     this.fetch(nextProps.company);
   }
 

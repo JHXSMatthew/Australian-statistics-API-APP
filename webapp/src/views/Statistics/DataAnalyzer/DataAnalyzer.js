@@ -202,6 +202,7 @@ class DataAnalyzer extends Component {
     this.setCategory = this.setCategory.bind(this);
     this.setFocusDate = this.setFocusDate.bind(this);
     this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
+    this.setCompany = this.setCompany.bind(this);
 
   }
 
@@ -211,6 +212,13 @@ class DataAnalyzer extends Component {
     }else{
       this.setState({sidebarOpen: !this.state.sidebarOpen});
     }
+ }
+
+ setCompany(company){
+   this.setState({
+     company: company,
+     rSelected: 4
+   })
  }
 
 
@@ -254,7 +262,10 @@ class DataAnalyzer extends Component {
                 <ComparisonView expert={this.state.expert} data={this.state.data} dataType={this.state.dataType} setFocusDate={this.setFocusDate} setCategory={this.setCategory}></ComparisonView>
               </div>
               <div style={this.state.rSelected === 3 && this.state.dataType && this.state.focusDate ?  {display: 'inline'} : {display: 'none'}}>
-                {this.state.focusDate && <AnalyticsView shouldDraw={this.state.rSelected === 3} date={this.state.focusDate} dataType={this.state.dataType} category={this.state.category}/>}
+                {this.state.focusDate && <AnalyticsView setCompany={this.setCompany} shouldDraw={this.state.rSelected === 3} date={this.state.focusDate} dataType={this.state.dataType} category={this.state.category}/>}
+              </div>
+              <div style={this.state.rSelected === 4 && this.state.company && this.state.focusDate ?  {display: 'inline'} : {display: 'none'}}>
+                <StockTradingView company={this.state.company} />
               </div>
             </div>
           </Container>
@@ -263,7 +274,7 @@ class DataAnalyzer extends Component {
   }
 
   //<div>
-  //  <StockTradingView company={{name:"Elders Ltd",instrumentId:"ELD.AX"}} />
+  //
   //</div>
 
     addDataEntry(e,b,c){
